@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <div style="width: 600px;height: 400px;"></div>
+  <script src="./lib/echarts.js"></script>
+  <script>
+    const myChart = echarts.init(document.querySelector('div'));
+    myChart.setOption({
+      title: {
+        text: '成绩展示',
+        textStyle: {
+          color: 'red',
+          fontSize: '28px'
+        },
+        borderWidth: 5,
+        borderColor: 'blue',
+        borderRadius: 5,
+        left: '40%',
+        top: 'auto',
+      },
+      xAxis: {
+        type: 'category',
+        data: ['张三', '李四', '王五', '赵六']
+      },
+      yAxis: {
+        type: 'value'
+      },
+      tooltip: {
+        trigger: 'axis',// 'item'
+        triggerOn: 'click',
+        formatter: function (arg) {
+          console.log(arg); // 可以打印看看 有什么值
+          return `${arg[0].name}的分数是 ${arg[0].data}`; // 返回值将会呈现在页面中
+        }
+      },
+      series: [
+        {
+          name: '成绩',
+          type: 'bar',
+          data: [98, 88, 78, 80]
+        }
+      ]
+    });
+  </script>
+</body>
+
+</html>
