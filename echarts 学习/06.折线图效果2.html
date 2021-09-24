@@ -22,50 +22,32 @@
       },
       xAxis: {
         data: ['1月', '2月', '3月', '4月', '5月', '6月'],
-        type: 'category'
+        type: 'category',
+        boundaryGap: false, // 设置为无间隙
       },
       yAxis: {
         type: 'value',
+        scale: true
       },
-      series: {
+      series: [{
         name: '康师傅的销量',
         type: 'line',
-        data: [35, 29, 38, 88, 69, 89],
-        markPoint: {
-          data: [
-            { type: 'max' },
-            { type: 'min' }
-          ]
-        },
-        markLine: {
-          data: [
-            { type: 'average' }
-          ]
-        },
-        markArea: {
-          data: [
-            [
-              { xAxis: '1月' }, // 开始月份
-              { xAxis: '2月' }, // 结束月份
-            ],
-            [
-              { xAxis: '3月' }, // 开始月份
-              { xAxis: '5月' }, // 结束月份
-            ],
-          ]
-        },
-        smooth: true,
-        lineStyle: {
-          color: 'green',
-          type: 'dotted', //solid dashed
-        },
-        areaStyle: {
-          color: 'pink'
-        }
-      },
+        data: [3091, 900, 300, 2006, 1510, 1813],
+        stack: 'all',
+        areaStyle: {}
+        // stack属性值相同的serie，后面的serie的值将会叠加在前一个serie的值
+        // 第二条线
+      }, {
+
+        name: '',
+        type: 'line',
+        data: [2000, 2328, 3282, 230, 1889, 1123],
+        stack: 'all',
+        areaStyle: {}
+      }],
       tooltip: {
         trigger: 'axis',
-        formatter: '{b} 的成绩是 {c}'
+        formatter: '{b} 的成绩是 {c}',
       }
     })
   </script>
