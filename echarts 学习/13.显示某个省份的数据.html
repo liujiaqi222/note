@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <div style="width: 600px;height: 400px; border:1px solid blue"></div>
+  <script src="https://cdn.bootcdn.net/ajax/libs/echarts/5.1.2/echarts.js"></script>
+  <script>
+const myChart = echarts.init(document.querySelector('div'));
+fetch('./JSON/map/hunan.json').then(res=>res.json()).then((data)=>{
+  echarts.registerMap('hunan',data);
+  console.log(data);
+  myChart.setOption({
+    geo:{
+      type:'map',
+      map:'hunan',
+      center:[111.691347, 29.040225]
+    },
+  })
+})
+  </script>
+</body>
+
+</html>

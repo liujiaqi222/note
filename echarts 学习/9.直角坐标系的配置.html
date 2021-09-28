@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <div style="width: 600px;height: 400px;"></div>
+  <script src="./lib/echarts.js"></script>
+  <script>
+
+    let myCharts = echarts.init(document.querySelector('div'));
+    myCharts.setOption({
+      title: {
+        text: '成绩'
+      },
+      grid: {
+        show: true,
+        borderWidth: 10,
+        borderColor: 'pink',
+        top: 120,
+        left: 120,
+        width: 600,
+        height: 140,
+      },
+      xAxis: {
+        type: 'value',
+        position:'top'
+      },
+      yAxis: {
+        data: ['张三', '李四', '王五', '赵六'],
+        type: 'category',
+      },
+      series: [{
+        name: '成绩',
+        data: [5, 10, 15, 20],
+        type: 'bar',
+        markPoint: {
+          data: [{
+            type: 'max',
+            name: '最大值'
+          }, {
+            type: 'min',
+            name: '最小值'
+          }]
+        },
+        markLine: {
+          data: [
+            {
+              type: 'average', name: '平均值'
+            }
+          ]
+        },
+        label: {
+          show: true,
+          position: 'inside'
+        },
+        barWidth: '50%' // 调整为默认宽度的50%
+      }],
+      
+    });
+  </script>
+</body>
+
+</html>

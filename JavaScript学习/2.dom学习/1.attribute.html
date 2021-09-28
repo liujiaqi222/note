@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <div>
+    <input type="text" id="input">
+  </div>
+  <script>
+    document.body.myData = {
+      name: 'Caeser',
+      title: 'imperator'
+    }
+    document.body.sayTagName = function(){
+      console.log(this.tagName);
+    }
+    document.body.sayTagName ();
+    // Element.prototype 为所有元素添加一个新方法
+    Element.prototype.sayHi = function (){
+      console.log(this.tagName,this.nodeType);
+    }
+    document.body.sayHi();
+    document.documentElement.sayHi();
+    // 这些方法操作的实际上是 HTML 中的内容。 
+    // HTML 特性有以下几个特征：
+    // 它们的名字是大小写不敏感的（id 与 ID 相同），它们的值总是字符串类型的。
+
+    console.log(input.hasAttribute('input')) //false
+    input.setAttribute('level',3);
+    input.setAttribute('value','text');
+    console.log(input.value)
+    input.value = '333';
+    console.log(input.getAttribute('level')) //3
+    console.log(input.attributes); //属于内建 Attr 类的对象的集合，具有 name 和 value 属性。
+
+</script>
+</body>
+
+</html>
