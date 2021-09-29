@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <div style="width: 600px;height: 400px;"></div>
+  <script src="https://cdn.bootcdn.net/ajax/libs/echarts/5.1.2/echarts.js"></script>
+  <script>
+const myChart = echarts.init(document.querySelector('div'));
+myChart.setOption({
+  series: [
+    {
+      data: [
+        { value: 97,itemStyle:{color:'blue'}},// 每一个对象就代表一个指针
+        { value: 85 },// 每一个对象就代表一个指针
+        // 每一个对象就代表一个指针
+      ],
+      type: 'gauge',
+      min:50 //控制仪表盘的范围
+    }
+  ],
+  label:{
+    show:false
+  }
+})
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <div style="width: 600px;height: 400px;"></div>
+  <script src="https://cdn.bootcdn.net/ajax/libs/echarts/5.1.2/echarts.js"></script>
+  <script>
+const myChart = echarts.init(document.querySelector('div'));
+myChart.setOption({
+  radar: {
+    indicator: [{ name: '易用性', max: 100 }, { name: '功能', max: 100 }, { name: '拍照', max: 100 }, { name: '跑分', max: 100 }, { name: '续航', max: 100 }],
+    shape:'circle' // 默认值为polygon
+  },
+  series: [{
+    type: 'radar',
+    data: [{ name: '华为手机1', value: [48, 88, 99, 66, 77] }, { name: '小米手机', value:[88, 90, 89, 95, 87] }],
+    areaStyle:{}
+  }],
+  label:{
+    show:true
+  },
+  legend:{}
+})
+  </script>
+</body>
+
+</html>
