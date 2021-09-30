@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <div style="max-width:600px;height: 400px; border:1px solid red"></div>
+  <script src="./lib/echarts.js"></script>
+  <script>
+    const myChart = echarts.init(document.querySelector('div'));
+    myChart.showLoading();
+    fetch('./Json/data.json').then(res => res.json()).then(data => {
+      myChart.hideLoading();
+      const dataArr = data.map(item => [item.height, item.weight]);
+      myChart.setOption({
+        xAxis: {
+          type: 'value',
+          scale: true
+        },
+        yAxis: {
+          type: 'value',
+          scale: true,
+        },
+        series: {
+          type: 'scatter',
+          data: dataArr
+        }
+      })
+    })
+  </script>
+</body>
+
+</html>

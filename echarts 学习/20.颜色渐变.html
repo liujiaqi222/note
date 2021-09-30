@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <div style="width: 600px;height: 400px;"></div>
+  <script src="https://cdn.bootcdn.net/ajax/libs/echarts/5.1.2/echarts.js"></script>
+  <script>
+    const myChart = echarts.init(document.querySelector('div'));
+    myChart.setOption({
+      xAxis: {
+        type: 'category',
+        data: ['小明', '小芳', '张三', '胖虎', '小李']
+      },
+      yAxis: {
+        type: 'value'
+      },
+      series: {
+        data: [83, 98, 90, 89, 92],
+        type: 'bar',
+        markPoint: {
+          data: [
+            {
+              type: 'max',
+              name: '最大值'
+            },
+            {
+              type: 'min',
+              name: '最小值'
+            }
+          ]
+        },
+        markLine: {
+          data: [{
+            type: 'average',
+            name: '平均值'
+          }]
+        },
+        label: {
+          show: true,
+          position: 'inside'
+        },
+        barWidth: '40%',
+        itemStyle: {
+          // color:{
+          //   type:'linear', // 线性渐变
+          //   x:0, // 定义颜色渐变的方向
+          //   y:0,
+          //   x2:0,
+          //   y2:1,
+          //   colorStops:[
+          //     {offset:0,color:'red'}, // 百分之0处的颜色为红色
+          //     {offset:1,color:'pink'} // 百分之100处的颜色为蓝色 
+          //   ]
+          // }
+          color: {
+            type: 'radial',
+            x: 0.5, // 圆心的x坐标
+            y: 0.5, // 圆心的y坐标
+            r: 1, // 半径
+            colorStops: [
+              { offset: 0, color: 'red' },
+              { offset: 1, color: 'blue' }
+            ]
+
+          }
+        }
+      }
+    })
+  </script>
+</body>
+
+</html>

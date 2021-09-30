@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+
+</head>
+
+<body>
+  <div style="width: 600px;height: 400px;"></div>
+  <script src="https://cdn.bootcdn.net/ajax/libs/echarts/5.1.2/echarts.js"></script>
+  <button id="button">触发行为</button>
+  <button id="button2">clear</button>
+  <button id="button3">dispose</button>
+
+  <script>
+    const myChart = echarts.init(document.querySelector('div'));
+    myChart.setOption({
+      series: [{
+        type: 'pie',
+        data: [{ name: '淘宝', value: 11232 }, { name: '闲鱼', value: 5632 }, { name: '京东', value: 7885 }, { name: '拼多多', value: 4632 }],
+        label: {
+          // 是否显示标签 
+          show: true, //默认为true
+          //决定文字显示的内容
+          // formatter:'{b}-{c}-{d}%', // 淘宝-11232-28.23%
+          formatter: function (arg) {
+            return `${arg.name}-${arg.value}`;
+          },
+        },
+
+        // 设置为single 选中的一部分会偏离圆点一小段 选中其他的之前的选中块又会回来
+        // selectedMode:'single' 
+        selectedMode: 'multiple', // 选中其他块，偏离不会回来
+        // 设置偏离的距离
+        selectedOffset: 30
+      }],
+      legend: {
+        data: ['淘宝', '闲鱼', '京东', '拼多多']
+      },
+      tooltip:{}
+    });
+    // 对事件监听
+    myChart.on('click', function (arg) {
+      console.log(arg);
+      console.log('click...');
+    });
+    myChart.on('legendSelectChanged', function (arg) {
+      console.log(arg);
+    })
+    const button = document.querySelector('#button');
+    button.addEventListener('click',()=>{
+      myChart.dispatchAction({
+        type:'highlight',
+        seriesIndex:0,
+        dataIndex:1,
+      });
+      myChart.dispatchAction({
+        type:'showTip',
+        seriesIndex:0,
+        dataIndex:1,
+      })
+    })
+    document.querySelector('#button2').addEventListener('click',()=>{
+      // 清空图表实例
+      myChart.clear();
+    });
+    document.querySelector('#button3').addEventListener('click',()=>{
+      // 清空图表实例
+      myChart.dispose();
+    });
+
+  </script>
+</body>
+
+</html>

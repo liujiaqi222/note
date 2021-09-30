@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <div style="max-width:600px;height: 400px; border:1px solid red"></div>
+
+  <script src="./lib/echarts.js"></script>
+  <script>
+
+    let myCharts = echarts.init(document.querySelector('div'));
+    myCharts.setOption({
+      title: {
+        text: '成绩'
+      },
+      animation: true,
+      animationDuration: function (arg) {
+        console.log(arg); // 会打印动画元素的索引值
+        return arg * 2000;
+
+      },
+      animationEasing: 'bounceOut', // linear 等等
+      animationThreshold: 5,
+      yAxis: {
+        type: 'value'
+      },
+      xAxis: {
+        data: ['张三', '李四', '王五', '赵六'],
+        type: 'category',
+      },
+      series: [{
+        name: '成绩',
+        data: [5, 10, 15, 20],
+        type: 'bar',
+        markPoint: {
+          data: [{
+            type: 'max',
+            name: '最大值'
+          }, {
+            type: 'min',
+            name: '最小值'
+          }]
+        },
+        markLine: {
+          data: [
+            {
+              type: 'average', name: '平均值'
+            }
+          ]
+        },
+        label: {
+          show: true,
+          position: 'inside'
+        },
+        barWidth: '50%' // 调整为默认宽度的50%
+      }],
+    });
+
+  </script>
+</body>
+
+</html>

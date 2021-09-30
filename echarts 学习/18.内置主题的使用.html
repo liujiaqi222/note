@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <div style="width: 600px;height: 400px;"></div>
+  <script src="https://cdn.bootcdn.net/ajax/libs/echarts/5.1.2/echarts.js"></script>
+  <script>
+    const myChart = echarts.init(document.querySelector('div'), 'dark');
+    myChart.setOption({
+      xAxis: {
+        type: 'category',
+        data: ['小明', '小芳', '张三', '胖虎', '小李']
+      },
+      yAxis: {
+        type: 'value'
+      },
+      series: {
+        data: [83, 98, 90, 89, 92],
+        type: 'bar',
+        markPoint: {
+          data: [
+            {
+              type: 'max',
+              name: '最大值'
+            },
+            {
+              type:'min',
+              name:'最小值'
+            }
+          ]
+        },
+        markLine:{
+          data:[{
+            type:'average',
+            name:'平均值'
+          }]
+        },
+        label:{
+          show:true,
+          position:'inside'
+        },
+        barWidth:'40%'
+      }
+    })
+  </script>
+</body>
+
+</html>

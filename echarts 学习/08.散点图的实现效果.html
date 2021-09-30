@@ -26,38 +26,38 @@
         type: 'value',
         scale: true
       },
-series: [{
-  data: axisdata,
-  type: 'effectScatter',
-  showEffectOn:'emphasis', // render（页面加载完成后显示） emphasis(鼠标滑过的时候显示)
-  rippleEffect:{
-    scale:5
-  },
-  // symbolSize:10 ,// 改变散点的大小
-  // 不同的元素，散点的大小不同
-  symbolSize: function (arg) {
-    const height = arg[0];
-    const weight = arg[1];
-    if ((weight / Math.pow(height / 100, 2) > 25)) {
-      return 15;
-    } 
-      return 5;
-    
-  },
-  // 控制样式
-  itemStyle: {
-    // color:'green'
-    color: function (arg) {
-      const height = arg.data[0];
-      const weight = arg.data[1];
-      if ((weight / Math.pow(height / 100, 2) > 25)) {
-      return 'pink';
-    } 
-      return 'blue';
-    
-    }
-  }
-}]
+      series: [{
+        data: axisdata,
+        type: 'effectScatter',
+        showEffectOn: 'emphasis', // render（页面加载完成后显示） emphasis(鼠标滑过的时候显示)
+        rippleEffect: {
+          scale: 5
+        },
+        // symbolSize:10 ,// 改变散点的大小
+        // 不同的元素，散点的大小不同
+        symbolSize: function (arg) {
+          const height = arg[0];
+          const weight = arg[1];
+          if ((weight / Math.pow(height / 100, 2) > 25)) {
+            return 15;
+          }
+          return 5;
+
+        },
+        // 控制样式
+        itemStyle: {
+          // color:'green'
+          color: function (arg) {
+            const height = arg.data[0];
+            const weight = arg.data[1];
+            if ((weight / Math.pow(height / 100, 2) > 25)) {
+              return 'pink';
+            }
+            return 'blue';
+
+          }
+        }
+      }]
     })
   </script>
 </body>

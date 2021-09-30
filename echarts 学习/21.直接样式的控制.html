@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <div style="width: 600px;height: 400px;"></div>
+  <script src="https://cdn.bootcdn.net/ajax/libs/echarts/5.1.2/echarts.js"></script>
+  <script>
+    const myChart = echarts.init(document.querySelector('div'));
+myChart.setOption({
+  title:{
+    text:'饼图的测试',
+    // 2.textStyle
+    textStyle:{
+      color:'red'
+    }
+  },
+series: {
+  color: ['blue', 'red', 'purple', 'pink', 'green'],
+  type: 'pie',
+  data: [{
+    name: '张三', value: 33,
+    // 1.itemStyle控制张三这一区域的样式
+    itemStyle: {
+      color:'yellow'
+    },
+    // 3.label
+    label:{
+      color:'green'
+    },
+    emphasis:{
+      itemStyle:{color:'pink'},
+      label:{color:'black'}
+    }
+  },
+  { 'name': '王五', value: 44 },
+  { 'name': '赵六', value: 54 },
+  { 'name': '李四', value: 39 },
+  { 'name': '老张', value: 63 }
+  ],
+  label: {
+    show: true,
+    formatter: '{b}-{c}',
+  }
+}
+})
+  </script>
+</body>
+
+</html>
