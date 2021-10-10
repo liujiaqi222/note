@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-size: 30px;
+        }
+
+        [class ^='box-'] {
+            display: grid;
+            place-items: center;
+            border: 5px solid orangered;
+            padding: 10px;
+            border-radius: 20px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 01);
+            color: white;
+        }
+
+        body {
+            background-image: linear-gradient(lightblue, darkblue);
+            height: 100vh;
+        }
+
+        /* ===关键代码=== */
+        .beginner {
+            height: 90vh;
+            width: 90%;
+            margin: 20px auto;
+            display: grid;
+            gap: 20px;
+            /* 使用auto后 header和footer只会占自己所需的高度，main content 就会占据剩下的那1fr */
+            grid-template-rows: auto 1fr auto;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="beginner">
+        <div class="box-1">Header</div>
+        <div class="box-2">Main Content</div>
+        <div class="box-3">Footer</div>
+    </div>
+</body>
+
+</html>

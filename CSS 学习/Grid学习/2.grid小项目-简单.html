@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-size: 30px;
+        }
+
+        [class ^='box-'] {
+            display: grid;
+            place-items: center;
+            border: 5px solid orangered;
+            padding: 10px;
+            border-radius: 20px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 01);
+            color: white;
+        }
+
+        body {
+            background-image: linear-gradient(lightblue, darkblue);
+            height: 100vh;
+        }
+
+        /* ===关键代码=== */
+        .beginner-plus{
+            height: 90Vh;
+            width: 90%;
+            margin: 20px auto;
+            display: grid;
+            grid-template-columns: repeat(12,1fr);
+            gap:20px
+        }
+        .beginner-plus .box-1{
+            /* 占据2列 */
+            grid-column: span 2;
+        }
+        .beginner-plus .box-2{
+            grid-column: span 6;
+        }
+        .beginner-plus .box-3{
+            grid-column: span 4;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="beginner-plus">
+        <div class="box-1">nav</div>
+        <div class="box-2">Main</div>
+        <div class="box-3">Blog</div>
+    </div>
+</body>
+
+</html>

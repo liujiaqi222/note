@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-size: 30px;
+        }
+
+        [class ^='box-'] {
+            display: grid;
+            place-items: center;
+            border: 5px solid orangered;
+            padding: 10px;
+            border-radius: 20px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 01);
+            color: white;
+        }
+
+        html {
+            background-image: linear-gradient(lightblue, darkblue);
+            height: 150vh;
+        }
+
+        /* ===关键代码=== */
+        .pro {
+            height: 100vh;
+            width: 90%;
+            margin: 20px auto;
+            display: grid;
+            gap: 20px;
+            grid-template-columns: repeat(12, 1fr);
+            grid-template-areas:
+                'h h h h   h h h h  h h h h '
+                'b b b b   b b b b  b b b b'
+                'm m m m   m m m m  m m m m'
+                's s s s   s s s s  s s s s '
+                'f f f f   f f f f  f f f f '
+            ;
+        }
+
+        .pro .box-1 {
+            grid-area: h;
+        }
+
+        .pro .box-2 {
+            grid-area: b;
+        }
+
+        .pro .box-3 {
+            grid-area: m;
+        }
+
+        .pro .box-4 {
+            grid-area: s;
+        }
+
+        .pro .box-5 {
+            grid-area: f;
+        }
+
+        @media (min-width:768px) {
+            .pro {
+                grid-template-areas:
+                    'h h h h   h h h h  h h h h '
+                    'b b b b   m m m m  m m m m'
+                    'b b b b   m m m m  m m m m'
+                    's s s s   m m m m  m m m m '
+                    's s s s   f f f f  f f f f '
+                ;
+            }
+
+        }
+
+        @media (min-width:1000px) {
+            .pro {
+                grid-template-areas:
+                    'h h h h   h h h h  h h h h '
+                    'b b m m   m m m m  m m s s'
+                    'b b m m   m m m m  m m s s'
+                    'b b m m   m m m m  m m s s '
+                    'f f f f   f f f f  f f s s '
+                ;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="pro">
+        <div class="box-1">Header(1)</div>
+        <div class="box-2">Blog(2)</div>
+        <div class="box-3">Main(3)</div>
+        <div class="box-4">Sidebar(4)</div>
+        <div class="box-5">Footer(5)</div>
+    </div>
+</body>
+
+</html>
