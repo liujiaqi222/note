@@ -1,7 +1,7 @@
 <!-- 商家销量统计的横向统计图 -->
 <template>
   <div class="com-container">
-    <div class="com-chart" ref="seller_ref">12222222222222</div>
+    <div class="com-chart" ref="seller_ref"></div>
   </div>
 </template>
 
@@ -21,6 +21,60 @@ export default {
     // 初始化echartsInstance 对象
     initChart() {
       this.chartInstance = this.$echarts.init(this.$refs.seller_ref, "chalk");
+      // 对图表初始化的控制
+      const initOption = {
+        title: {
+          text: "▎销售统计",
+          left: 20,
+          top: 20,
+        },
+        xAxis: {
+          type: "value",
+        },
+        yAxis: {
+          type: "category",
+        },
+        tooltip: {
+          trigger: "axis",
+          // 鼠标移动到坐标轴后所展示的样式
+          axisPointer: {
+            type: "line",
+            z: 0, //调整层级
+            lineStyle: {
+              width: 66,
+              color: "#213443",
+              type: "solid", //默认为dashded
+            },
+          },
+        },
+        series: [
+          {
+            type: "bar",
+            label: {
+              show: true,
+              position: "right",
+            },
+            itemStyle: {
+              // ====设置颜色渐变======
+              // 指明颜色渐变的方向 指明不同百分比下颜色的值
+              // x1,y1,x2,y2,[]    //(x1,y1)和(x2,y2)两个点确定渐变的方向
+              color: new this.$echarts.graphic.LinearGradient(0, 0, 1, 0, [
+                { offset: 0, color: "#5052ee" }, //百分之0状态下的颜色值
+                { offset: 1, color: "#ab6ee5" }, //百分之100状态下的颜色值
+              ]),
+            },
+          },
+        ],
+        grid: {
+          top: "20%",
+          left: "3%",
+          right: "3%",
+          bottom: "3%",
+          // 上面的距离设置包含坐标轴上的文字
+          containLabel: true,
+        },
+      };
+      this.chartInstance.setOption(initOption);
       this.chartInstance.on("mouseover", () => {
         clearInterval(this.timerId);
       });
@@ -49,66 +103,17 @@ export default {
       const showData = this.allData.slice(start, end);
       const sellerNames = showData.map((item) => item.name);
       const sellerValues = showData.map((item) => item.value);
-      const option = {
-        title: {
-          text: "▎销售统计",
-          textStyle: {
-            fontSize: 66,
-          },
-          left: 20,
-          top: 20,
-        },
-        xAxis: {
-          type: "value",
-        },
+      const dataOption = {
         yAxis: {
-          type: "category",
           data: sellerNames,
-        },
-        tooltip:{
-          trigger:'axis',
-          // 鼠标移动到坐标轴后所展示的样式
-          axisPointer:{
-            type:'line',
-            z:0, //调整层级
-            lineStyle:{
-              width:66,
-              color:'#213443',
-              type:'solid' //默认为dashded
-            }
-          }
         },
         series: [
           {
-            type: "bar",
             data: sellerValues,
-            barWidth: 66,
-            label: {
-              show: true,
-              position: "right",
-            },
-            itemStyle: {
-              barBorderRadius: [0, 33, 33, 0],
-              // ====设置颜色渐变======
-              // 指明颜色渐变的方向 指明不同百分比下颜色的值
-              // x1,y1,x2,y2,[]    //(x1,y1)和(x2,y2)两个点确定渐变的方向
-              color: new this.$echarts.graphic.LinearGradient(0, 0, 1, 0, [
-                { offset: 0, color: "#5052ee" }, //百分之0状态下的颜色值
-                { offset: 1, color: "#ab6ee5" }, //百分之100状态下的颜色值
-              ]),
-            },
           },
         ],
-        grid: {
-          top: "20%",
-          left: "3%",
-          right: "3%",
-          bottom: "3%",
-          // 上面的距离设置包含坐标轴上的文字
-          containLabel: true,
-        },
       };
-      this.chartInstance.setOption(option);
+      this.chartInstance.setOption(dataOption);
     },
     startInterval() {
       clearInterval(this.timerId);
@@ -119,15 +124,52 @@ export default {
         this.updateChart();
       }, 3000);
     },
+    // 屏幕适配
+    //当浏览器大小发生变化时会调用的方法
+    screenAdaptor() {
+      // this.$refs.seller_ref.offsetWidth
+      const titleFontSize = parseInt(
+        (this.$refs.seller_ref.offsetWidth / 100) * 3.6
+      );
+      const adaptOption = {
+        title: {
+          textStyle: {
+            fontSize: titleFontSize,
+          },
+        },
+        tooltip: {
+          axisPointer: {
+            lineStyle: {
+              width: titleFontSize,
+            },
+          },
+        },
+        series: [
+          {
+            barWidth: titleFontSize,
+            itemStyle: {
+              barBorderRadius: [0, titleFontSize / 2, titleFontSize / 2, 0],
+            },
+          },
+        ],
+      };
+      this.chartInstance.setOption(adaptOption);
+      // 记得调用echarts自带的自适应方法 上面之所以要自定义是因为echarts无法改变自定义的固定宽度，如这里初始化定义的标题宽度为固定值66
+      this.chartInstance.resize();
+    },
   },
   mounted() {
     this.initChart();
+    this.screenAdaptor();
+    window.addEventListener("resize", this.screenAdaptor);
   },
   created() {
     this.getData();
   },
   destroyed() {
     clearInterval(this.timerId);
+    // 移除事件监听
+    window.removeEventListener('resize',this.screenAdaptor);
   },
 };
 </script>
