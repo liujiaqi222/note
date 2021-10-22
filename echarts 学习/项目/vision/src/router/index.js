@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 
+
 Vue.use(VueRouter)
 
 const routes = [
@@ -9,6 +10,16 @@ const routes = [
     name: 'SellerPage',
     component: ()=>import('../views/SellerPage.vue')
   },
+  {
+    path:'/trendpage',
+    name:'TrendPage',
+    component:()=>import('../views/TrendPage.vue'),
+  },
+  {
+    path:'/mappage',
+    name:'MapPage',
+    component:()=>import('../views/MapPage.vue'),
+  }
 
 ]
 
