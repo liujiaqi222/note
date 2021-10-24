@@ -342,3 +342,6 @@ setTimeout(() => {
 
 ```
 
+## module.exports  
+
+Node中我们经常导出变量的时候，通常是通过module.exports导出的：  

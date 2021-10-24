@@ -1,0 +1,30 @@
+* {
+    margin: 0;
+    box-sizing: border-box;
+}
+
+.container{
+    background-color: #333;
+    padding: 1rem;
+    margin-top: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap:20px;
+}
+
+
+.draggable{
+    cursor: move;
+    padding: 1rem;
+    background-color: white;
+    border:1px solid black;
+
+}
+
+/* .draggable.dragging{
+    opacity: 0.5;
+    background-color: #fff;
+    width: 20px;
+    height: 20px;
+    background-color: blue;
+} */
