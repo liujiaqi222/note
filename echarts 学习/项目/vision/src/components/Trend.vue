@@ -29,7 +29,7 @@ export default {
   methods: {
     // 初始化echarts实例对象的方法
     initChart() {
-      this.chartInstance = this.$echarts.init(this.$refs.trend_ref, "chalk");
+      this.chartInstance = this.$echarts.init(this.$refs.trend_ref, 'chalk');
       const initOption = {
         xAxis: {
           type: "category",

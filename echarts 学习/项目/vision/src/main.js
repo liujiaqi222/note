@@ -12,6 +12,7 @@ Vue.prototype.$echarts = echarts;
 
 axios.defaults.baseURL = 'http://localhost/api'
 Vue.prototype.$axios = axios;
+Vue.prototype.$url = 'http://localhost:8080'
 
 new Vue({
   router,
