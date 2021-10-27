@@ -5,62 +5,88 @@
 </template>
 
 <script>
+import "../../public/static/theme/chalk.js";
+
 export default {
   data() {
     return {
       chartInstance: null,
       allData: null,
-      
     };
   },
   mounted() {
     this.initChart();
     this.screenAdapter();
-    window.addEventListener('resize',this.screenAdapter);
-    this.$once('hook:beforeDestroy',()=>{
-      window.removeEventListener('resize',this.screenAdapter);
-    })
+    window.addEventListener("resize", this.screenAdapter);
+    this.$once("hook:beforeDestroy", () => {
+      window.removeEventListener("resize", this.screenAdapter);
+    });
   },
   methods: {
     initChart() {
-      const initOption = {};
-      this.chartInstance = this.$echarts.init(this.$refs.stock_ref);
+      const initOption = {
+        title: {
+          text: "▎库存和销量分析",
+          left: 20,
+          top: 20,
+        },
+      };
+      this.chartInstance = this.$echarts.init(this.$refs.stock_ref, "chalk");
       this.chartInstance.setOption(initOption);
       this.getData();
     },
     async getData() {
-      const {data} = await this.$axios.get('/stock');
+      const { data } = await this.$axios.get("/stock");
       this.allData = data;
       console.log(this.allData);
       this.updateChart();
     },
-    updateChart(){
-      const showData = this.allData.slice(0,5);
+    updateChart() {
+      const showData = this.allData.slice(0, 5);
       const centerArr = [
-        ['18%','40%'],
-        ['50%','40%'],
-        ['82%','40%'],
-        ['34%','75%'],
-        ['66%','75%'],
+        ["18%", "40%"],
+        ["50%", "40%"],
+        ["82%", "40%"],
+        ["34%", "75%"],
+        ["66%", "75%"],
       ];
-      const seriesArr = showData.map((item,index) => {
+      
+      this.chartInstance.dispatchAction({
+        type:'highlight',
+        seriesIndex:1
+      });
+      const seriesArr = showData.map((item, index) => {
         return {
-          type:'pie',
-          radius:[100,90],
-          center:centerArr[index],
-          data:[{value:item.sales},{value:item.stock}],
-        }
+          type: "pie",
+          radius: [100, 90],
+          center: centerArr[index],
+          data: [
+            { value: item.sales, name: item.name + "\n" + item.sales },
+            { value: item.stock },
+          ],
+          emphasis:{
+            scale:false
+          },
+          labelLine: {
+            show: false,
+          },
+          label: {
+            position: 'center',
+            show:true,
+            zlevel:1000,
+          },
+        };
       });
       const dataOption = {
-        series:seriesArr
+        series: seriesArr,
       };
       this.chartInstance.setOption(dataOption);
     },
-    screenAdapter(){
-      const adapterOption ={};
+    screenAdapter() {
+      const adapterOption = {};
       this.chartInstance.setOption(adapterOption);
       this.chartInstance.resize();
-    }
+    },
   },
 };
 </script>

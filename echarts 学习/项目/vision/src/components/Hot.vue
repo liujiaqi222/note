@@ -24,7 +24,7 @@ export default {
     initChart() {
       this.chartInstance = this.$echarts.init(this.$refs.hot_ref, "chalk");
       const initOption = {
-        title:{text:'▏热销商品',left:20,top:20,},
+        title:{text:'▎热销商品',left:20,top:20,},
         series: [
           {
             type: "pie",
