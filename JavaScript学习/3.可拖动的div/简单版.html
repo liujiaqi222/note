@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    * {
+      padding: 0;
+      margin: 0;
+      box-sizing: border-box;
+    }
+    body{
+      padding: 20px;
+      background-color: black;
+    }
+    div.dragZone{
+      background-color: white;
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+    #drggable{
+      padding: 20px;
+      color: white;
+      background-color: black;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="dragZone">
+    <div id="drggable" draggable="true"  >可被拖动的元素</div>
+  </div>
+  <div class="dragZone"></div>
+  <div class="dragZone"></div>
+  <div class="dragZone"></div>
+  <script>
+    let dragging;
+    document.addEventListener('dragstart', e => {
+      dragging = e.target;
+      dragging.style.opacity = 0.5;
+    });
+    document.addEventListener('dragend',e =>{
+      dragging.style.opacity = '';
+    })
+    document.addEventListener('dragover',e =>{
+      e.preventDefault(); //一定要加这个否则drop的时候无法放进去 另外不加这个图标也会显示禁止
+     if(e.target.className ==='dragZone'){
+       e.target.style.backgroundColor = 'pink';
+     }
+    },false)
+    document.addEventListener('dragleave',e =>{
+     if(e.target.className ==='dragZone'){
+       e.target.style.backgroundColor = '';
+     }
+    },false);
+
+   document.addEventListener('drop',e => {
+    event.preventDefault();
+     if(e.target.className ==='dragZone'){
+       e.target.appendChild(dragging);
+     }
+   })
+
+  </script>
+</body>
+
+</html>

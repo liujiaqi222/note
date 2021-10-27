@@ -10,11 +10,75 @@
 
 > tip:如果是手机端想要实现元素拖动，记得使用[touch事件](https://developer.mozilla.org/zh-CN/docs/Web/API/TouchEvent)，手机端不支持drag事件。
 
+```
+drag 
+```
 
+拖动元素或选择文本时触发此事件。
 
+```
+dragend
+```
 
+当拖动操作结束时（释放鼠标按钮或按下退出键），会触发此事件。
+
+```
+dragenter
+```
+
+当拖动的元素或选择文本输入有效的放置目标时，会触发此事件。
+
+```
+dragleave 
+```
+
+当拖动的元素或文本选择离开有效的放置目标时，会触发此事件。
+
+```
+dragover
+```
+
+当将元素或文本选择拖动到有效放置目标（每几百毫秒）上时，会触发此事件。
+
+```
+dragstart 
+```
+
+当用户开始拖动元素或选择文本时触发此事件。
+
+```
+drop
+```
+
+当在有效放置目标上放置元素或选择文本时触发此事件。
+
+------
+
+`dragover`、`dragenter`、`dragleave`，和鼠标进入移出的事件对应。`dragstart`和`dragend`，顾名思义，就不做解释了。同样，`drag`和`drop`也很好理解，drag是拖动元素时触发，drop则是放下元素到有效位置时触发。
+
+这其中`dragover`，`dragenter`，`dragover`，`drop`的 `e.target` 指向的是 **有效放置区域**，剩下的事件`e.target`指向的是被拖动的元素。
 
 ## 小项目
+
+### 简单版
+
+<iframe height="700" style="width: 100%;" scrolling="no" title="Untitled" src="https://codepen.io/liujiaqi222/embed/jOLmxze?default-tab=html%2Cresult" frameborder="no" loading="lazy" allowtransparency="true" allowfullscreen="true">
+  See the Pen <a href="https://codepen.io/liujiaqi222/pen/jOLmxze">
+  Untitled</a> by liujiaqi222 (<a href="https://codepen.io/liujiaqi222">@liujiaqi222</a>)
+  on <a href="https://codepen.io">CodePen</a>.
+</iframe>
+> Note: 要记得在dragOver事件监听中，加上preventDefault()否则会无法放置。
+
+总结：
+
+1. 这里把监听全部绑定到`document`上，可以大量节省内存占用,减少事件注册。
+2. 注意区分监听事件的`e.target`指向的是什么。
+
+
+
+
+
+
 
 
 

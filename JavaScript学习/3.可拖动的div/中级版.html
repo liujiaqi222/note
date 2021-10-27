@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            padding: 20px;
+            background-color: black;
+        }
+
+        div.dragZone {
+            background-color: white;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .draggable {
+            padding: 20px;
+            color: white;
+            background-color: rgb(100, 12, 182);
+        }
+
+        .draggable:not(:last-child) {
+            margin-bottom: 10px;
+        }
+
+        .dragging {
+            opacity: 0.5;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="dragZone">
+        <div class="draggable" draggable="true">可被拖动的元素1</div>
+        <div class="draggable" draggable="true">可被拖动的元素2</div>
+    </div>
+    <div class="dragZone">
+        <div class="draggable" draggable="true">可被拖动的元素3</div>
+        <div class="draggable" draggable="true">可被拖动的元素4</div>
+    </div>
+    <script>
+        let dragging;
+        document.addEventListener('dragstart', e => {
+            e.target.classList.add('dragging')
+        })
+        document.addEventListener('dragend', e => {
+            e.target.classList.remove('dragging')
+        })
+        document.addEventListener('dragover', e => {
+            e.preventDefault();
+            if (e.target.className === 'dragZone') {
+                // e.target.appendChild(document.querySelector('.dragging'));
+                getAfterElment(e.target, e.clientY);
+            }
+        });
+
+        function getAfterElment(container, y) {
+            const draggableEls = container.querySelectorAll('.draggable:not(.dragging)');
+            [...draggableEls].forEach(el =>{
+                const box = el.getBoundingClientRect();
+                console.log(box);
+                offset = box.top+box.height/2-y;
+                console.log(offset);
+            })
+        }
+
+    </script>
+</body>
+
+</html>
