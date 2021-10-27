@@ -12,10 +12,12 @@ export default {
     return {
       chartInstance: null,
       allData: null,
+      currentIndex:0, //当前显示数据的其实值
+      timerId:null, //定时器标识
     };
   },
-  mounted() {
-    this.initChart();
+  async mounted() {
+   await this.initChart();
     this.screenAdapter();
     window.addEventListener("resize", this.screenAdapter);
     this.$once("hook:beforeDestroy", () => {
@@ -23,7 +25,7 @@ export default {
     });
   },
   methods: {
-    initChart() {
+    async initChart() {
       const initOption = {
         title: {
           text: "▎库存和销量分析",
@@ -33,16 +35,23 @@ export default {
       };
       this.chartInstance = this.$echarts.init(this.$refs.stock_ref, "chalk");
       this.chartInstance.setOption(initOption);
-      this.getData();
+     await this.getData();
+      this.chartInstance.on('mouseover',()=>{
+        clearInterval(this.timerId);
+      });
+      this.chartInstance.on('mouseout',()=>{
+        this.startInterval();
+      });
     },
     async getData() {
       const { data } = await this.$axios.get("/stock");
       this.allData = data;
       console.log(this.allData);
       this.updateChart();
+      this.startInterval();
     },
     updateChart() {
-      const showData = this.allData.slice(0, 5);
+      const showData = this.allData.slice(this.currentIndex, this.currentIndex+5);
       const centerArr = [
         ["18%", "40%"],
         ["50%", "40%"],
@@ -50,30 +59,42 @@ export default {
         ["34%", "75%"],
         ["66%", "75%"],
       ];
-      
-      this.chartInstance.dispatchAction({
-        type:'highlight',
-        seriesIndex:1
-      });
+      const colorArr = [['#4ff778', '#0ba82c'], ['#e5dd45', '#e8b11c'], ['#e8821c', '#e55445'], ['#5052ee', '#ab6ee5'], ['#23e5e5', '#2e78bf']];
       const seriesArr = showData.map((item, index) => {
         return {
           type: "pie",
           radius: [100, 90],
           center: centerArr[index],
           data: [
-            { value: item.sales, name: item.name + "\n" + item.sales },
-            { value: item.stock },
+            {
+              value: item.stock, name: item.name + '\n' + item.sales, itemStyle: {
+                color: new this.$echarts.graphic.LinearGradient(0, 1, 0, 0, [
+                  {
+                    offset: 0,
+                    color:colorArr[index][0]
+                  },
+                  {
+                    offset: 1,
+                    color:colorArr[index][1]
+                  }
+                ])
+              }
+            },
+            {
+              value: item.sales, itemStyle: {
+                color: '#333843'
+              }
+            },
           ],
-          emphasis:{
-            scale:false
+          emphasis: {
+            scale: false
           },
           labelLine: {
             show: false,
           },
           label: {
             position: 'center',
-            show:true,
-            zlevel:1000,
+            color:colorArr[index][0]
           },
         };
       });
@@ -83,10 +104,63 @@ export default {
       this.chartInstance.setOption(dataOption);
     },
     screenAdapter() {
-      const adapterOption = {};
+      const box = this.$refs.stock_ref ;
+      const titleFontSize = box.offsetWidth<box.offsetHeight?box.offsetWidth/100*3.6:box.offsetHeight/100*3.6;
+      const innerRadius = titleFontSize*2;
+      const outterRadius = titleFontSize*1.125;
+      const adapterOption = {
+        title:{
+          textStyle:{
+            fontSize:titleFontSize
+          }
+        },
+        series:[
+          {
+            raduis:[outterRadius,innerRadius],
+            label:{
+              fontSize:titleFontSize/1.4
+            }
+          },
+          {
+            raduis:[outterRadius,innerRadius],
+            label:{
+              fontSize:titleFontSize/1.4
+            }
+          },
+          {
+            raduis:[outterRadius,innerRadius],
+            label:{
+              fontSize:titleFontSize/1.4
+            }
+          },
+          {
+            raduis:[outterRadius,innerRadius],
+            label:{
+              fontSize:titleFontSize/1.4
+            }
+          },
+          {
+            raduis:[outterRadius,innerRadius],
+            label:{
+              fontSize:titleFontSize/1.4
+            }
+          },
+         
+        ]
+      };
       this.chartInstance.setOption(adapterOption);
       this.chartInstance.resize();
     },
+    startInterval(){
+      this.timerId&&clearInterval(this.timerId);
+      this.timerId = setInterval(() => {
+        this.currentIndex === 0? this.currentIndex=5:this.currentIndex=0;
+        this.updateChart();
+      }, 5000);
+      this.$once('hook:beforeDestory',()=>{
+        clearInterval(this.timerId);
+      })
+    }
   },
 };
 </script>

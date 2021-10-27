@@ -7,10 +7,39 @@
     <title>Document</title>
 </head>
 <body>
+    <button id="connect">连接服务端</button>
+    <button id="send" disabled>发送数据给服务端</button>
+    <div>从服务端接收的数据如下 <span></span> </div>
     <script>
-        fetch('http://localhost/api/seller').then(res =>{
-            return res.json();
-        }).then(data => console.log(data))
+        const connectBtn = document.querySelector('#connect');
+        const sendBtn = document.querySelector('#send');
+        const recv = document.querySelector('span');
+        let ws = null
+        connectBtn.addEventListener('click',()=>{
+            ws = new WebSocket('ws://localhost:9998');
+            ws.addEventListener('open',()=>{
+                console.log('连接服务端成功了');
+                sendBtn.disabled = false;
+            })
+            ws.addEventListener('close',()=>{
+                console.log('连接服务器失败');
+                sendBtn.disabled = true;
+            });
+            ws.addEventListener('message',(msg)=>{
+                console.log('收到服务端的数据'+msg);
+                console.log(msg);
+                recv.innerHTML = msg.data;
+            });
+        });
+
+        sendBtn.addEventListener('click',()=>{
+            ws.send(JSON.stringify({
+                "action":"fullScreen",
+                sockectType:'trendData',
+                chartName:'trend',
+                value:'true',
+            }));
+        });
     </script>
 </body>
 </html>
