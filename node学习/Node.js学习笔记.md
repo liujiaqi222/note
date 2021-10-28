@@ -345,3 +345,33 @@ setTimeout(() => {
 ## module.exports  
 
 Node中我们经常导出变量的时候，通常是通过module.exports导出的：  
+
+CommonJS中是没有module.exports的概念的；但是为了实现模块的导出，Node中使用的是Module的类，每一个模块都是Module的一个实例，也就是module；
+
+所以在Node中真正用于导出的其实根本不是exports，而是module.exports；因为module才是导出的真正实现者；
+
+但是，为什么exports也可以导出呢？
+这是因为module对象的exports属性是exports对象的一个引用；也就是说 `module.exports = exports = main`中的`bar`；  
+
+```js
+//main.js
+const bar = require('./bar.js'); 
+// 本质是 bar = exports，变量bar是对bar.js文件中exports对象的浅拷贝
+
+console.log(bar.name,2); //jiaqicoder
+
+bar.name ='jiaqi';
+
+//bar.js
+const name = 'jiaqicoder';
+
+module.exports.name = name; 
+console.log(module.exports.name,1);
+
+setTimeout(() => {
+    console.log(exports.name,3);
+}, 1000);
+```
+
+![image-20211025225431713](,.,.klkjlkjl,.,mm,m,mm,m,m,)
+
