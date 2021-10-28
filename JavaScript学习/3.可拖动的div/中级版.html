@@ -41,38 +41,53 @@
 </head>
 
 <body>
-    <div class="dragZone">
-        <div class="draggable" draggable="true">可被拖动的元素1</div>
-        <div class="draggable" draggable="true">可被拖动的元素2</div>
-    </div>
-    <div class="dragZone">
-        <div class="draggable" draggable="true">可被拖动的元素3</div>
-        <div class="draggable" draggable="true">可被拖动的元素4</div>
-    </div>
+<div class="dragZone">
+    <div class="draggable" draggable="true">可被拖动的元素1</div>
+    <div class="draggable" draggable="true">可被拖动的元素2</div>
+</div>
+<div class="dragZone">
+    <div class="draggable" draggable="true">可被拖动的元素3</div>
+    <div class="draggable" draggable="true">可被拖动的元素4</div>
+</div>
     <script>
-        let dragging;
+        const containers = document.querySelectorAll('.dragZone');
         document.addEventListener('dragstart', e => {
             e.target.classList.add('dragging')
         })
         document.addEventListener('dragend', e => {
             e.target.classList.remove('dragging')
         })
-        document.addEventListener('dragover', e => {
-            e.preventDefault();
-            if (e.target.className === 'dragZone') {
-                // e.target.appendChild(document.querySelector('.dragging'));
-                getAfterElment(e.target, e.clientY);
-            }
-        });
+        // 注意这里是在container上添加的事件监听
+        // 因为如果是在document上添加事件监听，e.target将会分为两个部分
+        // 一个部分是可拖动的元素，另外一个部分才是放置的容器 因为元素在容器中
+        // 另外之后的getAfterElement 传递的dom元素也就无法确定了。
+        containers.forEach(container => {
+            container.addEventListener('dragover', e => {
+                e.preventDefault();
+                 const afterElement = getAfterElment(container, e.clientY);
+                 const dragging = document.querySelector('.dragging')
+                 if(afterElement){
+                     container.insertBefore(dragging,afterElement)
+                 }else{
+                     container.appendChild(dragging);
+                 }
+            });
+
+        })
 
         function getAfterElment(container, y) {
             const draggableEls = container.querySelectorAll('.draggable:not(.dragging)');
-            [...draggableEls].forEach(el =>{
+            let data = {offset:Number.POSITIVE_INFINITY,element:null};
+
+            [...draggableEls].forEach(el => {
                 const box = el.getBoundingClientRect();
-                console.log(box);
-                offset = box.top+box.height/2-y;
-                console.log(offset);
+                offset = box.top + box.height / 2 - y;
+                if(offset>=0&&offset<data.offset){
+                    data.offset = offset;
+                    data.element = el;
+                }
             })
+            return data.element;
         }
 
     </script>

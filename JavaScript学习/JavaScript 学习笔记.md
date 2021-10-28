@@ -76,6 +76,27 @@ drop
 
 
 
+### 中等难度
+
+<iframe height="700" style="width: 100%;" scrolling="no" title="元素拖动" src="https://codepen.io/liujiaqi222/embed/jOLwmMR?default-tab=html%2Cresult&editable=true" frameborder="no" loading="lazy" allowtransparency="true" allowfullscreen="true">
+  See the Pen <a href="https://codepen.io/liujiaqi222/pen/jOLwmMR">
+  元素拖动</a> by liujiaqi222 (<a href="https://codepen.io/liujiaqi222">@liujiaqi222</a>)
+  on <a href="https://codepen.io">CodePen</a>.
+</iframe>
+
+值得注意的是，`dragover`这一事件监听是被添加在容器上的，因为如果添加在document上，`e.target`的指向可能会有容器和其他可拖动的元素。
+
+
+
+# Generator学习笔记
+
+
+
+
+
+
+
+
 
 
 
@@ -86,7 +107,7 @@ drop
 
 # 零碎知识点
 
-1.`mouseover`和`mouseenter`的区别？
+## 1.`mouseover`和`mouseenter`的区别？
 
 `mouseover`：当鼠标移入元素或其子元素都会触发事件，所以有一个重复触发，冒泡过程。对应的移除事件是mouseout
 
@@ -104,12 +125,20 @@ drop
 
    **`mouseenter`**只有在当鼠标从元素的边界之外移入元素的边界之内时，事件被触发。而鼠标本身在元素边界内时，要触发该事件，必须先将鼠标移出元素边界外，再次移入才能触发。而mouseover只要在元素上移动，会被一直触发。
 
- 
-
-
-
 
 
 可见mouseover事件因其具有冒泡的性质，在子元素内移动的时候，频繁被触发，如果我们不希望如此，可以使用mouseenter事件代替之，
 
 参考链接：https://juejin.cn/post/6844903480470028302
+
+
+
+## 2.textContent与innerHTML的区别
+
+- `textContent` 会获取*所有*元素的内容，包括 `<script>`和`<style>` 元素，然而 `innerText` 只展示给人看的元素。
+- `textContent` 会返回节点中的每一个元素。受 CSS 样式的影响，`innerText`并不会返回隐藏元素(display:none)的文本
+
+    - 此外，由于 `innerText` 受 CSS 样式的影响，它会触发回流（[reflow](https://developer.mozilla.org/zh-CN/docs/Glossary/Reflow)）去确保是最新的计算样式。（回流在计算上可能会非常昂贵，因此应尽可能避免。）
+
+- 与 `textContent` 不同的是, 在 Internet Explorer (小于和等于 11 的版本) 中对 `innerText` 进行修改， 不仅会移除当前元素的子节点，而且还会*永久性地破坏*所有后代文本节点。在之后不可能再次将节点再次插入到任何其他元素或同一元素中。
+

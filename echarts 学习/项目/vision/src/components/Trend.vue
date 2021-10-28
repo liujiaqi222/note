@@ -1,12 +1,16 @@
 <template>
   <div class="com-container">
     <div class="title" :style="comStyle">
-      <span>▎{{showTitle}}</span>
-      <i class="fas fa-chevron-down" @click="showChoice=!showChoice"></i>
-      <div class="select-con" v-show="showChoice" >
-        <div class="select-item" v-for='item in selectTypes' :key='item.key' :style="marginStyle" @click="handleSelect(item.key)">
-          {{item.text}}
-        </div>
+      <span>▎{{ showTitle }}</span>
+      <i class="fas fa-chevron-down" @click="showChoice = !showChoice"></i>
+      <div class="select-con" v-show="showChoice">
+        <div
+          class="select-item"
+          v-for="item in selectTypes"
+          :key="item.key"
+          :style="marginStyle"
+          @click="handleSelect(item.key)"
+        >{{ item.text }}</div>
       </div>
     </div>
     <div class="com-chart" ref="trend_ref"></div>
@@ -21,9 +25,9 @@ export default {
     return {
       chartInstance: null,
       allData: null, //从服务器中获取的所有数据
-      showChoice:false, //是否显示可选值
-      choiceType:'map',//显示的数据类型
-      titleFontSize:16, //指明标题的字体大小
+      showChoice: false, //是否显示可选值
+      choiceType: 'map',//显示的数据类型
+      titleFontSize: 16, //指明标题的字体大小
     };
   },
   methods: {
@@ -48,13 +52,13 @@ export default {
       };
       this.chartInstance.setOption(initOption);
     },
-    async getData() {
-      // 获取数据
-      const { data } = await this.$axios.get("trend");
-      this.allData = data;
-      this.updateChart(); //处理数据
-      console.log(this.allData);
-    },
+async getData(data) {
+  // 获取数据
+  // const { data } = await this.$axios.get("trend");
+  this.allData = data;
+  this.updateChart(); //处理数据
+  console.log(this.allData);
+},
 
     updateChart() {
       // 处理数据
@@ -83,7 +87,7 @@ export default {
         type: "line",
         data: item.data,
         name: item.name,
-        stack:this.choiceType,
+        stack: this.choiceType,
         areaStyle: {
           // x1,y1,x2,y2
           color: new this.$echarts.graphic.LinearGradient(0, 0, 0, 1, [
@@ -113,20 +117,20 @@ export default {
     // 处理屏幕分辨率
     screenAdapter() {
       const adapterOption = {
-        legend:{
-          itemWidth:this.titleFontSize,
-          itemHeight:this.titleFontSize,
-          itemGap:this.titleFontSize,
-          textStyle:{
-            fontSize:this.titleFontSize/2
+        legend: {
+          itemWidth: this.titleFontSize,
+          itemHeight: this.titleFontSize,
+          itemGap: this.titleFontSize,
+          textStyle: {
+            fontSize: this.titleFontSize / 2
           }
         },
       };
-      this.titleFontSize = this.$refs.trend_ref.offsetWidth/100*3.6;
+      this.titleFontSize = this.$refs.trend_ref.offsetWidth / 100 * 3.6;
       this.chartInstance.setOption(adapterOption);
       this.chartInstance.resize();
     },
-    handleSelect(currentType){
+    handleSelect(currentType) {
       this.choiceType = currentType;
       this.updateChart();
       this.showChoice = false;
@@ -140,9 +144,18 @@ export default {
       window.removeEventListener("resize", this.screenAdapter);
     });
   },
-  created() {
-    this.getData();
-  },
+created() {
+  this.$socket.registerCallBack('trendData', this.getData);
+  // 发送数据给服务器
+  this.$socket.send({
+    action:'getData',
+    socketType:'trendData',
+    chartName:'trend'
+  });
+},
+destroyed() {
+  this.$socket.unRegisterCallBack(this.getData);
+},
   computed: {
     selectTypes() {
       if (!this.allData) {
@@ -150,21 +163,21 @@ export default {
       }
       return this.allData.type.filter(item => item.key !== this.choiceType);
     },
-    showTitle(){
-      if(!this.allData){
+    showTitle() {
+      if (!this.allData) {
         return '';
       }
       return this.allData[this.choiceType].title;
     },
     // 设置标题样式
-    comStyle(){
+    comStyle() {
       return {
-        fontSize:this.titleFontSize+'px',
+        fontSize: this.titleFontSize + 'px',
       }
     },
-    marginStyle(){
+    marginStyle() {
       return {
-        marginLeft:this.titleFontSize+'px',
+        marginLeft: this.titleFontSize + 'px',
       }
     }
 
@@ -179,10 +192,10 @@ export default {
   top: 20px;
   z-index: 10;
   color: white;
-  .fa-chevron-down{
+  .fa-chevron-down {
     cursor: pointer;
   }
-  .select-con{
+  .select-con {
     cursor: pointer;
     background-color: #222733;
   }

@@ -12,16 +12,26 @@ export default {
     return {
       chartInstance: null,
       allData: null,
-      currentIndex:0, //当前显示数据的其实值
-      timerId:null, //定时器标识
+      currentIndex: 0, //当前显示数据的其实值
+      timerId: null, //定时器标识
     };
   },
   async mounted() {
-   await this.initChart();
+    await this.initChart();
     this.screenAdapter();
     window.addEventListener("resize", this.screenAdapter);
     this.$once("hook:beforeDestroy", () => {
       window.removeEventListener("resize", this.screenAdapter);
+    });
+  },
+  created() {
+    // 先注册这样一个回调函数，等下给服务器发送请求后就会用到这个getData的函数
+    this.$socket.registerCallBack('stockData', this.getData);
+    // 发送数据给服务器
+    this.$socket.send({
+      action: 'getData',
+      socketType: 'stockData',
+      chartName: 'stock'
     });
   },
   methods: {
@@ -35,23 +45,22 @@ export default {
       };
       this.chartInstance = this.$echarts.init(this.$refs.stock_ref, "chalk");
       this.chartInstance.setOption(initOption);
-     await this.getData();
-      this.chartInstance.on('mouseover',()=>{
+      await this.getData();
+      this.chartInstance.on('mouseover', () => {
         clearInterval(this.timerId);
       });
-      this.chartInstance.on('mouseout',()=>{
+      this.chartInstance.on('mouseout', () => {
         this.startInterval();
       });
     },
-    async getData() {
-      const { data } = await this.$axios.get("/stock");
+    async getData(data) {
       this.allData = data;
       console.log(this.allData);
       this.updateChart();
       this.startInterval();
     },
     updateChart() {
-      const showData = this.allData.slice(this.currentIndex, this.currentIndex+5);
+      const showData = this.allData.slice(this.currentIndex, this.currentIndex + 5);
       const centerArr = [
         ["18%", "40%"],
         ["50%", "40%"],
@@ -71,11 +80,11 @@ export default {
                 color: new this.$echarts.graphic.LinearGradient(0, 1, 0, 0, [
                   {
                     offset: 0,
-                    color:colorArr[index][0]
+                    color: colorArr[index][0]
                   },
                   {
                     offset: 1,
-                    color:colorArr[index][1]
+                    color: colorArr[index][1]
                   }
                 ])
               }
@@ -94,7 +103,7 @@ export default {
           },
           label: {
             position: 'center',
-            color:colorArr[index][0]
+            color: colorArr[index][0]
           },
         };
       });
@@ -104,60 +113,60 @@ export default {
       this.chartInstance.setOption(dataOption);
     },
     screenAdapter() {
-      const box = this.$refs.stock_ref ;
-      const titleFontSize = box.offsetWidth<box.offsetHeight?box.offsetWidth/100*3.6:box.offsetHeight/100*3.6;
-      const innerRadius = titleFontSize*2;
-      const outterRadius = titleFontSize*1.125;
+      const box = this.$refs.stock_ref;
+      const titleFontSize = box.offsetWidth < box.offsetHeight ? box.offsetWidth / 100 * 3.6 : box.offsetHeight / 100 * 3.6;
+      const innerRadius = titleFontSize * 2;
+      const outterRadius = titleFontSize * 1.125;
       const adapterOption = {
-        title:{
-          textStyle:{
-            fontSize:titleFontSize
+        title: {
+          textStyle: {
+            fontSize: titleFontSize
           }
         },
-        series:[
+        series: [
           {
-            raduis:[outterRadius,innerRadius],
-            label:{
-              fontSize:titleFontSize/1.4
+            raduis: [outterRadius, innerRadius],
+            label: {
+              fontSize: titleFontSize / 1.4
             }
           },
           {
-            raduis:[outterRadius,innerRadius],
-            label:{
-              fontSize:titleFontSize/1.4
+            raduis: [outterRadius, innerRadius],
+            label: {
+              fontSize: titleFontSize / 1.4
             }
           },
           {
-            raduis:[outterRadius,innerRadius],
-            label:{
-              fontSize:titleFontSize/1.4
+            raduis: [outterRadius, innerRadius],
+            label: {
+              fontSize: titleFontSize / 1.4
             }
           },
           {
-            raduis:[outterRadius,innerRadius],
-            label:{
-              fontSize:titleFontSize/1.4
+            raduis: [outterRadius, innerRadius],
+            label: {
+              fontSize: titleFontSize / 1.4
             }
           },
           {
-            raduis:[outterRadius,innerRadius],
-            label:{
-              fontSize:titleFontSize/1.4
+            raduis: [outterRadius, innerRadius],
+            label: {
+              fontSize: titleFontSize / 1.4
             }
           },
-         
+
         ]
       };
       this.chartInstance.setOption(adapterOption);
       this.chartInstance.resize();
     },
-    startInterval(){
-      this.timerId&&clearInterval(this.timerId);
+    startInterval() {
+      this.timerId && clearInterval(this.timerId);
       this.timerId = setInterval(() => {
-        this.currentIndex === 0? this.currentIndex=5:this.currentIndex=0;
+        this.currentIndex === 0 ? this.currentIndex = 5 : this.currentIndex = 0;
         this.updateChart();
       }, 5000);
-      this.$once('hook:beforeDestory',()=>{
+      this.$once('hook:beforeDestory', () => {
         clearInterval(this.timerId);
       })
     }
