@@ -83,8 +83,7 @@ export default {
       });
     },
     // 获取数据
-    async getData() {
-      const { data } = await this.$axios.get("/seller");
+    async getData(data) {
       this.allData = data;
       // 对数组进行排序
       this.allData.sort((a, b) => {
@@ -164,12 +163,18 @@ export default {
     window.addEventListener("resize", this.screenAdaptor);
   },
   created() {
-    this.getData();
+    this.$socket.registerCallBack('sellerData', this.getData);
+    // 发送数据给服务器
+    this.$socket.send({
+      action: 'getData',
+      socketType: 'sellerData',
+      chartName: 'seller'
+    });
   },
   destroyed() {
     clearInterval(this.timerId);
     // 移除事件监听
-    window.removeEventListener('resize',this.screenAdaptor);
+    window.removeEventListener('resize', this.screenAdaptor);
   },
 };
 </script>

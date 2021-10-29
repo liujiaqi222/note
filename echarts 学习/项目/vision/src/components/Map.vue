@@ -6,7 +6,7 @@
 
 <script>
 import "../../public/static/theme/chalk.js";
-import { getProvinceMapInfo,name2pinyin } from "../utils/map_utils.js";
+import { getProvinceMapInfo, name2pinyin } from "../utils/map_utils.js";
 import axios from "axios";
 
 export default {
@@ -18,7 +18,13 @@ export default {
     };
   },
   created() {
-    this.getData();
+    this.$socket.registerCallBack('mapData', this.getData);
+    // 发送数据给服务器
+    this.$socket.send({
+      action: 'getData',
+      socketType: 'mapData',
+      chartName: 'map'
+    });
   },
   mounted() {
     this.initChart();
@@ -55,28 +61,27 @@ export default {
         },
       };
       this.chartInstance.on("click", async (param) => {
-        if(Object.keys(name2pinyin).includes(param.name)){
+        if (Object.keys(name2pinyin).includes(param.name)) {
           const provinceInfo = getProvinceMapInfo(param.name);
-        // 判断当前所点击的这个省份的地图矢量数据是否在mapData中存在
-        if (!this.mapData[provinceInfo.key]) {
-          // 获取该省份地图矢量数据
-          const { data } = await axios.get(this.$url + provinceInfo.path);
-          this.mapData[provinceInfo.key] = data;
-          this.$echarts.registerMap(provinceInfo.key, data);
-        }
+          // 判断当前所点击的这个省份的地图矢量数据是否在mapData中存在
+          if (!this.mapData[provinceInfo.key]) {
+            // 获取该省份地图矢量数据
+            const { data } = await axios.get(this.$url + provinceInfo.path);
+            this.mapData[provinceInfo.key] = data;
+            this.$echarts.registerMap(provinceInfo.key, data);
+          }
 
-        const changeOption = {
-          geo: {
-            map: provinceInfo.key,
-          },
-        };
-        this.chartInstance.setOption(changeOption);
+          const changeOption = {
+            geo: {
+              map: provinceInfo.key,
+            },
+          };
+          this.chartInstance.setOption(changeOption);
         }
       });
       this.chartInstance.setOption(initOption);
     },
-    async getData() {
-      const { data } = await this.$axios.get("/map");
+    getData(data) {
       this.allData = data;
       this.updateChart();
     },

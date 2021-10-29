@@ -56,8 +56,7 @@ export default {
         this.startInterval();
       });
     },
-    async getData() {
-      const { data } = await this.$axios.get("/rank");
+     getData(data) {
       this.allData = data.sort((a, b) => {
         return b.value - a.value;
       });
@@ -123,8 +122,8 @@ export default {
         series: [
           {
             barWidth: titleFontSize,
-            itemStyle:{
-              borderRadius:[titleFontSize/2,titleFontSize/2,0,0],
+            itemStyle: {
+              borderRadius: [titleFontSize / 2, titleFontSize / 2, 0, 0],
             }
           },
         ],
@@ -148,9 +147,17 @@ export default {
       });
     },
   },
+  created() {
+    this.$socket.registerCallBack('rankData', this.getData);
+    // 发送数据给服务器
+    this.$socket.send({
+      action: 'getData',
+      socketType: 'rankData',
+      chartName: 'rank'
+    });
+  },
   mounted() {
     this.initChart();
-    this.getData();
     window.addEventListener("resize", this.screenAdapter);
     this.screenAdapter();
   },

@@ -2,7 +2,7 @@
   <div class="com-container">
     <i class="fas fa-chevron-left" @click="toLeft"></i>
     <i class="fas fa-chevron-right" @click="toRight"></i>
-    <span class="name" v-text='categoryName' :style="comStyle"></span>
+    <span class="name" v-text="categoryName" :style="comStyle"></span>
     <div class="com-chart" ref="hot_ref" :style="comStyle"></div>
   </div>
 </template>
@@ -16,54 +16,62 @@ export default {
       allData: {},
       chartInstance: "",
       currentIndex: 0, //当前所展示的一级分类数据
-      categoryName:'女装',
-      titleFontSize:15,
+      categoryName: '女装',
+      titleFontSize: 15,
     };
+  },
+  created() {
+    this.$socket.registerCallBack('hotData', this.getData);
+    // 发送数据给服务器
+    this.$socket.send({
+      action: 'getData',
+      socketType: 'hotData',
+      chartName: 'hotproduct'
+    });
   },
   methods: {
     initChart() {
       this.chartInstance = this.$echarts.init(this.$refs.hot_ref, "chalk");
       const initOption = {
-        title:{text:'▎热销商品',left:20,top:20,},
+        title: { text: '▎热销商品', left: 20, top: 20, },
         series: [
           {
             type: "pie",
-            label:{
-              show:false,
+            label: {
+              show: false,
             },
             // 鼠标移上去的时候，显示label
-            emphasis:{
-              label:{
-                show:true,
+            emphasis: {
+              label: {
+                show: true,
               },
-              labelLine:{
-                show:false,
+              labelLine: {
+                show: false,
               }
             }
           },
         ],
-        legend:{
-          top:'15%',
-          icon:'cicle'
+        legend: {
+          top: '15%',
+          icon: 'cicle'
         },
-        tooltip:{
-          show:true,
-          formatter:(param)=>{
+        tooltip: {
+          show: true,
+          formatter: (param) => {
             let total = 0;
-            param.data.children.forEach(item => total+=item.value);
+            param.data.children.forEach(item => total += item.value);
             let text = '';
             param.data.children.forEach(item => {
-              text += param.marker + '&nbsp' +item.name+'&nbsp&nbsp&nbsp&nbsp' +Math.round(item.value/total*100)+'%<br>';
+              text += param.marker + '&nbsp' + item.name + '&nbsp&nbsp&nbsp&nbsp' + Math.round(item.value / total * 100) + '%<br>';
             })
             return text;
           }
         }
       };
       this.chartInstance.setOption(initOption);
-      this.getData();
     },
-    async getData() {
-      const { data } = await this.$axios.get("/hotproduct");
+
+    getData(data) {
       this.allData = data;
       this.updateChart();
     },
@@ -77,7 +85,7 @@ export default {
           return {
             name: item.name,
             value: item.value,
-            children:item.children, //添加了这个属性后，会显示在tooltip的 formatter的data节点下
+            children: item.children, //添加了这个属性后，会显示在tooltip的 formatter的data节点下
           };
         }
       );
@@ -95,43 +103,43 @@ export default {
     },
     screenAdaptor() {
       let chart = this.$refs.hot_ref;
-       this.titleFontSize = (chart.offsetWidth>chart.offsetHeight?chart.offsetHeight:chart.offsetWidth)/100*3.6;
-      
+      this.titleFontSize = (chart.offsetWidth > chart.offsetHeight ? chart.offsetHeight : chart.offsetWidth) / 100 * 3.6;
+
       const adapterOption = {
-        title:{
-          textStyle:{
-            fontSize: this.titleFontSize+'px',
+        title: {
+          textStyle: {
+            fontSize: this.titleFontSize + 'px',
           }
         },
-        legend:{
+        legend: {
           itemWidth: this.titleFontSize,
-          itemHeight: this.titleFontSize/2,
-          itemGap: this.titleFontSize/2,
-          textStyle:{
+          itemHeight: this.titleFontSize / 2,
+          itemGap: this.titleFontSize / 2,
+          textStyle: {
             fontSize: this.titleFontSize,
           }
         },
-        series:[{
-          radius: this.titleFontSize*8,
-          center:['50%','60%']
+        series: [{
+          radius: this.titleFontSize * 8,
+          center: ['50%', '60%']
         }]
       };
       this.chartInstance.setOption(adapterOption);
       this.chartInstance.resize();
     },
-    toLeft(){
+    toLeft() {
       this.currentIndex--;
-      if(this.currentIndex<0){
-        this.currentIndex = this.allData.length-1;
+      if (this.currentIndex < 0) {
+        this.currentIndex = this.allData.length - 1;
       }
       this.updateChart();
     },
-    toRight(){
+    toRight() {
       this.currentIndex++;
-      if(this.currentIndex>this.allData.length-1){
+      if (this.currentIndex > this.allData.length - 1) {
         this.currentIndex = 0;
       }
-        this.updateChart();
+      this.updateChart();
     }
   },
   mounted() {
@@ -142,16 +150,15 @@ export default {
       window.removeEventListener("resize", this.screenAdaptor);
     });
   },
-  computed:{
-    comStyle(){
-      return {fontSize: this.titleFontSize+'px'}
+  computed: {
+    comStyle() {
+      return { fontSize: this.titleFontSize + 'px' }
     }
   }
 };
 </script>
 
 <style lang='scss' scoped>
-
 .fas {
   z-index: 999;
   position: absolute;
@@ -159,21 +166,20 @@ export default {
   top: 50%;
   font-size: 50px;
   transform: translateY(-50%);
-  color:white;
+  color: white;
 }
-.fa-chevron-left{
-  left:5%;
+.fa-chevron-left {
+  left: 5%;
 }
-.fa-chevron-right{
-  right:5%;
+.fa-chevron-right {
+  right: 5%;
 }
-.name{
+.name {
   position: absolute;
-  color:white;
+  color: white;
   bottom: 5%;
-  right:  10%;
+  right: 10%;
   z-index: 100;
   font-size: 40px;
-
 }
 </style>

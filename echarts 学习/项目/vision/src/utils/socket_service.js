@@ -40,7 +40,6 @@ export default class SocketService {
             if (this.callBackMapping[recvData.socketType]) {
                 if (recvData.action === 'getData') {
                     // 调用回调函数传值
-                    console.log(this);
                     this.callBackMapping[recvData.socketType](JSON.parse(recvData.data))
                 } else if (recvData.action === 'fullScreen') {
 

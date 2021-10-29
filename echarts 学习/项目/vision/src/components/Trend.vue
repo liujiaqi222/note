@@ -52,13 +52,13 @@ export default {
       };
       this.chartInstance.setOption(initOption);
     },
-async getData(data) {
-  // 获取数据
-  // const { data } = await this.$axios.get("trend");
-  this.allData = data;
-  this.updateChart(); //处理数据
-  console.log(this.allData);
-},
+    async getData(data) {
+      // 获取数据
+      // const { data } = await this.$axios.get("trend");
+      this.allData = data;
+      this.updateChart(); //处理数据
+      console.log(this.allData);
+    },
 
     updateChart() {
       // 处理数据
@@ -144,18 +144,18 @@ async getData(data) {
       window.removeEventListener("resize", this.screenAdapter);
     });
   },
-created() {
-  this.$socket.registerCallBack('trendData', this.getData);
-  // 发送数据给服务器
-  this.$socket.send({
-    action:'getData',
-    socketType:'trendData',
-    chartName:'trend'
-  });
-},
-destroyed() {
-  this.$socket.unRegisterCallBack(this.getData);
-},
+  created() {
+    this.$socket.registerCallBack('trendData', this.getData);
+    // 发送数据给服务器
+    this.$socket.send({
+      action: 'getData',
+      socketType: 'trendData',
+      chartName: 'trend'
+    });
+  },
+  destroyed() {
+    this.$socket.unRegisterCallBack(this.getData);
+  },
   computed: {
     selectTypes() {
       if (!this.allData) {

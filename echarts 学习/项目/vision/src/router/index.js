@@ -6,6 +6,12 @@ Vue.use(VueRouter)
 
 const routes = [
   {
+    path: '/',
+    name: 'ScreenPage',
+    component: () => import('../views/ScreenPage.vue'),
+  }
+  ,
+  {
     path: '/sellerpage',
     name: 'SellerPage',
     component: () => import('../views/SellerPage.vue')

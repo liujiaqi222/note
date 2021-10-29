@@ -16,8 +16,7 @@ export default {
       timerId: null, //定时器标识
     };
   },
-  async mounted() {
-    await this.initChart();
+ mounted() {
     this.screenAdapter();
     window.addEventListener("resize", this.screenAdapter);
     this.$once("hook:beforeDestroy", () => {
@@ -35,7 +34,7 @@ export default {
     });
   },
   methods: {
-    async initChart() {
+    initChart() {
       const initOption = {
         title: {
           text: "▎库存和销量分析",
@@ -45,7 +44,6 @@ export default {
       };
       this.chartInstance = this.$echarts.init(this.$refs.stock_ref, "chalk");
       this.chartInstance.setOption(initOption);
-      await this.getData();
       this.chartInstance.on('mouseover', () => {
         clearInterval(this.timerId);
       });
@@ -53,9 +51,11 @@ export default {
         this.startInterval();
       });
     },
-    async getData(data) {
+    getData(data) {
       this.allData = data;
-      console.log(this.allData);
+      this.initChart(); //获取数据后再初始化
+
+      console.log(this.allData, 1);
       this.updateChart();
       this.startInterval();
     },
