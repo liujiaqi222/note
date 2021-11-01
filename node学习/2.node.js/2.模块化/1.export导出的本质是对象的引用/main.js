@@ -3,4 +3,4 @@ const bar = require('./bar.js');
 
 console.log(bar.name,2); //jiaqicoder
 
-bar.name ='jiaqi';
+bar.name ='jiaqi'; //修改了bar.name
