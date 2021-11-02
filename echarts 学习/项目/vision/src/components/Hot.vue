@@ -1,7 +1,7 @@
 <template>
   <div class="com-container">
-    <i class="fas fa-chevron-left" @click="toLeft"></i>
-    <i class="fas fa-chevron-right" @click="toRight"></i>
+    <i class="fas fa-chevron-left" @click="toLeft" :style="comStyle"></i>
+    <i class="fas fa-chevron-right" @click="toRight" :style="comStyle"></i>
     <span class="name" v-text="categoryName" :style="comStyle"></span>
     <div class="com-chart" ref="hot_ref" :style="comStyle"></div>
   </div>
@@ -109,12 +109,12 @@ export default {
         title: {
           textStyle: {
             fontSize: this.titleFontSize + 'px',
-          }
+          } 
         },
         legend: {
           itemWidth: this.titleFontSize,
-          itemHeight: this.titleFontSize / 2,
-          itemGap: this.titleFontSize / 2,
+          itemHeight: this.titleFontSize,
+          itemGap: this.titleFontSize,
           textStyle: {
             fontSize: this.titleFontSize,
           }

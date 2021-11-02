@@ -14,10 +14,10 @@ export default {
       allData: null,
       currentIndex: 0, //当前显示数据的其实值
       timerId: null, //定时器标识
+      titleFontSize: 16,
     };
   },
- mounted() {
-    this.screenAdapter();
+  mounted() {
     window.addEventListener("resize", this.screenAdapter);
     this.$once("hook:beforeDestroy", () => {
       window.removeEventListener("resize", this.screenAdapter);
@@ -54,8 +54,7 @@ export default {
     getData(data) {
       this.allData = data;
       this.initChart(); //获取数据后再初始化
-
-      console.log(this.allData, 1);
+      this.screenAdapter();
       this.updateChart();
       this.startInterval();
     },
@@ -68,15 +67,17 @@ export default {
         ["34%", "75%"],
         ["66%", "75%"],
       ];
+      const innerRadius = parseInt(this.titleFontSize * 4);
+      const outterRadius = parseInt(this.titleFontSize * 3);
+      console.log(innerRadius,outterRadius);
       const colorArr = [['#4ff778', '#0ba82c'], ['#e5dd45', '#e8b11c'], ['#e8821c', '#e55445'], ['#5052ee', '#ab6ee5'], ['#23e5e5', '#2e78bf']];
       const seriesArr = showData.map((item, index) => {
         return {
           type: "pie",
-          radius: [100, 90],
           center: centerArr[index],
           data: [
             {
-              value: item.stock, name: item.name + '\n' + item.sales, itemStyle: {
+              value: item.stock, name: item.name + '\n\n' + item.sales, itemStyle: {
                 color: new this.$echarts.graphic.LinearGradient(0, 1, 0, 0, [
                   {
                     offset: 0,
@@ -103,10 +104,14 @@ export default {
           },
           label: {
             position: 'center',
-            color: colorArr[index][0]
+            color: colorArr[index][0],
+            fontSize: this.titleFontSize / 1.4
+            
           },
+          radius: [outterRadius, innerRadius],
         };
       });
+
       const dataOption = {
         series: seriesArr,
       };
@@ -114,49 +119,15 @@ export default {
     },
     screenAdapter() {
       const box = this.$refs.stock_ref;
-      const titleFontSize = box.offsetWidth < box.offsetHeight ? box.offsetWidth / 100 * 3.6 : box.offsetHeight / 100 * 3.6;
-      const innerRadius = titleFontSize * 2;
-      const outterRadius = titleFontSize * 1.125;
+      this.titleFontSize = box.offsetWidth < box.offsetHeight ? box.offsetWidth / 100 * 3.6 : box.offsetHeight / 100 * 3.6;
       const adapterOption = {
         title: {
           textStyle: {
-            fontSize: titleFontSize
+            fontSize: this.titleFontSize
           }
         },
-        series: [
-          {
-            raduis: [outterRadius, innerRadius],
-            label: {
-              fontSize: titleFontSize / 1.4
-            }
-          },
-          {
-            raduis: [outterRadius, innerRadius],
-            label: {
-              fontSize: titleFontSize / 1.4
-            }
-          },
-          {
-            raduis: [outterRadius, innerRadius],
-            label: {
-              fontSize: titleFontSize / 1.4
-            }
-          },
-          {
-            raduis: [outterRadius, innerRadius],
-            label: {
-              fontSize: titleFontSize / 1.4
-            }
-          },
-          {
-            raduis: [outterRadius, innerRadius],
-            label: {
-              fontSize: titleFontSize / 1.4
-            }
-          },
-
-        ]
       };
+
       this.chartInstance.setOption(adapterOption);
       this.chartInstance.resize();
     },

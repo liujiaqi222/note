@@ -45,14 +45,10 @@
         },
         "line": {
             "itemStyle": {
-                "normal": {
-                    "borderWidth": "4"
-                }
+                "borderWidth": "4"
             },
             "lineStyle": {
-                "normal": {
-                    "width": "3"
-                }
+                "width": "3"
             },
             "symbolSize": "0",
             "symbol": "circle",
@@ -60,14 +56,10 @@
         },
         "radar": {
             "itemStyle": {
-                "normal": {
-                    "borderWidth": 1
-                }
+                "borderWidth": 1
             },
             "lineStyle": {
-                "normal": {
-                    "width": 2
-                }
+                "width": 2
             },
             "symbolSize": 4,
             "symbol": "emptyCircle",
@@ -75,11 +67,13 @@
         },
         "bar": {
             "itemStyle": {
-                "normal": {
-                    "barBorderWidth": 0,
-                    "barBorderColor": "#ccc"
-                },
-                "emphasis": {
+                "barBorderWidth": 0,
+                "barBorderColor": "#ccc"
+
+            },
+            "emphasis": {
+                "itemStyle": {
+
                     "barBorderWidth": 0,
                     "barBorderColor": "#ccc"
                 }
@@ -87,11 +81,12 @@
         },
         "pie": {
             "itemStyle": {
-                "normal": {
-                    "borderWidth": 0,
-                    "borderColor": "#ccc"
-                },
-                "emphasis": {
+                "borderWidth": 0,
+                "borderColor": "#ccc"
+                
+            },
+            "emphasis": {
+                "itemStyle": {
                     "borderWidth": 0,
                     "borderColor": "#ccc"
                 }
@@ -99,11 +94,12 @@
         },
         "scatter": {
             "itemStyle": {
-                "normal": {
-                    "borderWidth": 0,
-                    "borderColor": "#ccc"
-                },
-                "emphasis": {
+                "borderWidth": 0,
+                "borderColor": "#ccc"
+                
+            },
+            "emphasis": {
+                "itemStyle": {
                     "borderWidth": 0,
                     "borderColor": "#ccc"
                 }
@@ -111,11 +107,12 @@
         },
         "boxplot": {
             "itemStyle": {
-                "normal": {
-                    "borderWidth": 0,
-                    "borderColor": "#ccc"
-                },
-                "emphasis": {
+                "borderWidth": 0,
+                "borderColor": "#ccc"
+                
+            },
+            "emphasis": {
+                "itemStyle": {
                     "borderWidth": 0,
                     "borderColor": "#ccc"
                 }
@@ -123,11 +120,12 @@
         },
         "parallel": {
             "itemStyle": {
-                "normal": {
-                    "borderWidth": 0,
-                    "borderColor": "#ccc"
-                },
-                "emphasis": {
+                "borderWidth": 0,
+                "borderColor": "#ccc"
+                
+            },
+            "emphasis": {
+                "itemStyle": {
                     "borderWidth": 0,
                     "borderColor": "#ccc"
                 }
@@ -135,11 +133,13 @@
         },
         "sankey": {
             "itemStyle": {
-                "normal": {
-                    "borderWidth": 0,
-                    "borderColor": "#ccc"
-                },
-                "emphasis": {
+                "borderWidth": 0,
+                "borderColor": "#ccc"
+                ,
+
+            },
+            "emphasis": {
+                "itemStyle": {
                     "borderWidth": 0,
                     "borderColor": "#ccc"
                 }
@@ -147,23 +147,26 @@
         },
         "funnel": {
             "itemStyle": {
-                "normal": {
-                    "borderWidth": 0,
-                    "borderColor": "#ccc"
-                },
-                "emphasis": {
+                "borderWidth": 0,
+                "borderColor": "#ccc"
+                ,
+            },
+            "emphasis": {
+                "itemStyle": {
                     "borderWidth": 0,
                     "borderColor": "#ccc"
                 }
             }
+
         },
         "gauge": {
             "itemStyle": {
-                "normal": {
-                    "borderWidth": 0,
-                    "borderColor": "#ccc"
-                },
-                "emphasis": {
+                "borderWidth": 0,
+                "borderColor": "#ccc"
+
+            },
+            "emphasis": {
+                "itemStyle": {
                     "borderWidth": 0,
                     "borderColor": "#ccc"
                 }
@@ -171,27 +174,21 @@
         },
         "candlestick": {
             "itemStyle": {
-                "normal": {
-                    "color": "#c23531",
-                    "color0": "#314656",
-                    "borderColor": "#c23531",
-                    "borderColor0": "#314656",
-                    "borderWidth": 1
-                }
+                "color": "#c23531",
+                "color0": "#314656",
+                "borderColor": "#c23531",
+                "borderColor0": "#314656",
+                "borderWidth": 1
             }
         },
         "graph": {
             "itemStyle": {
-                "normal": {
-                    "borderWidth": 0,
-                    "borderColor": "#ccc"
-                }
+                "borderWidth": 0,
+                "borderColor": "#ccc"
             },
             "lineStyle": {
-                "normal": {
-                    "width": 1,
-                    "color": "#aaa"
-                }
+                "width": 1,
+                "color": "#aaa"
             },
             "symbolSize": 4,
             "symbol": "emptyCircle",
@@ -209,62 +206,50 @@
                 "#4b565b"
             ],
             "label": {
-                "normal": {
-                    "textStyle": {
-                        "color": "#eee"
-                    }
-                }
+                "color": "#eee"
             }
         },
         "map": {
             "itemStyle": {
-                "normal": {
-                    "areaColor": "#eeeeee",
-                    "borderColor": "#444444",
-                    "borderWidth": 0.5
+                "areaColor": "#eeeeee",
+                "borderColor": "#444444",
+                "borderWidth": 0.5
+                ,
+
+            },
+            "label": {
+                "color": "#000000"
+                ,
+            },
+            "emphasis": {
+                "label": {
+                    "color": "rgb(100,0,0)"
                 },
-                "emphasis": {
+                "itemStyle": {
                     "areaColor": "rgba(255,215,0,0.8)",
                     "borderColor": "#444444",
                     "borderWidth": 1
-                }
-            },
-            "label": {
-                "normal": {
-                    "textStyle": {
-                        "color": "#000000"
-                    }
-                },
-                "emphasis": {
-                    "textStyle": {
-                        "color": "rgb(100,0,0)"
-                    }
                 }
             }
         },
         "geo": {
             "itemStyle": {
-                "normal": {
-                    "areaColor": "#eeeeee",
-                    "borderColor": "#444444",
-                    "borderWidth": 0.5
+                "areaColor": "#eeeeee",
+                "borderColor": "#444444",
+                "borderWidth": 0.5
+
+            },
+            "label": {
+                "color": "#000000"
+            },
+            "emphasis": {
+                "label": {
+                    "color": "rgb(100,0,0)"
                 },
-                "emphasis": {
+                "itemStyle": {
                     "areaColor": "rgba(255,215,0,0.8)",
                     "borderColor": "#444444",
                     "borderWidth": 1
-                }
-            },
-            "label": {
-                "normal": {
-                    "textStyle": {
-                        "color": "#000000"
-                    }
-                },
-                "emphasis": {
-                    "textStyle": {
-                        "color": "rgb(100,0,0)"
-                    }
                 }
             }
         },
@@ -357,9 +342,7 @@
             },
             "axisLabel": {
                 "show": true,
-                "textStyle": {
-                    "color": "#333"
-                }
+                "color": "#333"
             },
             "splitLine": {
                 "show": true,
@@ -394,9 +377,7 @@
             },
             "axisLabel": {
                 "show": true,
-                "textStyle": {
-                    "color": "#333"
-                }
+                "color": "#333"
             },
             "splitLine": {
                 "show": true,
@@ -418,18 +399,18 @@
         },
         "toolbox": {
             "iconStyle": {
-                "normal": {
-                    "borderColor": "#999999"
-                },
-                "emphasis": {
+                "borderColor": "#999999"
+                ,
+            },
+            "emphasis": {
+                "itconStyle": {
                     "borderColor": "#666666"
+
                 }
             }
         },
         "legend": {
-            "textStyle": {
-                "color": "#333333"
-            }
+            "color": "#333333"
         },
         "tooltip": {
             "axisPointer": {
@@ -449,42 +430,38 @@
                 "width": 1
             },
             "itemStyle": {
-                "normal": {
-                    "color": "#293c55",
-                    "borderWidth": 1
-                },
-                "emphasis": {
+                "color": "#293c55",
+                "borderWidth": 1
+                ,
+            },
+            "emphasis": {
+                "itemStyle": {
                     "color": "#a9334c"
+                },
+                "label": {
+                    "color": "#293c55"
+                },
+                "controlStyle": {
+                    "color": "#293c55",
+                    "borderColor": "#293c55",
+                    "borderWidth": 0.5
                 }
             },
             "controlStyle": {
-                "normal": {
-                    "color": "#293c55",
-                    "borderColor": "#293c55",
-                    "borderWidth": 0.5
-                },
-                "emphasis": {
-                    "color": "#293c55",
-                    "borderColor": "#293c55",
-                    "borderWidth": 0.5
-                }
+                "color": "#293c55",
+                "borderColor": "#293c55",
+                "borderWidth": 0.5
+                ,
             },
+            
             "checkpointStyle": {
                 "color": "#e43c59",
                 "borderColor": "rgba(194,53,49,0.5)"
             },
             "label": {
-                "normal": {
-                    "textStyle": {
-                        "color": "#293c55"
-                    }
-                },
-                "emphasis": {
-                    "textStyle": {
-                        "color": "#293c55"
-                    }
-                }
-            }
+                "color": "#293c55"
+            },
+           
         },
         "visualMap": {
             "color": [
@@ -505,15 +482,12 @@
         },
         "markPoint": {
             "label": {
-                "normal": {
-                    "textStyle": {
-                        "color": "#eee"
-                    }
-                },
-                "emphasis": {
-                    "textStyle": {
-                        "color": "#eee"
-                    }
+                "color": "#eee"
+                ,
+            },
+            "emphasis": {
+                "label": {
+                    "color": "#eee"
                 }
             }
         }

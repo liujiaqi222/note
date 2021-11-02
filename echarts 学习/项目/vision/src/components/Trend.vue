@@ -56,8 +56,10 @@ export default {
       // 获取数据
       // const { data } = await this.$axios.get("trend");
       this.allData = data;
+      this.initChart();
+      this.screenAdapter();
+      this.screenAdapter();
       this.updateChart(); //处理数据
-      console.log(this.allData);
     },
 
     updateChart() {
@@ -107,8 +109,11 @@ export default {
         },
         legend: {
           left: 20,
-          top: "20%",
+          top: "15%",
           icon: "circle",
+          textStyle: {
+            color: 'white'
+          }
         },
       };
 
@@ -126,6 +131,7 @@ export default {
           }
         },
       };
+
       this.titleFontSize = this.$refs.trend_ref.offsetWidth / 100 * 3.6;
       this.chartInstance.setOption(adapterOption);
       this.chartInstance.resize();
@@ -137,8 +143,6 @@ export default {
     }
   },
   mounted() {
-    this.initChart();
-    this.screenAdapter();
     window.addEventListener("resize", this.screenAdapter);
     this.$once("hook:beforeDestory", () => {
       window.removeEventListener("resize", this.screenAdapter);

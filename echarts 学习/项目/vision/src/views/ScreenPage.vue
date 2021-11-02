@@ -1,64 +1,70 @@
 <template>
-  <div class="screen-container" >
+  <div class="screen-container">
     <header class="screen-header">
       <div>
-        <img src="static/img/header_border_dark.png">
+        <img src="static/img/header_border_dark.png" />
       </div>
       <span class="logo">
         <img src="static/img/logo_dark.png" />
       </span>
       <span class="title">电商平台实时监控系统</span>
       <div class="title-right">
-        <img  class="qiehuan" src='/static/img/qiehuan_dark.png'>
+        <img class="qiehuan" src="/static/img/qiehuan_dark.png" />
         <span class="datetime">2049-01-01 00:00:00</span>
       </div>
     </header>
     <div class="screen-body">
       <section class="screen-left">
-        <div id="left-top" >
-          <trend/>
-          <!-- 销量趋势图表 -->
+        <!-- 销量趋势图表 -->
+        <div id="left-top" :class="[fullScreenStatus.trend ? 'fullScreen' : '']">
+          <trend />
           <div class="resize">
             <!-- icon-compress-alt -->
+            <i :class="['fas', fullScreenStatus.trend ? 'fa-compress-alt' : ' fa-expand-alt']"></i>
           </div>
         </div>
-        <div id="left-bottom" >
-          <!-- 商家销售金额图表 -->
-          <seller/>
+        <!-- 商家销售金额图表 -->
+        <div id="left-bottom" :class="[fullScreenStatus.seller ? 'fullScreen' : '']">
+          <seller />
           <div class="resize">
             <!-- icon-compress-alt -->
+            <i :class="['fas', fullScreenStatus.seller ? 'fa-compress-alt' : ' fa-expand-alt']"></i>
           </div>
         </div>
       </section>
+      <!-- 商家分布图表 -->
       <section class="screen-middle">
-        <div id="middle-top" >
-          <!-- 商家分布图表 -->
-          <MapChart/>
+        <div id="middle-top" :class="[fullScreenStatus.map ? 'fullScreen' : '']">
+          <MapChart />
           <div class="resize">
             <!-- icon-compress-alt -->
+            <i :class="['fas', fullScreenStatus.map ? 'fa-compress-alt' : ' fa-expand-alt']"></i>
           </div>
         </div>
-        <div id="middle-bottom" >
-          <!-- 地区销量排行图表 -->
-          <rank/>
+        <!-- 地区销量排行图表 -->
+        <div id="middle-bottom" :class="[fullScreenStatus.rank ? 'fullScreen' : '']">
+          <rank />
           <div class="resize">
             <!-- icon-compress-alt -->
+            <i :class="['fas', fullScreenStatus.rank ? 'fa-compress-alt' : ' fa-expand-alt']"></i>
           </div>
         </div>
       </section>
       <section class="screen-right">
-        <div id="right-top" >
-          <!-- 热销商品占比图表 -->
-          <hot/>
+        <!-- 热销商品占比图表 -->
+        <div id="right-top" :class="[fullScreenStatus.hot ? 'fullScreen' : '']">
+          <hot />
           <div class="resize">
             <!-- icon-compress-alt -->
+            <i :class="['fas', fullScreenStatus.hot ? 'fa-compress-alt' : ' fa-expand-alt']"></i>
           </div>
         </div>
-        <div id="right-bottom">
-          <!-- 库存销量分析图表 -->
-          <stock/>
+        <!-- 库存销量分析图表 -->
+        <div id="right-bottom" :class="[fullScreenStatus.stock ? 'fullScreen' : '']">
+          <stock />
           <div class="resize">
             <!-- icon-compress-alt -->
+            <i :class="['fas', fullScreenStatus.stock ? 'fa-compress-alt' : ' fa-expand-alt']"></i>
           </div>
         </div>
       </section>
@@ -75,22 +81,25 @@ import Stock from '../components/Stock.vue';
 import Trend from '../components/Trend.vue'
 
 export default {
-    components:{
-        Hot,MapChart,Seller,Rank,Stock,Trend
+  components: {
+    Hot, MapChart, Seller, Rank, Stock, Trend
+  },
+  data() {
+    return {
+      // 定义每一个图表的全屏状态
+      fullScreenStatus: {
+        trend: true,
+        seller: false,
+        map: false,
+        rank: false,
+        hot: false,
+        stock: false
+      }
     }
+  }
 }
 </script>
 <style lang="scss" scoped>
-// 全屏样式的定义
-.fullscreen {
-  position: fixed!important;
-  top: 0 !important;
-  left: 0 !important;
-  width: 100% !important;
-  height: 100% !important;
-  margin: 0 !important;
-  z-index: 100;
-}
 
 .screen-container {
   width: 100%;
@@ -106,10 +115,10 @@ export default {
   font-size: 20px;
   position: relative;
   > div {
-      img {
-        width: 100%;
-      }
+    img {
+      width: 100%;
     }
+  }
   .title {
     position: absolute;
     left: 50%;
@@ -120,7 +129,7 @@ export default {
   .title-right {
     display: flex;
     align-items: center;
-    position:absolute;
+    position: absolute;
     right: 0px;
     top: 50%;
     transform: translateY(-80%);
@@ -199,5 +208,16 @@ export default {
   right: 20px;
   top: 20px;
   cursor: pointer;
+}
+
+// 全屏样式的定义
+.fullScreen {
+  position: fixed !important;
+  left: 0 !important;
+  right: 0 !important;
+  height: 100% !important ;
+  width: 100% !important;
+  margin: 0 !important;
+  z-index: 1000 !important;
 }
 </style>

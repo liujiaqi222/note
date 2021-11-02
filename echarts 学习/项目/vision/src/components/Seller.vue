@@ -67,9 +67,9 @@ export default {
         ],
         grid: {
           top: "20%",
-          left: "3%",
-          right: "3%",
-          bottom: "3%",
+          left: "5%",
+          right: "13%",
+          bottom: "13%",
           // 上面的距离设置包含坐标轴上的文字
           containLabel: true,
         },
@@ -179,8 +179,3 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
-.com-chart {
-  height: 100vh;
-}
-</style>
