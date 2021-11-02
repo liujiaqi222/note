@@ -5,6 +5,8 @@ import axios from 'axios'
 import './assets/css/global.css'
 // 5.0需要这样引入echarts
 import * as echarts from 'echarts'
+import 'animate.css';
+
 Vue.config.productionTip = false;
 
 import SocketService from './utils/socket_service.js'

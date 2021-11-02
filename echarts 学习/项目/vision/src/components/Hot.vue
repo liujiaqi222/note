@@ -53,7 +53,10 @@ export default {
         ],
         legend: {
           top: '15%',
-          icon: 'cicle'
+          icon: 'circle',
+          textStyle:{
+            color:'white'
+          }
         },
         tooltip: {
           show: true,
@@ -86,6 +89,7 @@ export default {
             name: item.name,
             value: item.value,
             children: item.children, //添加了这个属性后，会显示在tooltip的 formatter的data节点下
+            
           };
         }
       );

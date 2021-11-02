@@ -13,32 +13,32 @@ const routes = [
   ,
   {
     path: '/sellerpage',
-    name: 'SellerPage',
+    name: 'seller',
     component: () => import('../views/SellerPage.vue')
   },
   {
     path: '/trendpage',
-    name: 'TrendPage',
+    name: 'trend',
     component: () => import('../views/TrendPage.vue'),
   },
   {
     path: '/mappage',
-    name: 'MapPage',
+    name: 'map',
     component: () => import('../views/MapPage.vue'),
   },
   {
     path: '/rankpage',
-    name: 'RankPage',
+    name: 'rank',
     component: () => import('../views/RankPage.vue'),
   },
   {
     path: '/hotpage',
-    name: 'HotPage',
+    name: 'hot',
     component: () => import('../views/HotPage.vue'),
   },
   {
     path: '/stockpage',
-    name: 'StockPage',
+    name: 'stock',
     component: () => import('../views/StockPage.vue'),
   },
 
