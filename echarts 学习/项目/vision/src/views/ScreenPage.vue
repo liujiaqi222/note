@@ -1,22 +1,19 @@
 <template>
-  <div class="screen-container">
-    <header class="screen-header">
-      <div>
+  <div class="screen-container" :style="containerStyle">
+    <header class="screen-header" :style="headerStyle">
+      <!-- <div>
         <img src="static/img/header_border_dark.png" />
-      </div>
-      <span class="logo">
-        <img src="static/img/logo_dark.png" />
-      </span>
+      </div>-->
       <span class="title">电商平台实时监控系统</span>
       <div class="title-right">
-        <img class="qiehuan" src="/static/img/qiehuan_dark.png" />
+        <img class="qiehuan" :src="themeSrc" @click="handleChangeTheme" style="cursor: pointer;" />
         <span class="datetime">2049-01-01 00:00:00</span>
       </div>
     </header>
     <div class="screen-body">
       <!-- 销量趋势图表 -->
       <div class="trend" :class="[fullScreenStatus.trend ? 'fullScreen' : '']">
-        <trend />
+        <trend ref="trend" />
         <div class="resize">
           <!-- icon-compress-alt -->
           <i
@@ -26,19 +23,19 @@
         </div>
       </div>
       <!-- 商家分布图表 -->
-      <div class="map" :class="[fullScreenStatus.map ? 'fullScreen' : '']">
-        <MapChart />
+      <div class="map" :class="[fullScreenStatus.mapChart ? 'fullScreen' : '']">
+        <MapChart ref="mapChart" />
         <div class="resize">
           <!-- icon-compress-alt -->
           <i
             :class="['fas', fullScreenStatus.map ? 'fa-compress-alt' : ' fa-expand-alt']"
-            @click="changeSize('map')"
+            @click="changeSize('mapChart')"
           ></i>
         </div>
       </div>
       <!-- 热销商品占比图表 -->
       <div class="hot" :class="[fullScreenStatus.hot ? 'fullScreen' : '']">
-        <hot />
+        <hot ref="hot" />
         <div class="resize">
           <!-- icon-compress-alt -->
           <i
@@ -49,7 +46,7 @@
       </div>
       <!-- 商家销售金额图表 -->
       <div class="seller" :class="[fullScreenStatus.seller ? 'fullScreen' : '']">
-        <seller />
+        <seller ref="seller" />
         <div class="resize">
           <!-- icon-compress-alt -->
           <i
@@ -61,7 +58,7 @@
 
       <!-- 地区销量排行图表 -->
       <div class="rank" :class="[fullScreenStatus.rank ? 'fullScreen' : '']">
-        <rank />
+        <rank ref="rank" />
         <div class="resize">
           <!-- icon-compress-alt -->
           <i
@@ -73,7 +70,7 @@
 
       <!-- 库存销量分析图表 -->
       <div class="stock" :class="[fullScreenStatus.stock ? 'fullScreen' : '']">
-        <stock />
+        <stock ref="stock" />
         <div class="resize">
           <!-- icon-compress-alt -->
           <i
@@ -92,7 +89,9 @@ import Seller from '../components/Seller.vue';
 import MapChart from '../components/Map.vue';
 import Rank from '../components/Rank.vue';
 import Stock from '../components/Stock.vue';
-import Trend from '../components/Trend.vue'
+import Trend from '../components/Trend.vue';
+import getThemeValue from '../utils/theme_utils.js'
+import { mapState } from 'vuex'
 
 export default {
   components: {
@@ -104,7 +103,7 @@ export default {
       fullScreenStatus: {
         trend: false,
         seller: false,
-        map: false,
+        mapChart: false,
         rank: false,
         hot: false,
         stock: false
@@ -113,9 +112,76 @@ export default {
   },
   methods: {
     changeSize(chartName) {
-      this.$router.push({'name':chartName})
+      // 1.改变fullScreenStatus的数据
+      // this.fullScreenStatus[chartName] = !this.fullScreenStatus[chartName];
+      // 2.需要调用每个图表的screenAdapter方法
+      // this.$nextTick(() => {
+      //   this.$refs[chartName].screenAdapter();
+      // })
+      const targetValue = !this.fullScreenStatus[chartName];
+      // 将数据发送给服务端
+      this.$socket.send({
+        action: 'fullScreen',
+        socketType: 'fullScreen',
+        chartName,
+        value: targetValue,
+      })
+    },
+
+    recvData(data) {
+      // 取出是哪一个图表需要切换，以及切换状态
+      const chartName = data.chartName;
+      const targetValue = data.value;
+      // 1.改变fullScreenStatus的数据
+      this.fullScreenStatus[chartName] = targetValue;
+      // 2.需要调用每个图表的screenAdapter方法
+      this.$nextTick(() => {
+        this.$refs[chartName].screenAdapter();
+      })
+    },
+    // 修改vuex中的数据
+    handleChangeTheme() {
+      // this.$store.commit('changeTheme');
+      this.$socket.send({
+        action: 'themeChange',
+        socketType: 'themeChange',
+        value: ''
+      });
+    },
+    recvThemeChange() {
+      this.$store.commit('changeTheme');
     }
   },
+  created() {
+    // 注册接收数据的函数
+    this.$socket.registerCallBack('fullScreen', this.recvData);
+    this.$socket.registerCallBack('themeChange', this.recvThemeChange);
+  },
+  destroyed() {
+    this.$socket.unRegisterCallBack('fullScreen')
+    this.$socket.unRegisterCallBack('themeChange')
+  },
+  computed: {
+    ...mapState(['theme']),
+    headerBorderSrc() {
+      return '';
+    },
+    themeSrc() {
+      return '/static/img/' + getThemeValue(this.theme).themeSrc;
+    },
+    headerStyle() {
+      return {
+        'background-image': `url(static/img/${getThemeValue(this.theme).headerBorderSrc})`
+      }
+    },
+    containerStyle() {
+      return {
+        backgroundColor: getThemeValue(this.theme).backgroundColor,
+        color: getThemeValue(this.theme).titleColor,
+      }
+    }
+  }
+
 }
 </script>
 <style lang="scss" scoped>
@@ -126,54 +192,29 @@ export default {
   color: #fff;
   box-sizing: border-box;
 }
+
 .screen-header {
+  background: url("../../public/static/img/header_border_dark.png") no-repeat
+    center/cover;
+
+  display: flex;
+  height: 4rem;
+  align-items: center;
   width: 100%;
-  height: 64px;
-  font-size: 20px;
+  justify-content: center;
   position: relative;
-  > div {
-    img {
-      width: 100%;
-    }
-  }
-  .title {
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    font-size: 20px;
-    transform: translate(-50%, -50%);
-  }
+  padding: 0;
+  margin-bottom: 10px;
   .title-right {
-    display: flex;
-    align-items: center;
     position: absolute;
-    right: 0px;
-    top: 50%;
-    transform: translateY(-80%);
-  }
-  .qiehuan {
-    width: 28px;
-    height: 21px;
-    cursor: pointer;
-  }
-  .datetime {
-    font-size: 15px;
-    margin-left: 10px;
-  }
-  .logo {
-    position: absolute;
-    left: 0px;
-    top: 50%;
-    transform: translateY(-80%);
-    img {
-      height: 35px;
-      width: 128px;
-    }
+    right: 0;
+    top: 0;
   }
 }
+
 .screen-body {
   width: 100%;
-  min-height: calc(100vh - 64px);
+  min-height: calc(100vh - 74px);
   display: grid;
   grid-template-columns: repeat(12, 1fr);
   grid-template-rows: 300px 400px 300px 300px 300px 300px;
@@ -220,7 +261,7 @@ export default {
       "r r r r  r r k k  k k k k";
   }
   @media (min-width: 1200px) {
-    grid-template-rows: repeat(6, calc((100vh - 164px) / 6));
+    grid-template-rows: repeat(6, calc((100vh - 174px) / 6));
     grid-template-areas:
       "t t t m  m m m m  h h h h"
       "t t t m  m m m m  h h h h"
@@ -246,6 +287,6 @@ div.fullScreen {
   width: 100vm !important;
   margin: 0 !important;
   z-index: 1000 !important;
- 
+  transition: all 0.3s ease;
 }
 </style>

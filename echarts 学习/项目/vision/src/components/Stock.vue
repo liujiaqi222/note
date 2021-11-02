@@ -6,6 +6,8 @@
 
 <script>
 import "../../public/static/theme/chalk.js";
+import "../../public/static/theme/vintage.js";
+import { mapState } from 'vuex'
 
 export default {
   data() {
@@ -33,6 +35,17 @@ export default {
       chartName: 'stock'
     });
   },
+  computed: {
+    ...mapState(['theme'])
+  },
+  watch: {
+    theme() {
+      this.chartInstance.dispose();
+      this.initChart(); //用新主题来初始化
+      this.screenAdapter(); //完成屏幕适配
+      this.updateChart();
+    }
+  },
   methods: {
     initChart() {
       const initOption = {
@@ -42,7 +55,7 @@ export default {
           top: 20,
         },
       };
-      this.chartInstance = this.$echarts.init(this.$refs.stock_ref, "chalk");
+      this.chartInstance = this.$echarts.init(this.$refs.stock_ref, this.theme);
       this.chartInstance.setOption(initOption);
       this.chartInstance.on('mouseover', () => {
         clearInterval(this.timerId);
@@ -69,7 +82,6 @@ export default {
       ];
       const innerRadius = parseInt(this.titleFontSize * 4);
       const outterRadius = parseInt(this.titleFontSize * 3);
-      console.log(innerRadius,outterRadius);
       const colorArr = [['#4ff778', '#0ba82c'], ['#e5dd45', '#e8b11c'], ['#e8821c', '#e55445'], ['#5052ee', '#ab6ee5'], ['#23e5e5', '#2e78bf']];
       const seriesArr = showData.map((item, index) => {
         return {
@@ -106,7 +118,7 @@ export default {
             position: 'center',
             color: colorArr[index][0],
             fontSize: this.titleFontSize / 1.4
-            
+
           },
           radius: [outterRadius, innerRadius],
         };

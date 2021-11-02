@@ -42,8 +42,9 @@ export default class SocketService {
                     // 调用回调函数传值
                     this.callBackMapping[recvData.socketType](JSON.parse(recvData.data))
                 } else if (recvData.action === 'fullScreen') {
-
+                    this.callBackMapping[recvData.socketType](recvData);
                 } else if (recvData.action === 'themeChange') {
+                    this.callBackMapping[recvData.socketType](recvData);
 
                 }
             }

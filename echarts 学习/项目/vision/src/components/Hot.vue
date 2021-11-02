@@ -9,6 +9,9 @@
 
 <script>
 import "../../public/static/theme/chalk.js";
+import "../../public/static/theme/vintage.js";
+import {mapState} from 'vuex';
+import getThemeValue from '../utils/theme_utils.js'
 
 export default {
   data() {
@@ -31,7 +34,8 @@ export default {
   },
   methods: {
     initChart() {
-      this.chartInstance = this.$echarts.init(this.$refs.hot_ref, "chalk");
+      console.log(this.theme);
+      this.chartInstance = this.$echarts.init(this.$refs.hot_ref, this.theme);
       const initOption = {
         title: { text: '▎热销商品', left: 20, top: 20, },
         series: [
@@ -54,9 +58,7 @@ export default {
         legend: {
           top: '15%',
           icon: 'circle',
-          textStyle:{
-            color:'white'
-          }
+         
         },
         tooltip: {
           show: true,
@@ -105,7 +107,7 @@ export default {
       };
       this.chartInstance.setOption(dataOption);
     },
-    screenAdaptor() {
+    screenAdapter() {
       let chart = this.$refs.hot_ref;
       this.titleFontSize = (chart.offsetWidth > chart.offsetHeight ? chart.offsetHeight : chart.offsetWidth) / 100 * 3.6;
 
@@ -148,15 +150,24 @@ export default {
   },
   mounted() {
     this.initChart();
-    this.screenAdaptor();
-    window.addEventListener("resize", this.screenAdaptor);
+    this.screenAdapter();
+    window.addEventListener("resize", this.screenAdapter);
     this.$once("hook:beforeDestroy", () => {
-      window.removeEventListener("resize", this.screenAdaptor);
+      window.removeEventListener("resize", this.screenAdapter);
     });
   },
   computed: {
     comStyle() {
-      return { fontSize: this.titleFontSize + 'px' }
+      return { fontSize: this.titleFontSize + 'px' ,color:getThemeValue(this.theme).titleColor}
+    },
+    ...mapState(['theme']),
+  },
+  watch:{
+    theme(){
+      this.chartInstance.dispose();
+      this.initChart(); //用新主题来初始化
+      this.screenAdapter(); //完成屏幕适配
+      this.updateChart(); 
     }
   }
 };

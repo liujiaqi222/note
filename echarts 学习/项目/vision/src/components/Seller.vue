@@ -7,6 +7,8 @@
 
 <script>
 import "../../public/static/theme/chalk.js";
+import "../../public/static/theme/vintage.js";
+import {mapState} from 'vuex';
 export default {
   data() {
     return {
@@ -20,7 +22,7 @@ export default {
   methods: {
     // 初始化echartsInstance 对象
     initChart() {
-      this.chartInstance = this.$echarts.init(this.$refs.seller_ref, "chalk");
+      this.chartInstance = this.$echarts.init(this.$refs.seller_ref, this.theme);
       // 对图表初始化的控制
       const initOption = {
         title: {
@@ -125,7 +127,7 @@ export default {
     },
     // 屏幕适配
     //当浏览器大小发生变化时会调用的方法
-    screenAdaptor() {
+    screenAdapter() {
       // this.$refs.seller_ref.offsetWidth
       const titleFontSize = parseInt(
         (this.$refs.seller_ref.offsetWidth / 100) * 3.6
@@ -157,10 +159,22 @@ export default {
       this.chartInstance.resize();
     },
   },
+  computed:{
+    ...mapState(['theme'])
+  },
+  watch:{
+    theme(){
+      console.log('主题切换了');
+      this.chartInstance.dispose();
+      this.initChart(); //用新主题来初始化
+      this.screenAdapter(); //完成屏幕适配
+      this.updateChart(); 
+    }
+  },
   mounted() {
     this.initChart();
-    this.screenAdaptor();
-    window.addEventListener("resize", this.screenAdaptor);
+    this.screenAdapter();
+    window.addEventListener("resize", this.screenAdapter);
   },
   created() {
     this.$socket.registerCallBack('sellerData', this.getData);
@@ -174,8 +188,9 @@ export default {
   destroyed() {
     clearInterval(this.timerId);
     // 移除事件监听
-    window.removeEventListener('resize', this.screenAdaptor);
+    window.removeEventListener('resize', this.screenAdapter);
   },
+
 };
 </script>
 

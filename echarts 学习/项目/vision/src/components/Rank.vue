@@ -6,6 +6,8 @@
 
 <script>
 import "../../public/static/theme/chalk.js";
+import "../../public/static/theme/vintage.js";
+import {mapState} from 'vuex'
 
 export default {
   data() {
@@ -19,7 +21,7 @@ export default {
   },
   methods: {
     initChart() {
-      this.chartInstance = this.$echarts.init(this.$refs.rank_ref, "chalk");
+      this.chartInstance = this.$echarts.init(this.$refs.rank_ref, this.theme);
       const initOption = {
         title: {
           text: "▏地区销售排行",
@@ -161,6 +163,17 @@ export default {
     window.addEventListener("resize", this.screenAdapter);
     this.screenAdapter();
   },
+  computed:{
+    ...mapState(['theme'])
+  },
+  watch:{
+    theme(){
+      this.chartInstance.dispose();
+      this.initChart(); //用新主题来初始化
+      this.screenAdapter(); //完成屏幕适配
+      this.updateChart(); 
+    }
+  }
 };
 </script>
 

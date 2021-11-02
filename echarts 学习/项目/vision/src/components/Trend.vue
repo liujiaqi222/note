@@ -1,9 +1,9 @@
 <template>
   <div class="com-container">
     <div class="title" :style="comStyle">
-      <span>▎{{ showTitle }}</span>
+      <span>▏{{ showTitle }}</span>
       <i class="fas fa-chevron-down" @click="showChoice = !showChoice"></i>
-      <div class="select-con" v-show="showChoice">
+      <div class="select-con" v-show="showChoice" :style='bgStyle'>
         <div
           class="select-item"
           v-for="item in selectTypes"
@@ -19,7 +19,9 @@
 
 <script>
 import "../../public/static/theme/chalk.js";
-
+import "../../public/static/theme/vintage.js";
+import getThemeValue from '../utils/theme_utils.js'
+import { mapState } from 'vuex'
 export default {
   data() {
     return {
@@ -33,7 +35,7 @@ export default {
   methods: {
     // 初始化echarts实例对象的方法
     initChart() {
-      this.chartInstance = this.$echarts.init(this.$refs.trend_ref, 'chalk');
+      this.chartInstance = this.$echarts.init(this.$refs.trend_ref, this.theme);
       const initOption = {
         xAxis: {
           type: "category",
@@ -177,15 +179,34 @@ export default {
     comStyle() {
       return {
         fontSize: this.titleFontSize + 'px',
+        color:getThemeValue(this.theme).titleColor,
+
       }
     },
+    // 设置标题的容器颜色
+    bgStyle(){
+      return{
+        backgroundColor:getThemeValue(this.theme).trendBgc
+      }
+
+    }
+    ,
     marginStyle() {
       return {
         marginLeft: this.titleFontSize + 'px',
       }
-    }
+    },
+    ...mapState(['theme'])
 
   },
+  watch: {
+    theme() {
+      this.chartInstance.dispose();
+      this.initChart(); //用新主题来初始化
+      this.screenAdapter(); //完成屏幕适配
+      this.updateChart();
+    }
+  }
 };
 </script>
 

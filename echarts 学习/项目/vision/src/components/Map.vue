@@ -6,6 +6,8 @@
 
 <script>
 import "../../public/static/theme/chalk.js";
+import "../../public/static/theme/vintage.js";
+import {mapState} from 'vuex'
 import { getProvinceMapInfo, name2pinyin } from "../utils/map_utils.js";
 import axios from "axios";
 
@@ -26,16 +28,27 @@ export default {
       chartName: 'map'
     });
   },
+  computed:{
+    ...mapState(['theme'])
+  },
+  watch:{
+    theme(){
+      this.chartInstance.dispose();
+      this.initChart(); //用新主题来初始化
+      this.screenAdapter(); //完成屏幕适配
+      this.updateChart(); 
+    }
+  },
   mounted() {
     this.initChart();
-    window.addEventListener("resize", this.screenAdaptor);
+    window.addEventListener("resize", this.screenAdapter);
     this.$once("hook:beforeDestory", () => {
-      window.removeEventListener("resize", this.screenAdaptor);
+      window.removeEventListener("resize", this.screenAdapter);
     });
   },
   methods: {
     async initChart() {
-      this.chartInstance = this.$echarts.init(this.$refs.map_ref, "chalk");
+      this.chartInstance = this.$echarts.init(this.$refs.map_ref, this.theme);
       const res = await axios.get(`${this.$url}/static/map/china.json`);
       this.$echarts.registerMap("china", res.data);
       const initOption = {
@@ -108,7 +121,7 @@ export default {
       };
       this.chartInstance.setOption(dataOption);
     },
-    screenAdaptor() {
+    screenAdapter() {
       const titleFontSize = (this.$refs.map_ref.offsetWidth / 100) * 3.6;
       const adapterOption = {
         title: {

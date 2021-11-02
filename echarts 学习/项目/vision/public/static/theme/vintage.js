@@ -268,9 +268,7 @@
             },
             "axisLabel": {
                 "show": true,
-                "textStyle": {
                     "color": "#999"
-                }
             },
             "splitLine": {
                 "show": false,
@@ -305,9 +303,7 @@
             },
             "axisLabel": {
                 "show": true,
-                "textStyle": {
                     "color": "#aaaaaa"
-                }
             },
             "splitLine": {
                 "show": false,
@@ -410,7 +406,7 @@
             }
         },
         "legend": {
-            "color": "#333333"
+            "color": "#333"
         },
         "tooltip": {
             "axisPointer": {

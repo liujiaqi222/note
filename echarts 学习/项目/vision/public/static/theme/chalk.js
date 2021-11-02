@@ -408,7 +408,7 @@
             },
             "legend": {
                 "textStyle": {
-                    "color": "#999999"
+                    "color": "#fffff"
                 }
             },
             "tooltip": {
@@ -459,9 +459,7 @@
                     "borderColor": "rgba(252,151,175,0.3)"
                 },
                 "label": {
-                    "color": "#87f7cf"
-
-                    ,
+                    "color": "#fff",
 
                 },
 
