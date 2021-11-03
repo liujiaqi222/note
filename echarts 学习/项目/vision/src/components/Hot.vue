@@ -34,7 +34,6 @@ export default {
   },
   methods: {
     initChart() {
-      console.log(this.theme);
       this.chartInstance = this.$echarts.init(this.$refs.hot_ref, this.theme);
       const initOption = {
         title: { text: '▎热销商品', left: 20, top: 20, },

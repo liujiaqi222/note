@@ -1,7 +1,7 @@
 <template>
   <div class="com-container">
     <div class="title" :style="comStyle">
-      <span>▏{{ showTitle }}</span>
+      <span>▎{{ showTitle }}</span>
       <i class="fas fa-chevron-down" @click="showChoice = !showChoice"></i>
       <div class="select-con" v-show="showChoice" :style='bgStyle'>
         <div
@@ -113,9 +113,6 @@ export default {
           left: 20,
           top: "15%",
           icon: "circle",
-          textStyle: {
-            color: 'white'
-          }
         },
       };
 

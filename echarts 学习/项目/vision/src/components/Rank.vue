@@ -24,15 +24,15 @@ export default {
       this.chartInstance = this.$echarts.init(this.$refs.rank_ref, this.theme);
       const initOption = {
         title: {
-          text: "▏地区销售排行",
+          text: "▎地区销售排行",
           left: 20,
           top: 20,
         },
         grid: {
-          top: "40%",
+          top: "25%",
           left: "5%",
           right: "5%",
-          bottom: "5%",
+          bottom: "10%",
           containLabel: true,
         },
         tooltip: {

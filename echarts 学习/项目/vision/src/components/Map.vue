@@ -63,7 +63,7 @@ export default {
           },
         },
         title: {
-          text: "▏商家分布",
+          text: "▎商家分布",
           left: "20",
           top: "20",
         },

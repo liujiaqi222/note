@@ -44,8 +44,7 @@ export default class SocketService {
                 } else if (recvData.action === 'fullScreen') {
                     this.callBackMapping[recvData.socketType](recvData);
                 } else if (recvData.action === 'themeChange') {
-                    this.callBackMapping[recvData.socketType](recvData);
-
+                    this.callBackMapping[recvData.socketType]();
                 }
             }
         }

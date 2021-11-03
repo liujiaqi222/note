@@ -164,7 +164,6 @@ export default {
   },
   watch:{
     theme(){
-      console.log('主题切换了');
       this.chartInstance.dispose();
       this.initChart(); //用新主题来初始化
       this.screenAdapter(); //完成屏幕适配

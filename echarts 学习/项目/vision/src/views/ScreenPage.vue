@@ -1,17 +1,13 @@
 <template>
   <div class="screen-container" :style="containerStyle">
     <header class="screen-header" :style="headerStyle">
-      <!-- <div>
-        <img src="static/img/header_border_dark.png" />
-      </div>-->
+      <span class="datetime" ref='dateTime'>{{ new Date().toLocaleString('zh-cn') }}</span>
       <span class="title">电商平台实时监控系统</span>
-      <div class="title-right">
-        <img class="qiehuan" :src="themeSrc" @click="handleChangeTheme" style="cursor: pointer;" />
-        <span class="datetime">2049-01-01 00:00:00</span>
-      </div>
+      <img class="changeTheme" :src="themeSrc" @click="handleChangeTheme" style="cursor: pointer;" />
     </header>
     <div class="screen-body">
       <!-- 销量趋势图表 -->
+
       <div class="trend" :class="[fullScreenStatus.trend ? 'fullScreen' : '']">
         <trend ref="trend" />
         <div class="resize">
@@ -28,7 +24,7 @@
         <div class="resize">
           <!-- icon-compress-alt -->
           <i
-            :class="['fas', fullScreenStatus.map ? 'fa-compress-alt' : ' fa-expand-alt']"
+            :class="['fas', fullScreenStatus.mapChart ? 'fa-compress-alt' : ' fa-expand-alt']"
             @click="changeSize('mapChart')"
           ></i>
         </div>
@@ -84,6 +80,10 @@
 </template>
 
 <script>
+// TODO 更改好全屏时bug
+// TODO 头部的响应式布局
+// TODO 存储用户的主题选择 localStorage
+// TODO 更改热销商品的颜色
 import Hot from '../components/Hot.vue';
 import Seller from '../components/Seller.vue';
 import MapChart from '../components/Map.vue';
@@ -106,7 +106,8 @@ export default {
         mapChart: false,
         rank: false,
         hot: false,
-        stock: false
+        stock: false,
+        timer:null
       }
     }
   },
@@ -148,18 +149,37 @@ export default {
         value: ''
       });
     },
-    recvThemeChange() {
-      this.$store.commit('changeTheme');
+    recvThemeChange(theme='') {
+      this.$store.commit('changeTheme',theme);
+    },
+    getLocalTheme(){
+      const localTheme = localStorage.getItem('theme');
+      //如果localTheme存在且不等于state中的theme
+      if(localTheme&&localTheme!==this.theme){
+        this.recvThemeChange(localTheme);
+      }
+},
+    // 实时更新时间
+    getCurrentTime(){
+      clearInterval(this.timer)
+      this.$nextTick(()=>{
+        this.timer = setInterval(() => {
+        this.$refs.dateTime.textContent = new Date().toLocaleString('zh-cn');
+      }, 1000);
+      })
     }
   },
   created() {
     // 注册接收数据的函数
     this.$socket.registerCallBack('fullScreen', this.recvData);
     this.$socket.registerCallBack('themeChange', this.recvThemeChange);
+    this.getLocalTheme();
+    
   },
   destroyed() {
-    this.$socket.unRegisterCallBack('fullScreen')
-    this.$socket.unRegisterCallBack('themeChange')
+    this.$socket.unRegisterCallBack('fullScreen');
+    clearInterval(this.timer);
+    this.$socket.unRegisterCallBack('themeChange');
   },
   computed: {
     ...mapState(['theme']),
@@ -180,7 +200,10 @@ export default {
         color: getThemeValue(this.theme).titleColor,
       }
     }
-  }
+  },
+  mounted() {
+    this.getCurrentTime();
+  },
 
 }
 </script>
@@ -196,19 +219,41 @@ export default {
 .screen-header {
   background: url("../../public/static/img/header_border_dark.png") no-repeat
     center/cover;
-
   display: flex;
-  height: 4rem;
+  height: 5rem;
   align-items: center;
   width: 100%;
   justify-content: center;
   position: relative;
   padding: 0;
   margin-bottom: 10px;
-  .title-right {
+  @media (min-width: 768px) {
+    height: 4rem;
+  }
+  
+  .title {
+    margin-top: 15px;
+    font-size: 1.5rem;
+    font-weight: bold;
+    align-self: start;
+    @media (min-width:768px) {
+      align-self: center;
+      margin-top: 0;
+    }
+  }
+  .datetime{
+    position: absolute;
+    font-size: 12px;
+      bottom: 10px;
+    @media (min-width:768px) {
+      bottom: 20px;
+      left: 0;
+      font-size: 14px;
+    }
+  }
+  .changeTheme{
     position: absolute;
     right: 0;
-    top: 0;
   }
 }
 
@@ -282,11 +327,14 @@ export default {
 div.fullScreen {
   position: fixed !important;
   left: 0 !important;
+  top: 0 !important;
   right: 0 !important;
+  bottom: 0 !important;
   height: 100vh !important ;
-  width: 100vm !important;
+  width: 100vw !important;
   margin: 0 !important;
   z-index: 1000 !important;
   transition: all 0.3s ease;
+  overflow: hidden;
 }
 </style>

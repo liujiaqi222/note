@@ -105,73 +105,7 @@
                 }
             }
         },
-        "boxplot": {
-            "itemStyle": {
-                "borderWidth": 0,
-                "borderColor": "#ccc"
-                
-            },
-            "emphasis": {
-                "itemStyle": {
-                    "borderWidth": 0,
-                    "borderColor": "#ccc"
-                }
-            }
-        },
-        "parallel": {
-            "itemStyle": {
-                "borderWidth": 0,
-                "borderColor": "#ccc"
-                
-            },
-            "emphasis": {
-                "itemStyle": {
-                    "borderWidth": 0,
-                    "borderColor": "#ccc"
-                }
-            }
-        },
-        "sankey": {
-            "itemStyle": {
-                "borderWidth": 0,
-                "borderColor": "#ccc"
-                ,
 
-            },
-            "emphasis": {
-                "itemStyle": {
-                    "borderWidth": 0,
-                    "borderColor": "#ccc"
-                }
-            }
-        },
-        "funnel": {
-            "itemStyle": {
-                "borderWidth": 0,
-                "borderColor": "#ccc"
-                ,
-            },
-            "emphasis": {
-                "itemStyle": {
-                    "borderWidth": 0,
-                    "borderColor": "#ccc"
-                }
-            }
-
-        },
-        "gauge": {
-            "itemStyle": {
-                "borderWidth": 0,
-                "borderColor": "#ccc"
-
-            },
-            "emphasis": {
-                "itemStyle": {
-                    "borderWidth": 0,
-                    "borderColor": "#ccc"
-                }
-            }
-        },
         "candlestick": {
             "itemStyle": {
                 "color": "#c23531",
@@ -406,7 +340,9 @@
             }
         },
         "legend": {
-            "color": "#333"
+            "textStyle": {
+                "color": "#333"
+            },
         },
         "tooltip": {
             "axisPointer": {
