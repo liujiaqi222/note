@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Canvas</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        #canvas{
+            border:2px solid black;
+            
+        }
+    </style>
+</head>
+<body>
+    <canvas id="canvas">
+
+    </canvas>
+
+    <script>
+        const canvas = document.querySelector('#canvas');
+        const ctx = canvas.getContext('2d');
+        canvas.height = window.innerHeight;
+        canvas.width = window.innerWidth;
+        // Resizing
+        // ctx.fillRect(50,50,100,200); //填充的
+        // ctx.strokeStyle = 'red';
+        // ctx.strokeRect(50,50,100,100); //未填充
+        // ===划线
+        // ctx.beginPath();
+        // ctx.moveTo(100,100);
+        // ctx.lineTo(200,100);
+        // ctx.lineTo(200,150);
+        // ctx.closePath();
+        // ctx.stroke();
+        // ========
+        let painting = false;
+        function startPosition(e){
+            painting = true;
+            draw(e); //因为默认只有移动的时候才调用draw，如果想要鼠标点下去也画一个点，则可以在鼠标点的时候调用draw
+        }
+        function finishedPosition(){
+            painting = false;
+            ctx.beginPath(); //新开一条path ，不然会直接直线连接上次的终点
+        }
+        canvas.addEventListener('mousedown',startPosition);
+        canvas.addEventListener('mouseup',finishedPosition);
+        canvas.addEventListener('mousemove',draw);
+        function draw(e){
+            if(!painting) return;
+            // 线条的宽度
+            console.log(e);
+            ctx.lineWidth = 10;
+            ctx.lineCap = 'round'; //线头的形状
+            ctx.lineTo(e.clientX,e.clientY);
+            ctx.stroke();
+
+        }
+    </script>
+</body>
+</html>
