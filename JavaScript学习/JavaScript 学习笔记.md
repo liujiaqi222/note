@@ -105,6 +105,9 @@ drop
 
 
 
+
+
+
 # 零碎知识点
 
 ## 1.`mouseover`和`mouseenter`的区别？
@@ -141,4 +144,113 @@ drop
     - 此外，由于 `innerText` 受 CSS 样式的影响，它会触发回流（[reflow](https://developer.mozilla.org/zh-CN/docs/Glossary/Reflow)）去确保是最新的计算样式。（回流在计算上可能会非常昂贵，因此应尽可能避免。）
 
 - 与 `textContent` 不同的是, 在 Internet Explorer (小于和等于 11 的版本) 中对 `innerText` 进行修改， 不仅会移除当前元素的子节点，而且还会*永久性地破坏*所有后代文本节点。在之后不可能再次将节点再次插入到任何其他元素或同一元素中。
+
+
+
+
+
+# 小技巧
+
+## 1.快速生成本地时间
+
+```js
+new Date().toLocaleString('zh-cn'); //2021/11/3 下午11:39:10
+
+new Date().toLocaleString('zh-cn',{dateStyle:'long'}) //2021年11月3日
+
+new Date().toLocaleString('zh-cn',{dateStyle:'long',timeStyle:'long'}) //2021年11月3日 GMT+8 下午11:47:53 用medium可以不显示 东八区
+
+new Date().toLocaleString('zh-cn',{dateStyle:'full',timeStyle:'medium'}) // 2021年11月3日星期三 下午11:59:20 !!全场最佳!!
+
+new Date().toLocaleString('zh-cn',{weekday:"long"}); //星期三 如果设置了weekday则将不能设置dateStyle和timeStyle
+
+new Date().toLocaleString('zh-cn',{dateStyle:'long',timeStyle:'medium',hour12:false}); //2021/11/3 23:49:31
+
+
+new Date().toLocaleDateString(); //2021/11/3
+
+new Date().toLocaleTimeString() //下午11:39:10
+
+new Date().toDateString() //Wed Nov 03 2021
+```
+
+
+
+## 2.数组小技巧
+
+### 1.填充数组
+
+```js
+new Array(7); //生成含有7个空元素的数组 [ <7 empty items> ]
+
+// 给数组中填充7个5
+new Array(7).fill(5); //[5,5,5,5,5,5,5]
+```
+
+
+
+### 2.独一无二的数组
+
+使用展开运算符和`Array.from()`会有同样的效果，因为集合是可迭代的。
+
+```js
+const arr = ['hello', 'world', 'word', 'word', 'excel', 'excel'];
+const unique = Array.from(new Set(arr));  //[ 'hello', 'world', 'word', 'excel' ]
+const unique2 = [...new Set(arr)]; //[ 'hello', 'world', 'word', 'excel' ]
+```
+
+
+
+### 3.快速切数组
+
+如果我想要一个数组的前3位，当然我可以用`slice`方法。但还可以更简单！
+
+```js
+const nums = [1, 2, 3, 4, 5, 6];
+nums.length = 3;
+console.log(nums);  //[1,2,3]
+```
+
+但是这个方法的局限性太大了，所以还是得用`slice`。
+
+```js
+const numbers = [1, 2, 3, 4, 5, 6, 7];
+console.log(numbers.slice(1,3)); //[ 2, 3 ]
+console.log(numbers.slice(-1)); //[7] 
+console.log(numbers.slice(-3)); //[ 4, 5, 6 ]
+```
+
+
+
+## 3.js代码时间测试
+
+当然以下这两种办法只有在同步时，才是较为正确的结果
+
+### 方法一
+
+```js
+let startAt = performance.now();
+
+// 超级复杂的代码
+for (let i = 0; i < 3333; i++){
+    console.log(i);
+}
+//============
+let endAt = performance.now();
+
+console.log(endAt-startAt); //390ms
+```
+
+### 方法二
+
+```js
+console.time("用时");
+
+// 超级复杂的代码
+for (let i = 0; i < 3333; i++){
+    console.log(i);
+}
+//================
+console.timeEnd("用时"); //用时: 386.467ms  这就是最后控制台打印的结果
+```
 
