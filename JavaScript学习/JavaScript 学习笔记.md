@@ -94,15 +94,572 @@ drop
 
 
 
+# Canvas学习
+
+## 什么是canvas？
+
+HTML `<canvas>` 元素用于在网页上绘制图形。`<canvas>`元素只是图形的容器，我们必须使用 `JS` 实际绘制图形。
+
+- Canvas 可以画出多彩文本，可以有也可以没有动画。
+- Canvas 可以绘制图表。
+- canvas can be animated. Canvas 对象可以移动。一切都是可能的：从简单的弹跳球到复杂的动画。
+- canvas 可以是交互式的。Canvas可以响应任何用户操作（键单击，鼠标点击，按钮点击，手指移动）。
+
+
+
+当没有设置宽度和高度的时候，canvas会初始化宽度为300像素和高度为150像素。该元素可以使用[CSS](https://developer.mozilla.org/zh-CN/docs/Glossary/CSS)来定义大小，但在绘制时图像会伸缩以适应它的框架尺寸：如果CSS的尺寸与初始画布的比例不一致，它会出现扭曲。
+
+>  如果你绘制出来的图像是扭曲的, 尝试用width和height属性为`<canvas>`明确规定宽高，而不是使用CSS。
+
+`<canvas>`元素可以像任何一个普通的图像一样（有margin，border，background等等属性）被设计。然而，这些样式不会影响在canvas中的实际图像。`当开始时没有为canvas规定样式规则，其将会完全透明。`
 
 
 
 
+<iframe height="500" style="width: 100%;" scrolling="no" title="Untitled" src="https://codepen.io/liujiaqi222/embed/JjyLbyB?default-tab=html%2Cresult" frameborder="no" loading="lazy" allowtransparency="true" allowfullscreen="true">
+  See the Pen <a href="https://codepen.io/liujiaqi222/pen/JjyLbyB">
+  Untitled</a> by liujiaqi222 (<a href="https://codepen.io/liujiaqi222">@liujiaqi222</a>)
+  on <a href="https://codepen.io">CodePen</a>.
+</iframe>
+
+1. 获取canvas元素
+
+   ```js
+   const canvas = document.getElementById('myCanvas');
+   ```
+
+2. 创建绘图对象
+
+   ```js
+   const ctx = canvas.getContext('2d');
+   ```
+
+3. 绘图
+
+   先设置颜色为红色，`fillStyle` 属性可以是CSS颜色，渐变或 `pattern`。默认的fillStyle是黑色的。
+
+   ```js
+   ctx.fillStyle = '#f00';
+   ```
+
+   The fillRect(*x,y, width,height*) method draws a rectangle, filled with the fill style, on the canvas:
+
+   ```js
+   ctx.fillRect(0,0,150,75);
+   ```
+
+   
+
+## 使用canvas来绘制图形
+
+### 栅格
+
+在我们开始画图之前，我们需要了解一下画布栅格（canvas grid）以及坐标空间。通常来说网格中的一个单元相当于canvas元素中的一像素。栅格的起点为左上角（坐标为（0,0））。所有元素的位置都相对于原点定位。所以图中蓝色方形左上角的坐标为距离左边（X轴）x像素，距离上边（Y轴）y像素（坐标为（x,y））
+
+![img](https://gitee.com/zyxbj/image-warehouse/raw/master/pics/202111070022363.png)
 
 
 
+### 绘制矩形
+
+不同于SVG，Canvas只支持两种形式的图形绘制：矩形和路径（由一系列点连成的线段）。所有其他类型的图形都是通过一条或者多条路径组合而成的。不过，我们拥有众多路径生成的方法让复杂图形的绘制成为了可能。
+
+canvas提供了三种方法绘制矩形：
+
+- fillRect(x,y,width,height) 绘制一个填充的矩形
+- strokeRect(x,y,width,height) 绘制一个矩形的边框
+- clearRect(x,y,width,height) 清除指定矩形区域，让清除部分完全透明。
+
+```html
+<canvas id="canvas"></canvas>
+<script>
+  function draw(){
+    const canvas = document.getElementById('canvas');
+    if(canvas.getContext){
+      const ctx = canvas.getContext('2d');
+      ctx.fillRect(25,25,100,100);
+      ctx.clearRect(45,45,60,60);
+      ctx.strokeRect(50,50,50,50);
+    }
+  }
+  draw();
+</script>
+```
+
+![image-20211107003236080](https://gitee.com/zyxbj/image-warehouse/raw/master/pics/202111070032112.png)
+
+`fillRect()`函数绘制了一个边长为100px的黑色正方形。`clearRect()`函数从正方形的中心开始擦除了一个60乘以60px的正方形，接着 `strokeRect()`在清除区域内生成一个50乘以50的正方形边框。
 
 
+
+### 绘制路径
+
+图形的基本元素是路径。路径是通过不同颜色和宽度的线段或曲线相连形成的不同形状的点的集合。一个路径，甚至一个子路径，都是闭合的。
+
+1. 首先，你需要创建路径起始点。
+2. 然后你使用[画图命令](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D#Paths)去画出路径。
+3. 之后你把路径封闭。
+4. 一旦路径生成，你就能通过描边或填充路径区域来渲染图形。
+
+以下是所要用到的函数：
+
+- beginPath() 新建一条路径，生成之后，图形绘制命令被指向到路径上生成路径。
+- closePath() 闭合路径之后图形绘制命令又重新指向到上下文中。
+- stroke() 通过线条来绘制图形轮廓。
+- fill() 通过填充路径的内容区域生成实心的图形。
+
+生成路径的第一步叫做`beginPath()`。本质上，路径是由很多子路径构成，这些子路径都是在一个列表中，所有的子路径（线、弧形、等等）构成图形。而每次这个方法调用之后，列表清空重置，然后我们就可以重新绘制新的图形。
+
+
+
+> **注意：当前路径为空，即调用beginPath()之后，或者canvas刚建的时候，第一条路径构造命令通常被视为是moveTo（），无论实际上是什么。出于这个原因，你几乎总是要在设置路径之后专门指定你的起始位置。**
+
+第二步就是调用函数指定绘制路径，本文稍后我们就能看到了。
+
+第三，就是闭合路径closePath(),不是必需的。这个方法会通过绘制一条从当前点到开始点的直线来闭合图形。如果图形是已经闭合了的，即当前点为开始点，该函数什么也不做。
+
+> **注意：当你调用fill()函数时，所有没有闭合的形状都会自动闭合，所以你不需要调用closePath()函数。但是调用stroke()时不会自动闭合**。
+
+
+
+```js
+<canvas id="canvas"></canvas>
+<script>
+function draw(){
+  const canvas = document.getElementById('canvas');
+  if(canvas.getContext){
+    const ctx = canvas.getContext('2d');
+    ctx.beginPath();
+    ctx.moveTo(100,75);
+    ctx.lineTo(150,50);
+    ctx.lineTo(150,100);
+    ctx.fill();
+  }
+}
+draw();
+</script>
+```
+
+![image-20211107004313922](https://gitee.com/zyxbj/image-warehouse/raw/master/pics/202111070043957.png)
+
+#### 移动笔触
+
+这个函数实际上并不能画出任何东西，也是上面所描述的路径列表的一部分，这个函数就是`moveTo()`。
+
+`moveTo` 将笔触移动到指定的坐标x以及y上。
+
+```js
+<canvas id="canvas"></canvas>
+<script>
+  function draw() {
+    const canvas = document.getElementById('canvas');
+    if (canvas.getContext) {
+      const ctx = canvas.getContext('2d');
+      ctx.beginPath();
+      ctx.arc(150, 75, 50, 0, 2 * Math.PI);
+      // 移动画笔
+      ctx.moveTo(140, 60);
+      ctx.arc(135, 60, 5, 0, Math.PI * 2);
+      ctx.moveTo(170, 60);
+      ctx.arc(165, 60, 5, 0, Math.PI * 2);
+      ctx.moveTo(180, 75);
+      ctx.arc(150, 75, 30, 0, Math.PI);
+      ctx.stroke();
+    }
+  }
+  draw();
+</script>
+```
+
+![加上了moveto](https://gitee.com/zyxbj/image-warehouse/raw/master/pics/202111070104914.png)
+
+如果删掉了上面所有的`moveTo`，则会显示有很多连续的线，因此需要移动笔刷。
+
+![image-20211107010542971](https://gitee.com/zyxbj/image-warehouse/raw/master/pics/202111070105004.png)
+
+
+
+#### 绘制直线
+
+绘制直线，需要用到的方法`lineTo()`。
+
+lineTo(x,y) 绘制一条从当前位置到指定x以及y位置的直线。
+
+该方法有两个参数：x以及y ，代表坐标系中直线结束的点。开始点和之前的绘制路径有关，之前路径的结束点就是接下来的开始点，开始点也可以通过`moveTo()`函数改变。
+
+```html
+<canvas id="canvas"></canvas>
+<script>
+  function draw() {
+    const canvas = document.getElementById('canvas');
+    if (canvas.getContext) {
+      const ctx = canvas.getContext('2d');
+
+      // 填充三角形
+      ctx.beginPath();
+      ctx.moveTo(25, 25);
+      ctx.lineTo(75, 25);
+      ctx.lineTo(25, 75);
+      ctx.fill();
+
+      // 描边三角形
+      ctx.beginPath();
+      ctx.moveTo(80, 30);
+      ctx.lineTo(80, 80);
+      ctx.lineTo(30, 80);
+      ctx.lineTo(80, 30);
+      ctx.stroke();
+    }
+  }
+  draw();
+</script>
+```
+
+![image-20211107154424458](https://gitee.com/zyxbj/image-warehouse/raw/master/pics/202111071544551.png)
+
+#### 圆弧
+
+绘制圆弧或者圆，我们使用`arc()`方法。当然可以使用`arcTo()`，不过这个的实现并不是那么的可靠，所以我们这里不作介绍。
+
+`arc(x,y,radius,startAngle,endAngle,anticlockwise)` 
+
+画一个以（x,y）为圆心的以radius为半径的圆弧（圆），从startAngle开始到endAngle结束，按照anticlockwise给定的方向（默认为顺时针）来生成,为true时，是逆时针方向，否则顺时针方向。
+
+> **注意：`arc()`函数中表示角的单位是弧度，不是角度。角度与弧度的js表达式:**
+>
+> **弧度=(Math.PI/180)\*角度。**
+
+
+
+```js
+<canvas id="canvas" width="300" height="300"></canvas>
+<script>
+  function draw() {
+    const canvas = document.getElementById('canvas');
+    if (canvas.getContext) {
+      const ctx = canvas.getContext('2d');
+      for (let i = 0; i < 4; i++) {
+        for (let j = 0; j < 3; j++) {
+          ctx.beginPath();
+          const x = 25 + j * 50; // x 坐标值
+          const y = 25 + i * 50; // y 坐标值
+          const radius = 20; // 圆弧半径
+          const startAngle = 0;  // 开始点
+          const endAngle = Math.PI + (Math.PI*j)/2;
+          const anticlockwise = i%2==0?false:true; // 结束点
+          ctx.arc(x,y,radius,startAngle,endAngle,anticlockwise); // 顺时针或逆时针
+          if(i>1){
+            ctx.fill();
+          }else{
+            ctx.stroke();
+          }
+        }
+      }
+    }
+  }
+  draw();
+```
+
+x,y坐标是可变的。半径（radius）和开始角度（startAngle）都是固定的。结束角度（endAngle）在第一列开始时是180度（半圆）然后每列增加90度。最后一列形成一个完整的圆。
+
+`clockwise`语句作用于第一、三行是顺时针的圆弧，`anticlockwise`作用于二、四行为逆时针圆弧。`if`语句让一、二行描边圆弧，下面两行填充路径。
+
+![image-20211107160032208](https://gitee.com/zyxbj/image-warehouse/raw/master/pics/202111071600251.png)
+
+
+
+### Path2D对象
+
+正如我们在前面例子中看到的，你可以使用一系列的路径和绘画命令来把对象“画”在画布上。为了简化代码和提高性能，`Path2D`对象已可以在较新版本的浏览器中使用，用来缓存或记录绘画命令，这样你将能快速地回顾路径。
+
+`Path2D()`会返回一个新初始化的Path2D对象（可能将某一个路径作为变量——创建一个它的副本，或者将一个包含SVG path数据的字符串作为变量）。
+
+```js
+new Path2D();     // 空的Path对象
+new Path2D(path); // 克隆Path对象
+new Path2D(d);    // 从SVG建立Path对象
+```
+
+所有的路径方法比如`moveTo`, `rect`, `arc`或`quadraticCurveTo`等，如我们前面见过的，都可以在Path2D中使用。
+
+```js
+<canvas id="canvas" width="300" height="300"></canvas>
+<script>
+  function draw() {
+    const canvas = document.getElementById('canvas');
+    if (canvas.getContext) {
+      const ctx = canvas.getContext('2d');
+      const rectangle = new Path2D();
+      rectangle.rect(10, 10, 50, 50);
+
+      const circle = new Path2D();
+      circle.moveTo(125, 35);
+      circle.arc(100, 35, 35, 0, 2 * Math.PI);
+      ctx.stroke(rectangle);
+      ctx.fill(circle);
+    }
+  }
+  draw();
+</script>
+```
+
+![image-20211107162952342](https://gitee.com/zyxbj/image-warehouse/raw/master/pics/202111071629382.png)
+
+
+
+## 使用样式和颜色
+
+### 色彩
+
+到目前为止，我们只看到过绘制内容的方法。如果我们想要给图形上色，有两个重要的属性可以做到：`fillStyle` 和 `strokeStyle`。
+
+他们的值可以是表示 CSS 颜色值的字符串，渐变对象或者图案对象。
+
+>**注意:** 一旦设置了 `strokeStyle` 或者 `fillStyle` 的值，那么这个新值就会成为新绘制的图形的默认值。如果你要给每个图形上不同的颜色，你需要重新设置 `fillStyle` 或 `strokeStyle` 的值。
+
+```js
+// 这些 fillStyle 的值均为 '橙色'
+ctx.fillStyle = "orange";
+ctx.fillStyle = "#FFA500";
+ctx.fillStyle = "rgb(255,165,0)";
+ctx.fillStyle = "rgba(255,165,0,1)";
+```
+
+#### fillStyle示例
+
+在本示例里，将会再度用两层 `for` 循环来绘制方格阵列，每个方格不同的颜色。结果如右图，但实现所用的代码却没那么绚丽。我们使用两个变量 i 和 j 来为每一个方格产生唯一的 RGB 色彩值，其中仅修改红色和绿色通道的值，而保持蓝色通道的值不变。
+
+```js
+<canvas id="canvas" width="300" height="300"></canvas>
+<script>
+  function draw() {
+    const canvas = document.getElementById('canvas');
+    if (canvas.getContext) {
+      const ctx = canvas.getContext('2d');
+      for (let i = 0; i < 6; i++) {
+        for (let j = 0; j < 6; j++) {
+          ctx.fillStyle = `rgba(${parseInt(42.5 * i)},${parseInt(42.5 * j)},255)`;
+          ctx.fillRect(i * 50, j * 50, 50, 50);
+        }
+      }
+    }
+  }
+  draw();
+</script>
+```
+
+![image-20211107164445676](https://gitee.com/zyxbj/image-warehouse/raw/master/pics/202111071644749.png)
+
+#### strokeStyle示例
+
+这个示例与上面的有点类似，但这次用到的是 `strokeStyle` 属性，画的不是方格，而是用 `arc` 方法来画圆。
+
+```js
+<canvas id="canvas" width="300" height="300"></canvas>
+<script>
+  function draw() {
+    const canvas = document.getElementById('canvas');
+    if (canvas.getContext) {
+      const ctx = canvas.getContext('2d');
+      for (let i = 0; i < 6; i++) {
+        for (let j = 0; j < 6; j++) {
+          ctx.strokeStyle = `rgba(0,${parseInt(42.5*i)},${parseInt(42.5*j)})`;
+          ctx.beginPath();
+          ctx.arc(50*(i+0.5),50*(j+0.5),25,0,Math.PI*2);
+          ctx.stroke();
+        }
+      }
+    }
+  }
+  draw();
+</script>
+```
+
+![image-20211107165333941](https://gitee.com/zyxbj/image-warehouse/raw/master/pics/202111071653005.png)
+
+### 透明度
+
+除了可以绘制实色图形，我们还可以用 canvas 来绘制半透明的图形。通过设置 `globalAlpha` 属性或者使用一个半透明颜色作为轮廓或填充的样式。
+
+`globalAlpha` 属性在需要绘制大量拥有相同透明度的图形时候相当高效。不过，我认为下面的方法可操作性更强一点。
+
+因为 `strokeStyle` 和 `fillStyle` 属性接受符合 CSS 3 规范的颜色值，那我们可以用下面的写法来设置具有透明度的颜色。
+
+```js
+// 指定透明颜色，用于描边和填充样式
+ctx.strokeStyle = "rgba(255,0,0,0.5)";
+ctx.fillStyle = "rgba(255,0,0,0.5)";
+```
+
+#### globaAlpha 示例
+
+在这个例子里，将用四色格作为背景，设置 `globalAlpha` 为 `0.2` 后，在上面画一系列半径递增的半透明圆。最终结果是一个径向渐变效果。圆叠加得越更多，原先所画的圆的透明度会越低。通过增加循环次数，画更多的圆，从中心到边缘部分，背景图会呈现逐渐消失的效果。
+
+```html
+<canvas id="canvas" width="300" height="300"></canvas>
+<script>
+  function draw() {
+    const canvas = document.getElementById('canvas');
+    if (canvas.getContext) {
+      const ctx = canvas.getContext('2d');
+      ctx.fillStyle = '#FD0';
+      ctx.fillRect(0, 0, 150, 150);
+      ctx.fillStyle = '#6c0';
+      ctx.fillRect(150, 0, 150, 150);
+      ctx.fillStyle = '#09F';
+      ctx.fillRect(0, 150, 150, 150);
+      ctx.fillStyle = '#F30';
+      ctx.fillRect(150, 150, 150, 150);
+
+      ctx.fillStyle ='#fff';
+      ctx.globalAlpha = 0.2;
+      for(let i = 0; i<15; i++){
+        ctx.beginPath();
+        ctx.arc(150,150,i*10,0,Math.PI*2);
+        ctx.fill();
+      }
+    }
+  }
+  draw();
+```
+
+
+
+![image-20211107170949016](https://gitee.com/zyxbj/image-warehouse/raw/master/pics/202111071709083.png)
+
+### 线型 Line styles（未看完）
+
+可以通过一系列属性来设置线的样式。
+
+- lineWidth，属性值必须为正数。默认值是1.0，用来设置线条宽度
+
+- lineCap值为`butt`，`round` 和 `square`。默认是 `butt`。设置线条末端样式。
+
+- lineJoin值为 设定线条与线条间接合处的样式。
+
+- miterLimit  限制当两条线相交时交接处最大长度；所谓交接处长度（斜接长度）是指线条交接处内角顶点到外角顶点的长度。
+
+  
+
+- [ ] https://developer.mozilla.org/zh-CN/docs/Web/API/Canvas_API/Tutorial/Applying_styles_and_colors#a_strokestyle_example
+
+
+
+## 绘制文本
+
+canvas 提供了两种方法来渲染文本:
+
+`fillText(text,x,y[,maxWidth]);`
+
+在指定的(x,y)位置填充指定的文本，绘制的最大宽度是可选的。
+
+`strokeText(text,x,y[,maxWidth]);`
+
+在指定的(x,y)位置绘制文本边框，绘制的最大宽度是可选的。
+
+```html
+<canvas id="canvas" ></canvas>
+<script>
+  const canvas = document.getElementById('canvas');
+  const ctx = canvas.getContext('2d');
+  ctx.font ='48px serif';
+  ctx.fillText('Hello Canvas',10,50);
+  ctx.strokeText('Hello Canvas',10,100);
+</script>
+```
+
+![image-20211107172621343](https://gitee.com/zyxbj/image-warehouse/raw/master/pics/202111071726560.png)
+
+### 文本样式
+
+在上面的例子用我们已经使用了 `font` 来使文本比默认尺寸大一些. 还有更多的属性可以让你改变canvas显示文本的方式：
+
+- font 当前我们用来绘制文本的样式. 这个字符串使用和 css font 属性相同的语法. 默认的字体是 `10px sans-serif`。
+  - `font` 属性可以用来作为 [`font-style`](https://developer.mozilla.org/zh-CN/docs/Web/CSS/font-style), [`font-variant`](https://developer.mozilla.org/zh-CN/docs/Web/CSS/font-variant), [`font-weight`](https://developer.mozilla.org/zh-CN/docs/Web/CSS/font-weight), [`font-size`](https://developer.mozilla.org/zh-CN/docs/Web/CSS/font-size), [`line-height`](https://developer.mozilla.org/zh-CN/docs/Web/CSS/line-height) 和 [`font-family`](https://developer.mozilla.org/zh-CN/docs/Web/CSS/font-family) 属性的简写，或将元素的字体设置为系统字体。
+
+- textAlign 文本对齐选项. 可选的值包括：`start`, `end`, `left`, `right` or `center`. 默认值是 `start`。
+- textBaseline 基线对齐选项. 可选的值包括：`top`, `hanging`, `middle`, `alphabetic`, `ideographic`, `bottom`。默认值是 `alphabetic`。
+- direction 文本方向。可能的值包括：ltr, rtl, inherit。默认值是 inherit。
+
+
+
+### 预测量文本宽度
+
+[`measureText()`](https://developer.mozilla.org/zh-CN/docs/Web/API/CanvasRenderingContext2D/measureText)
+
+将返回一个 [`TextMetrics`](https://developer.mozilla.org/zh-CN/docs/Web/API/TextMetrics)对象的宽度、所在像素，这些体现文本特性的属性。
+
+```html
+<canvas id="canvas" ></canvas>
+<script>
+  const canvas = document.getElementById('canvas');
+  const ctx = canvas.getContext('2d');
+  const text = ctx.measureText('foo');
+  console.log(text);
+</script>
+```
+
+![image-20211107173313382](https://gitee.com/zyxbj/image-warehouse/raw/master/pics/202111071733442.png)
+
+
+
+## 使用图片
+
+canvas更有意思的一项特性就是图像操作能力。可以用于动态的图像合成或者作为图形的背景，以及游戏界面（Sprites）等等。浏览器支持的任意格式的外部图片都可以使用，比如PNG、GIF或者JPEG。 你甚至可以将同一个页面中其他canvas元素生成的图片作为图片源。
+
+引入图像到canvas里需要以下两步基本操作：
+
+1. 获得一个指向[`HTMLImageElement`](https://developer.mozilla.org/zh-CN/docs/Web/API/HTMLImageElement)的对象或者另一个canvas元素的引用作为源，也可以通过提供一个URL的方式来使用图片。
+2. 使用`drawImage()`函数将图片绘制到画布上。
+
+### 获取需要绘制的图片
+
+我们可以通过下列方法的一种来获得与canvas相同页面内的图片的引用：
+
+- [`document.images`](https://developer.mozilla.org/zh-CN/docs/Web/API/Document/images)集合
+-  [`document.getElementsByTagName()`](https://developer.mozilla.org/zh-CN/docs/Web/API/Document/getElementsByTagName)方法
+- 如果你知道你想使用的指定图片的ID，你可以用[`document.getElementById()`](https://developer.mozilla.org/zh-CN/docs/Web/API/Document/getElementById)获得这个图片
+
+
+
+### 绘制图片
+
+#### drawImage(image,x,y)
+
+一旦获得了源图对象，我们就可以使用 `drawImage` 方法将它渲染到 canvas 里。`drawImage` 方法有三种形态，下面是最基础的一种。
+
+`drawImage(image, x, y)` 其中 `image` 是 image 或者 canvas 对象，`x` 和 `y 是其在目标 canvas 里的起始坐标。`
+
+```html
+<canvas id="canvas" ></canvas>
+<img src="https://mdn.mozillademos.org/files/5395/backdrop.png" alt="">
+<script>
+  const canvas = document.getElementById('canvas');
+  const ctx = canvas.getContext('2d');
+  const img = new Image();
+  img.src = 'https://mdn.mozillademos.org/files/5395/backdrop.png';
+  // 等待图片加载完成
+  img.onload = ()=>{
+    ctx.drawImage(img,0,0);
+    ctx.beginPath();
+    ctx.moveTo(30,96);
+    ctx.lineTo(70,66);
+    ctx.lineTo(120,88);
+    ctx.lineTo(160,38);
+    ctx.stroke();
+  }
+</script>
+```
+
+![image-20211107181013334](https://gitee.com/zyxbj/image-warehouse/raw/master/pics/202111071810396.png)
+
+#### drawImage(image,x,y,width,height)
+
+`drawImage` 方法的又一变种是增加了两个用于控制图像在 canvas 中缩放的参数。
+
+[`drawImage(image, x, y, width, height)`](https://developer.mozilla.org/zh-CN/docs/Web/API/CanvasRenderingContext2D/drawImage)
+
+这个方法多了2个参数：`width` 和 `height，`这两个参数用来控制 当向canvas画入时应该缩放的大小
 
 
 

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    canvas {
+      border: 1px solid red;
+    }
+  </style>
+</head>
+
+<body>
+<canvas id="canvas" width="300" height="300"></canvas>
+<script>
+  function draw() {
+    const canvas = document.getElementById('canvas');
+    if (canvas.getContext) {
+      const ctx = canvas.getContext('2d');
+      const rectangle = new Path2D();
+      rectangle.rect(10, 10, 50, 50);
+
+      const circle = new Path2D();
+      circle.moveTo(125, 35);
+      circle.arc(100, 35, 35, 0, 2 * Math.PI);
+      ctx.stroke(rectangle);
+      ctx.fill(circle);
+    }
+  }
+  draw();
+</script>
+</body>
+
+</html>

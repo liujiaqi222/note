@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+  </style>
+</head>
+
+<body>
+<canvas id="canvas" width="300" height="300"></canvas>
+<script>
+  function draw() {
+    const canvas = document.getElementById('canvas');
+    if (canvas.getContext) {
+      const ctx = canvas.getContext('2d');
+      ctx.fillStyle = '#FD0';
+      ctx.fillRect(0, 0, 150, 150);
+      ctx.fillStyle = '#6c0';
+      ctx.fillRect(150, 0, 150, 150);
+      ctx.fillStyle = '#09F';
+      ctx.fillRect(0, 150, 150, 150);
+      ctx.fillStyle = '#F30';
+      ctx.fillRect(150, 150, 150, 150);
+
+      ctx.fillStyle ='#fff';
+      ctx.globalAlpha = 0.2;
+      for(let i = 0; i<15; i++){
+        ctx.beginPath();
+        ctx.arc(150,150,i*10,0,Math.PI*2);
+        ctx.fill();
+      }
+    }
+  }
+  draw();
+  </script>
+</body>
+
+</html>

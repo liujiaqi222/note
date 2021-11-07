@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    canvas {
+      border: 1px solid red;
+    }
+  </style>
+</head>
+
+<body>
+<canvas id="canvas"></canvas>
+<script>
+  function draw() {
+    const canvas = document.getElementById('canvas');
+    if (canvas.getContext) {
+      const ctx = canvas.getContext('2d');
+      ctx.beginPath();
+      ctx.arc(150, 75, 50, 0, 2 * Math.PI);
+      // 移动画笔
+      ctx.moveTo(140, 60);
+      ctx.arc(135, 60, 5, 0, Math.PI * 2);
+      ctx.moveTo(170, 60);
+      ctx.arc(165, 60, 5, 0, Math.PI * 2);
+      ctx.moveTo(180, 75);
+      ctx.arc(150, 75, 30, 0, Math.PI);
+      ctx.stroke();
+    }
+  }
+  draw();
+</script>
+</body>
+
+</html>
