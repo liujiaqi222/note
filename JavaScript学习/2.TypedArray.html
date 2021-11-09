@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+    // 所有这些视图（Uint8Array，Uint32Array 等）的通用术语是 TypedArray。它们都享有同一组方法和属性。
+    // 请注意，没有名为 TypedArray 的构造器，它只是表示 ArrayBuffer 上的视图之一的通用总称术语：Int8Array，Uint8Array 及其他，很快就会有完整列表。
+    // 当你看到 new TypedArray 之类的内容时，它表示 new Int8Array、new Uint8Array 及其他中之一。
+
+    const arr = new Uint8Array([0,1,2,3,5]);
+    console.log(arr); //[0, 1, 2, 3, 5, buffer: ArrayBuffer(5), byteLength: 5, byteOffset: 0, length: 5]
+
+const arr16 = new Uint16Array([15,1000]);
+const arr8 = new Uint8Array(arr16);
+console.log(arr8[0]); //15
+console.log(arr8[1]); // 232，试图复制 1000，但无法将 1000 放进 8 位字节中
+
+  </script>
+</body>
+</html>

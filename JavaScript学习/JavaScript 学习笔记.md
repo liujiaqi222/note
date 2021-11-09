@@ -823,19 +823,115 @@ ctx.fillRect(60,60,30,30);
 
 
 
+# 二进制数据、文件
+
+## ArrayBuffer 二进制数组
+
+在 Web 开发中，当我们处理文件时（创建，上传，下载），经常会遇到二进制数据。另一个典型的应用场景是图像处理。
+
+这些都可以通过 JavaScript 进行处理，而且二进制操作性能更高。
+
+不过，在 JavaScript 中有很多种二进制数据格式，会有点容易混淆如`ArrayBuffer`，`Uint8Array`，`DataView`，`Blob`，`File`。
 
 
 
+基本的二进制对象是 `ArrayBuffer` —— 对**固定长度**的**连续内存空间**的引用。
+
+```js
+let buffer = new ArrayBuffer(16); // 创建一个长度为 16 的 buffer
+ console.log(buffer);
+```
+
+![image-20211109230142509](https://gitee.com/zyxbj/image-warehouse/raw/master/pics/202111092301640.png)
+
+它会分配一个 16 字节的连续内存空间，并用 0 进行预填充。
+
+> `ArrayBuffer` **不是某种东西的数组**
+>
+> `ArrayBuffer` 与 `Array` 没有任何共同之处：
+>
+> - 它的长度是固定的，我们无法增加或减少它的长度。
+> - 它正好占用了内存中的那么多空间。
+> - 要访问单个字节，需要另一个“视图”对象，而不是 `buffer[index]`。
 
 
 
+`ArrayBuffer` 是一个内存区域。它里面存储了什么？无从判断。只是一个原始的字节序列。
+
+**如要操作 `ArrayBuffer`，我们需要使用“视图”对象。**视图对象本身并不存储任何东西。它是一副“眼镜”，透过它来解释存储在 `ArrayBuffer` 中的字节。
+
+- **`Uint8Array`** —— 将 `ArrayBuffer` 中的每个字节视为 0 到 255 之间的单个数字（每个字节是 8 位，因此只能容纳那么多）。这称为 “8 位无符号整数”。
+- **`Uint16Array`** —— 将每 2 个字节视为一个 0 到 65535 之间的整数。这称为 “16 位无符号整数”。
+- **`Uint32Array`** —— 将每 4 个字节视为一个 0 到 4294967295 之间的整数。这称为 “32 位无符号整数”。
+- **`Float64Array`** —— 将每 8 个字节视为一个 `5.0x10-324` 到 `1.8x10308` 之间的浮点数。
+
+因此，一个 16 字节 `ArrayBuffer` 中的二进制数据可以解释为 16 个“小数字”，或 8 个更大的数字（每个数字 2 个字节），或 4 个更大的数字（每个数字 4 个字节），或 2 个高精度的浮点数（每个数字 8 个字节）。
+
+![img](https://zh.javascript.info/article/arraybuffer-binary-arrays/arraybuffer-views.svg)
+
+`ArrayBuffer` 是核心对象，是所有的基础，是原始的二进制数据。但是，如果我们要写入值或遍历它，基本上几乎所有操作 —— 我们必须使用视图（view），例如：
+
+```js
+//  创建一个长度为 16 的 buffer
+const buffer = new ArrayBuffer(16);
+
+// 将 buffer 视为一个 32 位整数的序列
+const view = new Uint32Array(buffer);
+console.log(view); // 一个类数组对象 其值为[0,0,0,0]
+```
+
+![image-20211109231046463](https://gitee.com/zyxbj/image-warehouse/raw/master/pics/202111092310535.png)
+
+```js
+// 写入一个值
+view[0] = 123456;
+// 遍历值
+for(let num of view){
+  console.log(num);
+} // 123456，然后 0，0，0（一共 4 个值）
+```
 
 
 
+### TypedArray
 
+所有这些视图（`Uint8Array`，`Uint32Array` 等）的通用术语是 [TypedArray](https://tc39.github.io/ecma262/#sec-typedarray-objects)。它们都享有同一组方法和属性。
 
+请注意，没有名为 `TypedArray` 的构造器，它只是表示 `ArrayBuffer` 上的视图之一的通用总称术语：`Int8Array`，`Uint8Array` 及其他，很快就会有完整列表。
 
+当你看到 `new TypedArray` 之类的内容时，它表示 `new Int8Array`、`new Uint8Array` 及其他中之一。一个类型化数组的构造器（无论是 `Int8Array` 或 `Float64Array`，都无关紧要），其行为各不相同，并且取决于参数类型。
 
+```js
+new TypedArray(buffer, [byteOffset], [length]);
+new TypedArray(object);
+new TypedArray(typedArray);
+new TypedArray(length);
+new TypedArray();
+```
+
+1. 如果给定的是 `ArrayBuffer` 参数，则会在其上创建视图。我们已经用过该语法了。
+
+   可选，我们可以给定起始位置 `byteOffset`（默认为 0）以及 `length`（默认至 buffer 的末尾），这样视图将仅涵盖 `buffer` 的一部分。
+
+2. 如果给定的是 `Array`，或任何类数组对象，则会创建一个相同长度的类型化数组，并复制其内容。 
+
+   ```js
+   const arr = new Uint8Array([0,1,2,3,5]);
+   console.log(arr); //[0, 1, 2, 3, 5, buffer: ArrayBuffer(5), byteLength: 5, byteOffset: 0, length: 5]
+   ```
+
+3. 如果给定的是另一个 `TypedArray`，也是如此：创建一个相同长度的类型化数组，并复制其内容。如果需要的话，数据在此过程中会被转换为新的类型。
+
+   ```js
+   const arr16 = new Uint16Array([15,1000]);
+   const arr8 = new Uint8Array(arr16);
+   console.log(arr8[0]); //15
+   console.log(arr8[1]); // 232，试图复制 1000，但无法将 1000 放进 8 位字节中
+   ```
+
+4. 对于数字参数 `length` —— 创建类型化数组以包含这么多元素。它的字节长度将是 `length` 乘以单个 `TypedArray.BYTES_PER_ELEMENT` 中的字节数：
+
+5. 
 
 
 
