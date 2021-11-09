@@ -603,7 +603,7 @@ canvas 提供了两种方法来渲染文本:
 
 
 
-## 使用图片
+## 绘制图片
 
 canvas更有意思的一项特性就是图像操作能力。可以用于动态的图像合成或者作为图形的背景，以及游戏界面（Sprites）等等。浏览器支持的任意格式的外部图片都可以使用，比如PNG、GIF或者JPEG。 你甚至可以将同一个页面中其他canvas元素生成的图片作为图片源。
 
@@ -624,7 +624,7 @@ canvas更有意思的一项特性就是图像操作能力。可以用于动态�
 
 ### 绘制图片
 
-#### drawImage(image,x,y)
+#### 绘制图片
 
 一旦获得了源图对象，我们就可以使用 `drawImage` 方法将它渲染到 canvas 里。`drawImage` 方法有三种形态，下面是最基础的一种。
 
@@ -653,13 +653,201 @@ canvas更有意思的一项特性就是图像操作能力。可以用于动态�
 
 ![image-20211107181013334](https://gitee.com/zyxbj/image-warehouse/raw/master/pics/202111071810396.png)
 
-#### drawImage(image,x,y,width,height)
+
+
+#### 缩放图片
 
 `drawImage` 方法的又一变种是增加了两个用于控制图像在 canvas 中缩放的参数。
 
 [`drawImage(image, x, y, width, height)`](https://developer.mozilla.org/zh-CN/docs/Web/API/CanvasRenderingContext2D/drawImage)
 
-这个方法多了2个参数：`width` 和 `height，`这两个参数用来控制 当向canvas画入时应该缩放的大小
+这个方法多了2个参数：`width` 和 `height，`这两个参数用来控制当向canvas画入时应该缩放的大小。
+
+> 注意：图像可能会因为大幅度的缩放而变得起杂点或者模糊。如果您的图像里面有文字，那么最好还是不要进行缩放，因为那样处理之后很可能图像里的文字就会变得无法辨认了。
+
+
+
+```js
+<canvas id="canvas" ></canvas>
+<img src="https://mdn.mozillademos.org/files/5397/rhino.jpg" alt="">
+<script>
+  const canvas = document.getElementById('canvas');
+  const ctx = canvas.getContext('2d');
+  const img = new Image();
+  img.src = 'https://mdn.mozillademos.org/files/5397/rhino.jpg';
+  // 等待image创建完成
+  img.onload = ()=>{
+    ctx.drawImage(img,0,0,40,40);
+  }
+</script>
+```
+
+![image-20211109161504633](https://gitee.com/zyxbj/image-warehouse/raw/master/pics/202111091615184.png)
+
+#### 图片裁切
+
+`drawImage` 方法的第三个也是最后一个变种有8个新参数，可以用来裁切图片。
+
+`drawImage(image,sx,sy,sWidth,sHeight,dx,dy,dWidth,dHeight)`
+
+第一个参数和其它的是相同的，都是一个图像或者另一个 canvas 的引用。其它8个参数可以参考下面的图片来理解，前4个是定义**图像源**的切片位置和大小，后4个则是定义切片的目标显示位置和大小。
+
+![img](https://gitee.com/zyxbj/image-warehouse/raw/master/pics/202111091620747.jpeg)
+
+
+
+```js
+<div>
+  <img id="source" src="https://mdn.mozillademos.org/files/5397/rhino.jpg" width="300" height="227">
+  <img id="frame" src="https://mdn.mozillademos.org/files/242/Canvas_picture_frame.png" width="132" height="150">
+
+</div>
+<hr>
+<canvas></canvas>
+<script>
+  const frame = document.getElementById('frame');
+  const source = document.getElementById('source');
+
+  const ctx = document.querySelector('canvas').getContext('2d');
+  // slice
+  ctx.drawImage(source, 33, 70, 100, 120, 86, 12, 100, 120)
+  // frame
+  ctx.drawImage(frame, 75, 0);
+</script>
+```
+
+![image-20211109163632996](https://gitee.com/zyxbj/image-warehouse/raw/master/pics/202111091636066.png)
+
+
+
+### 绘制图片小案例
+
+<iframe height="700" style="width: 100%;" scrolling="no" title="Untitled" src="https://codepen.io/liujiaqi222/embed/NWvzqbZ?default-tab=js%2Cresult&editable=true" frameborder="no" loading="lazy" allowtransparency="true" allowfullscreen="true">
+  See the Pen <a href="https://codepen.io/liujiaqi222/pen/NWvzqbZ">
+  Untitled</a> by liujiaqi222 (<a href="https://codepen.io/liujiaqi222">@liujiaqi222</a>)
+  on <a href="https://codepen.io">CodePen</a>.
+</iframe>
+
+
+
+### 控制图片的缩放行为
+
+如同前文所述，过度缩放图像可能会导致图像模糊或像素化。您可以通过使用绘图环境的[`imageSmoothingEnabled`](https://developer.mozilla.org/zh-CN/docs/Web/API/CanvasRenderingContext2D/imageSmoothingEnabled)属性来控制是否在缩放图像时使用平滑算法。默认值为`true`，即启用平滑缩放。您也可以像这样禁用此功能：
+
+```js
+ctx.mozImageSmoothingEnabled = false;
+ctx.webkitImageSmoothingEnabled = false;
+ctx.msImageSmoothingEnabled = false;
+ctx.imageSmoothingEnabled = false;
+```
+
+
+
+## 变形
+
+### 状态的恢复与保存
+
+在了解变形之前，需要学习两个在开始绘制复杂图形时必不可少的方法。
+
+[`save()`](https://developer.mozilla.org/zh-CN/docs/Web/API/CanvasRenderingContext2D/save)
+
+保存画布(canvas)的所有状态
+
+[`restore()`](https://developer.mozilla.org/zh-CN/docs/Web/API/CanvasRenderingContext2D/restore)
+
+save 和 restore 方法是用来保存和恢复 canvas 状态的，都没有参数。Canvas 的状态就是当前画面应用的所有样式和变形的一个快照。
+
+Canvas状态存储在栈中，每当`save()`方法被调用后，当前的状态就被推送到栈中保存。一个绘画状态包括：
+
+ 
+
+- 当前应用的变形
+- 以及下面这些属性：[`strokeStyle`](https://developer.mozilla.org/zh-CN/docs/Web/API/CanvasRenderingContext2D/strokeStyle), [`fillStyle`](https://developer.mozilla.org/zh-CN/docs/Web/API/CanvasRenderingContext2D/fillStyle), [`globalAlpha`](https://developer.mozilla.org/zh-CN/docs/Web/API/CanvasRenderingContext2D/globalAlpha), [`lineWidth`](https://developer.mozilla.org/zh-CN/docs/Web/API/CanvasRenderingContext2D/lineWidth), [`lineCap`](https://developer.mozilla.org/zh-CN/docs/Web/API/CanvasRenderingContext2D/lineCap), [`lineJoin`](https://developer.mozilla.org/zh-CN/docs/Web/API/CanvasRenderingContext2D/lineJoin), [`miterLimit`](https://developer.mozilla.org/zh-CN/docs/Web/API/CanvasRenderingContext2D/miterLimit), [`lineDashOffset`](https://developer.mozilla.org/zh-CN/docs/Web/API/CanvasRenderingContext2D/lineDashOffset), [`shadowOffsetX`](https://developer.mozilla.org/zh-CN/docs/Web/API/CanvasRenderingContext2D/shadowOffsetX), [`shadowOffsetY`](https://developer.mozilla.org/zh-CN/docs/Web/API/CanvasRenderingContext2D/shadowOffsetY), [`shadowBlur`](https://developer.mozilla.org/zh-CN/docs/Web/API/CanvasRenderingContext2D/shadowBlur), [`shadowColor`](https://developer.mozilla.org/zh-CN/docs/Web/API/CanvasRenderingContext2D/shadowColor), [`globalCompositeOperation`](https://developer.mozilla.org/zh-CN/docs/Web/API/CanvasRenderingContext2D/globalCompositeOperation), [`font`](https://developer.mozilla.org/zh-CN/docs/Web/API/CanvasRenderingContext2D/font), [`textAlign`](https://developer.mozilla.org/zh-CN/docs/Web/API/CanvasRenderingContext2D/textAlign), [`textBaseline`](https://developer.mozilla.org/zh-CN/docs/Web/API/CanvasRenderingContext2D/textBaseline), [`direction`](https://developer.mozilla.org/zh-CN/docs/Web/API/CanvasRenderingContext2D/direction), [`imageSmoothingEnabled`](https://developer.mozilla.org/zh-CN/docs/Web/API/CanvasRenderingContext2D/imageSmoothingEnabled)
+
+- 当前的[裁切路径（clipping path）](https://developer.mozilla.org/zh-CN/docs/Web/API/Canvas_API/Tutorial/Compositing#clipping_paths)
+
+你可以调用任意多次 `save`方法。每一次调用 `restore` 方法，上一个保存的状态就从栈中弹出，所有设定都恢复。
+
+#### save和restore的应用例子
+
+第一步是用默认设置画一个大四方形，然后保存一下状态。改变填充颜色画第二个小一点的蓝色四方形，然后再保存一下状态。再次改变填充颜色绘制更小一点的半透明的白色四方形。
+
+一旦我们调用 `restore`，**状态栈中最后的状态**会弹出，并恢复所有设置。
+
+当第二次调用 `restore` 时，已经恢复到最初的状态，因此最后是再一次绘制出一个黑色的四方形。
+
+```js
+const ctx = document.getElementById('canvas').getContext('2d');
+ctx.fillRect(0,0,150,150); //绘制一个矩形
+ctx.save(); //保存此时的canvas样式配置
+
+ctx.fillStyle = '#09F' ;
+ctx.fillRect(15,15,120,120);
+
+ctx.save(); //保存当前样式状态
+ctx.fillStyle = '#fff';
+ctx.globalAlpha = 0.5;
+ctx.fillRect(30,30,90,90);
+
+// 使用上一次的配置绘制一个矩形
+ctx.restore();
+ctx.fillRect(45,45,60,60);
+
+ctx.restore(); //使用第一次的颜色配置
+ctx.fillRect(60,60,30,30);
+```
+
+
+
+### 移动 translate
+
+``translate `方法接受两个参数。x 是左右偏移量，y 是上下偏移量，如下图所示。
+
+
+
+在做变形之前先保存状态是一个良好的习惯。大多数情况下，调用 restore 方法比手动恢复原先的状态要简单得多。又，如果你是在一个循环中做位移但没有保存和恢复 canvas 的状态，很可能到最后会发现怎么有些东西不见了，那是因为它很可能已经超出 canvas的画布 范围以外了。
+
+![img](https://gitee.com/zyxbj/image-warehouse/raw/master/pics/202111091802408.png)
+
+#### translate的例子
+
+如果不使用 `translate `方法，那么所有矩形都将被绘制在相同的位置（0,0）。`translate `方法同时让我们可以任意放置这些图案，而不需要在 `fillRect()` 方法中手工调整坐标值，既好理解也方便使用。
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -809,5 +997,21 @@ for (let i = 0; i < 3333; i++){
 }
 //================
 console.timeEnd("用时"); //用时: 386.467ms  这就是最后控制台打印的结果
+```
+
+
+
+#### 4.获取页面上的所有图片
+
+可以使用`document.images`获取页面上所有的img标签，返回一个类数组。
+
+```html
+<body>
+	<img src='1.jpg'>
+    <img src='2.jpg'>
+    <script>
+    	console.log(document.images);
+    </script>
+</body>
 ```
 

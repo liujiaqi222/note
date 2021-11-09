@@ -15,20 +15,13 @@
 <canvas id="canvas" ></canvas>
 <img src="https://mdn.mozillademos.org/files/5395/backdrop.png" alt="">
 <script>
-  const canvas = document.getElementById('canvas');
-  const ctx = canvas.getContext('2d');
-  const img = new Image();
-  img.src = 'https://mdn.mozillademos.org/files/5395/backdrop.png';
-  // 等待图片加载完成
-  img.onload = ()=>{
-    ctx.drawImage(img,0,0);
-    ctx.beginPath();
-    ctx.moveTo(30,96);
-    ctx.lineTo(70,66);
-    ctx.lineTo(120,88);
-    ctx.lineTo(160,38);
-    ctx.stroke();
-  }
+  const img = document.querySelector('img');
+  const ctx = document.getElementById('canvas').getContext('2d');
+  ctx.drawImage(img,0,0);
+  ctx.moveTo(35,80);
+  ctx.lineTo(55,50);
+  ctx.lineTo(110,35);
+  ctx.stroke();
 </script>
 </body>
 </html>

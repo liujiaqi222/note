@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    canvas {
+      border: 1px solid black;
+    }
+  </style>
+</head>
+
+<body>
+<div>
+  <img id="source" src="https://mdn.mozillademos.org/files/5397/rhino.jpg" width="300" height="227">
+  <img id="frame" src="https://mdn.mozillademos.org/files/242/Canvas_picture_frame.png" width="132" height="150">
+
+</div>
+<hr>
+<canvas></canvas>
+<script>
+  const frame = document.getElementById('frame');
+  const source = document.getElementById('source');
+
+  const ctx = document.querySelector('canvas').getContext('2d');
+  // slice
+  ctx.drawImage(source, 33, 70, 100, 120, 86, 12, 100, 120)
+  // frame
+  ctx.drawImage(frame, 75, 0);
+</script>
+</body>
+
+</html>
