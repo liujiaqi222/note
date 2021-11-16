@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <script>
+const buffer = new Uint8Array([255,255,255,255]).buffer;
+const dataView = new DataView(buffer);
+// 在偏移量为 0 处获取 8 位数字
+console.log(dataView);
+console.log(dataView.getUint8(0)); //255
+console.log(dataView.getUint16(0)); //65535
+console.log(dataView.getUint32(0)); //4294967295
+dataView.setUint32(0,0) // 将 4 个字节的数字设为 0，即将所有字节都设为 0
+
+
+  </script>
+</body>
+</html>

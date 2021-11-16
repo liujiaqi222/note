@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+</head>
+<body>
+  <script>
+const unit8array = new Uint8Array(4); //为4个整数创建类型化数组
+let num  = 256;
+console.log(num.toString(2)); //// 100000000（二进制表示）
+unit8array[0] =256;
+unit8array[1]=257;
+console.log(unit8array); //[0, 1, 0, 0, buffer: ArrayBuffer(4), byteLength: 4, byteOffset: 0, length: 4]
+  </script>
+</body>
+</html>
