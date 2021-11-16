@@ -161,6 +161,8 @@ app.get('/', (req, res) => {
 
 如果说有百个路径，我们不能全部都写在app.js中，很难以维护，express当然也想到了这点。我们可以使用路由，路由就是让我们可以创建另外一个实例，它有自己的逻辑，然后最后我们可以把这些代码嵌入到我们的主代码。
 
+> 官网解释： A `router` object is an isolated instance of middleware and routes. You can think of it as a “mini-application,” capable only of performing middleware and routing functions. Every Express application has a built-in app router.
+
 比如在这里我写了很多与users有关的路径，我们可以将这些代码放入routes文件夹下。
 
 ```js
@@ -174,16 +176,15 @@ app.get('/', (req, res) => {
   res.render('index',{name:'jiaqi'});
 });
 
-
+//users
 app.get('/users', (req, res) => {
   res.send('user list');
 })
 app.get('/users/new', (req, res) => {
   res.send('user new form');
 })
-app.get('/users/logout', (req, res) => {
-  res.send('user logout');
-})
+
+//===users
 
 
 app.listen(3000, () => {
@@ -191,5 +192,225 @@ app.listen(3000, () => {
 });
 ```
 
+在根目录下创建一个routes的文件夹，并创建users.js文件。
+
+![image-20211116224541167](https://gitee.com/zyxbj/image-warehouse/raw/master/pics/202111162245242.png)
+
+接着在user.js中，引入express，并使用它的`Router()`函数，然后将`app.get()`替换成`router.get()`。
+
+```js
+//routes/users.js
+const express = require('express');
+const router = express.Router();
 
 
+router.get('/users', (req, res) => {
+  res.send('user list');
+})
+router.get('/users/new', (req, res) => {
+  res.send('user new form');
+})
+```
+
+接着，我们导出这这个router对象，并将这些路径前面的`/users`去掉（因为等下在app.js中引入这些users路由时会做处理）
+
+```js
+//routes/users.js
+const express = require('express');
+const router = express.Router();
+
+
+router.get('/', (req, res) => {
+  res.send('user list');
+})
+router.get('/new', (req, res) => {
+  res.send('user new form');
+});
+
+
+module.exports = router;
+```
+
+现在在app.js中引入刚才导出的users路由。
+
+```js
+//app.js
+
+const express = require('express');
+
+const app = express();
+
+app.set('view engine', 'ejs');
+
+app.get('/', (req, res) => {
+  res.render('index',{name:'jiaqi'});
+});
+
+//使用user路由
+//表示以/users作为路径起点，然后再连接./routes/user.js文件中的具体的路径
+app.use('/users', require('./routes/user'));
+
+
+app.listen(3000, () => {
+  console.log('running at http://localhost:3000');
+});
+
+```
+
+这时我们再打开对应的网址，还是会正常显示。
+
+![image-20211116225554512](https://gitee.com/zyxbj/image-warehouse/raw/master/pics/202111162255556.png)
+
+### 动态路由
+
+假设我们现在有很多用户，如'/users/1','users/2','users/3'等。但我们不可能为每一个用户的请求地址都创建一个路由！
+
+
+
+这时候，我们就可以使用动态路由，`router.get('/:id')`，通过使用`:`，告诉express匹配任意的参数后缀。
+
+```js
+//routes/users.js
+
+const express = require('express');
+const router = express.Router();
+
+
+router.get('/', (req, res) => {
+  res.send('user list');
+})
+router.get('/new', (req, res) => {
+  res.send('user new form');
+});
+
+router.get('/:id', (req, res) => {
+  // 这里的路径中的id是自定义的
+  // 如果定义为/:userId ，想要获取对应的userId，就用req.params.userId
+  res.send(`获取用户${req.params.id}的数据`);
+})
+
+
+
+module.exports = router;
+```
+
+
+
+![image-20211116230707431](https://gitee.com/zyxbj/image-warehouse/raw/master/pics/202111162307466.png)
+
+
+
+
+
+> NOTE：注意一般要将动态路由放在最底部，因为express对于请求路径是从上往下匹配的。
+
+
+
+假设在这里，我将`/new`放在动态路由的下面
+
+```js
+const express = require('express');
+const router = express.Router();
+
+
+router.get('/', (req, res) => {
+  res.send('user list');
+})
+
+
+router.get('/:id', (req, res) => {
+  // 这里的路径中的id是自定义的
+  // 如果定义为/:userId ，想要获取对应的userId，就用req.params.userId
+  res.send(`获取用户${req.params.id}的数据`);
+})
+
+router.get('/new', (req, res) => {
+  res.send('user new form');
+});
+
+module.exports = router;
+```
+
+![image-20211116231139401](https://gitee.com/zyxbj/image-warehouse/raw/master/pics/202111162311436.png)
+
+
+
+我们可以看到`/:id`也匹配了'/new'的路径，因为id不过是个名称而已，它可以匹配任何字符串，包括new这个字符串。
+
+### app.route()
+
+如果一个路径，既需要用到get，又需要用到put，delete，这时候我们可以用app.route()链式调用。在路由中，就是将`app.route()`换成`router.route()`
+
+```js
+const express = require('express');
+const router = express.Router();
+
+
+router.get('/', (req, res) => {
+  res.send('user list');
+})
+
+
+
+router.route('/:id')
+  .get((req, res) => {
+    res.send(`get user with id ${req.params.id}`);
+  })
+  .put((req, res) => {
+    res.send(`update user with id ${req.params.id}`);
+  })
+  .delete((req, res) => {
+    res.send(`delete user with id ${req.params.id}`);
+  })
+
+
+module.exports = router;
+```
+
+
+
+这样我们不就少写了几次路径！
+
+### app.param(name,callback)
+
+和上面一样在路由中写作`router.param()`。它的意思是如果各个路由的路径如果匹配到了app.param的第一个参数（也就是name），则执行后面的回调函数（callback）。
+
+回调函数中的参数按顺序分别是请求对象，响应对象，next中间件，参数的值以及参数的名字，也就是`app.param(name,callback(req,res,next,id,name))`
+
+```js
+const express = require('express');
+const router = express.Router();
+
+
+router.get('/', (req, res) => {
+  res.send('user list');
+})
+
+
+
+router.route('/:id')
+  .get((req, res) => {
+    res.send(`get user with id ${req.params.id}`);
+  })
+  .put((req, res) => {
+    res.send(`update user with id ${req.params.id}`);
+  })
+  .delete((req, res) => {
+    res.send(`delete user with id ${req.params.id}`);
+  })
+
+// 如果匹配到了路径中有id的就执行这个函数
+// 而上面的那些get，put，delete都有id这个参数
+router.param('id', (req, res, next, id, name) => {
+  console.log(id, name); //控制台打印了2，id
+})
+
+
+module.exports = router;
+```
+
+但是浏览器一直在转圈，表示在加载中，且页面也没有被刷新！
+
+![image-20211117000459777](https://gitee.com/zyxbj/image-warehouse/raw/master/pics/202111170004832.png)
+
+这是因为我们没有调用next函数，执行下一步。因为`router.param()`本质上就是一种中间件，中间件就是**请求发送到服务器后，但服务器还没有将响应返回客户端**
