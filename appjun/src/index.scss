@@ -1,0 +1,71 @@
+@font-face {
+    font-family: "maoken";
+    src: url(/src/assets/fonts/maoken.ttf) format('truetype');
+}
+
+* {
+
+    font-family: 'maoken', '宋体', '楷体', serif;
+
+}
+
+// 颜色
+$hue:220;
+$bg-primary:hsl($hue, 89%, 60%);
+$bg-primary-lighter:hsl($hue, 92%, 85%);
+$bg-primary-darker:hsl($hue, 50%, 38%);
+$text-primary:hsl($hue,8%,45%);
+$body-color: hsl($hue, 60%, 99%);
+
+
+$white:white;
+
+// screen
+$mobile:600px;
+$tablet:820px;
+$desktop:1200px;
+
+@mixin shadow{
+    box-shadow: 0 4px 6px rgba($color: #000000, $alpha: 0.1),
+    0 2px 4px -1px rgba($color: #000000, $alpha: 0.06);
+}
+
+.container {
+    max-width: 1440px;
+    margin: 0 auto;
+}
+
+.link {
+    cursor: pointer;
+    text-decoration: none;
+    text-transform: uppercase;
+    color: black;
+}
+
+.link-light {
+    color: #fff;
+}
+
+.icon {
+    width: 1em;
+    height: 1em;
+    vertical-align: -0.15em;
+    fill: currentColor;
+    overflow: hidden;
+}
+
+.hover{
+  transition: all 0.3s ease;
+  &:hover{
+    opacity: 0.8;
+    transform: rotate(10deg);
+    filter: contrast(200%) hue-rotate(90deg);;
+  }
+}
+
+.hover_text{
+  transition: all 0.3s ease;
+  filter: hue-rotate(90deg);
+  &:hover{
+  }
+}
