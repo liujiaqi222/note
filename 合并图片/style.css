@@ -20,6 +20,11 @@ body {
   padding: 50px;
 }
 
+body h1 {
+  margin-bottom: 50px;
+  font-size: 50px;
+}
+
 .button {
   border: none;
   background-color: #333;
