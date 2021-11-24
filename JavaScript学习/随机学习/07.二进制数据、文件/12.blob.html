@@ -9,13 +9,13 @@
 </head>
 
 <body>
-  <a href="#" download="hello.txt">下载</a>
   <script>
-    let blob = new Blob(['hello,world'], { type: 'text/plain' });
-    const a = document.querySelector('a');
-    a.href = URL.createObjectURL(blob);
-    a.click();
-    URL.revokeObjectURL(a.href);
+    let hello = new Uint8Array([72, 101, 108, 108, 111]);
+    // 二进制格式的 "hello"
+    let blob = new Blob([hello, '', 'world'], {
+      type: 'text、plain'
+    })
+
   </script>
 </body>
 

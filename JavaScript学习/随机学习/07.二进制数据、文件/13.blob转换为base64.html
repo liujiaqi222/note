@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+<a download="hello.txt">下载</a>
+<script>
+  const blob = new Blob(['hello,world'],{type:'text/plain'});
+  const reader = new FileReader();
+
+  reader.readAsDataURL(blob); // 将blob转换成为base64格式
+
+  // 记得调用 onload
+  reader.onload = function(){
+    const a = document.querySelector('a');
+    a.href = reader.result; // data url 
+    console.log(a.href);
+    // data:text/plain;base64,aGVsbG8sd29ybGQ=
+  }
+  </script>
+</body>
+</html>

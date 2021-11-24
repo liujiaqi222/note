@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <img src="./kristen.jpg" alt="" class="source">
+  <img alt="" class="result">
+  <script>
+    let img = document.querySelector('.source');
+    let canvas = document.createElement('canvas');
+    img.onload = async  () => {
+      canvas.width = img.width;
+      canvas.height = img.height;
+      let context = canvas.getContext('2d');
+      context.drawImage(img, 0, 0);
+      let blob = await new Promise(resolve => canvas.toBlob(resolve,'image/png'))
+      const imgD = document.querySelector('.result');
+      imgD.src = URL.createObjectURL(blob)
+    }
+  </script>
+</body>
+
+</html>

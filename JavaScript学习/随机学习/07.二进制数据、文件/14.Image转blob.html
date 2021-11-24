@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+<img src="./kristen.jpg" alt="" class="source">
+<img  alt="" class="result">
+<script>
+  let img = document.querySelector('.source');
+  let canvas = document.createElement('canvas');
+  img.onload = () => {
+    canvas.width = img.width;
+    canvas.height = img.height;
+    let context = canvas.getContext('2d');
+    context.drawImage(img, 0, 0);
+    //  toBlob 是异步操作，结束后会调用 callback
+    canvas.toBlob(function (blob) {
+      const imgD = document.querySelector('.result');
+      imgD.src = URL.createObjectURL(blob);
+    },'image/png')
+  }
+  </script>
+</body>
+
+</html>
