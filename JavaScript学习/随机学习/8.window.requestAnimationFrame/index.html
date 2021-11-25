@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    #box {
+      background-color: red;
+      height: 10rem;
+      width: 1rem;
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <h1>Request Animation Frame</h1>
+  </header>
+  <main>
+    <p id="output"></p>
+    <p id="box"></p>
+  </main>
+  <script>
+    const output = document.querySelector('#output');
+    const box = document.querySelector('#box');
+
+    let number = 0;
+    let xpos = 0;
+
+    function paint() {
+      number++;
+      output.textContent = number;
+      if (number < 300) {
+        requestAnimationFrame(paint);
+      }
+    }
+    requestAnimationFrame(paint);
+    function move(timeStamp) {
+      if (timeStamp) {
+        let diff = timeStamp - number;
+        number = timeStamp; // high resolution time stamp
+        console.log(diff);
+      }
+      xpos = xpos + 5;
+      box.style.transform = `translateX(${xpos}px)`;
+      let ww = document.body.clientWidth - 100;
+
+      if (xpos < ww) {
+        requestAnimationFrame(move);
+      }
+    }
+    requestAnimationFrame(move);
+  </script>
+</body>
+
+</html>
