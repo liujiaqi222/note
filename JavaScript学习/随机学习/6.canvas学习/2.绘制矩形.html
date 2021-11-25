@@ -1,29 +1,35 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
   <style>
-    canvas{
+    canvas {
       border: 1px solid red;
     }
   </style>
 </head>
+
 <body>
-<canvas id="canvas"></canvas>
-<script>
-  function draw(){
+  <canvas id="canvas"></canvas>
+  <script>
     const canvas = document.getElementById('canvas');
-    if(canvas.getContext){
+    if (canvas.getContext) {
       const ctx = canvas.getContext('2d');
-      ctx.fillRect(25,25,100,100);
-      ctx.clearRect(45,45,60,60);
-      ctx.strokeRect(50,50,50,50);
+      ctx.fillRect(25, 25, 100, 100);
+      ctx.clearRect(45, 45, 60, 60);
+      ctx.strokeRect(50, 50, 50, 50);
     }
-  }
-  draw();
-</script>
+    canvas.toBlob(function (blob) {
+      const link = document.createElement('a');
+      link.download = 'pic.jpg'; //这里指定了图片的类型
+      link.href = URL.createObjectURL(blob);
+      link.click();
+    }, 'image/jpeg', 0.6);
+  </script>
 </body>
+
 </html>
