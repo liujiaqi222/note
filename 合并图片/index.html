@@ -7,9 +7,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>图片合并小应用</title>
   <style>
-    canvas {
-      border: 1px solid red;
-    }
+
   </style>
   <link rel="stylesheet" href="style.css">
 </head>
@@ -17,16 +15,45 @@
 <body>
   <h1>图片合并</h1>
   <div class="upload">
-    <input type="file" class="button" multiple>
+    <label for="upload-pic">上传需要被合并的图片</label>
+    <input type="file" class="button" multiple accept=".png, .jpg, ,jpeg" id="upload-pic">
   </div>
-  <div class="preview">
-    <canvas width="350" height="400"></canvas>
+  <div class="config-box">
+    <div class="space-between config">
+      <span class="text">间距</span>
+      <input type="range" value="5" min="0" max="30" onchange='handleSlider(value)'>
+      <span class="num">5px</span>
+    </div>
+    <div class="direction config">
+      <span class="text">横向合并</span>
+      <input type="checkbox" onchange="handleDirectionChange(this)">
+    </div>
+    <div class="shadow config">
+      <span class="text">阴影</span>
+      <input type="checkbox"" onchange=" handleIsShadow(this)">
+      <span class="text"> </span>
+    </div>
+    <div class="is-shadow config">
+      <span class="text">请选择阴影颜色</span>
+      <input type="color" onchange="watchColorPicker(this) " value="#ffffff">
+    </div>
+  </div>
+  <div class="preview_wrap">
+    <button>清除图片</button>
+    <div class="preview">
+    </div>
   </div>
   <div class="download">
     <button class="downloadBtn">下载</button>
   </div>
-  
-  <script src="./script.js"></script>
+  <!-- 文件上传 -->
+  <script src="./imgUpload.js" type="module"></script>
+  <!-- 图片设置 -->
+  <script src="./userConfig.js"></script>
+  <!-- 图片展示 -->
+  <!-- <script src="./imgDisplay.js" ></script> -->
+  <!-- 图片下载 -->
+  <!-- <script src="./imgDownload.js"></script> -->
 </body>
 
 </html>

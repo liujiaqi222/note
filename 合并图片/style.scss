@@ -1,30 +1,141 @@
-*{
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "宋体", "楷体";
 }
 
-body{
+$hue: 260;
+$bg-primary: hsl($hue, 89%, 60%);
+$bg-primary-lighter: hsl($hue, 92%, 85%);
+$bg-primary-darker: hsl($hue, 80%, 45%);
+$text-primary: hsl($hue, 8%, 45%);
+$body-color: hsl($hue, 60%, 99%);
+$white: #fff;
+$btn-bg: hsl($hue, 10%, 90%);
+$h1: 3rem;
+$h4: 1.25rem;
+
+button,
+label {
+  font-size: 14px;
+  cursor: pointer;
+  border-radius: 10px;
+  padding: 18px 24px;
+  border: none;
+  color: #fff;
+  background-color: $bg-primary;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  text-decoration: none;
+  &:hover {
+    background-color: $bg-primary-darker;
+  }
+}
+body {
+  background-color: $body-color;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 50px;
+  padding: 50px;
+  h1 {
+    font-size: $h1;
+    color: $text-primary;
+  }
+}
+
+.upload {
+  input {
+    display: none;
+  }
+}
+
+.config-box {
+  width: 60%;
+  display: grid;
+  min-width: 300px;
+  gap: 20px;
+  justify-content: center;
+  align-items: center;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  .config {
+    height: 40px;
     display: flex;
-    flex-direction: column;
+    font-size: $h4;
     align-items: center;
-    gap: 10px;
-    padding: 50px;
-    h1{
-      margin-bottom: 50px;
-      font-size: 50px;
+    gap: 12px;
+    line-height: 40px;
+    input[type="range"] {
+      border: none;
     }
+    input[type="checkbox"] {
+      position: relative;
+      appearance: none;
+      width: 70px;
+      height: 25px;
+      background-color: $btn-bg;
+      border-radius: 20px;
+      cursor: pointer;
+      transition: ease 0.3s;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+      &:checked {
+        background-color: $white;
+      }
+      &::before {
+        content: "";
+        top: 0;
+        left: 0;
+        border-radius: 50%;
+        position: absolute;
+        height: 25px;
+        width: 25px;
+        background-color: $bg-primary;
+        transition: 0.3s ease left;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+      }
+      &:checked::before {
+        left: 48px;
+        background-color: $bg-primary-darker;
+      }
+    }
+    input[type="color" i] {
+      border: none;
+    }
+  }
+  .is-shadow {
+    opacity: 0;
+    transition: 0.3s ease;
+    input {
+      pointer-events: none;
+      cursor: pointer;
+    }
+  }
 }
 
-.button{
-    border: none;
-    background-color: #333;
-    color:white;
-    padding: 10px;
+.preview_wrap {
+  min-height: 500px;
+  width: 80%;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  button {
+    align-self: flex-end;
+    margin-bottom: 10px;
     border-radius: 5px;
-    cursor: pointer;
-    transition: 0.3s ease;
-    &:hover{
-        opacity: 0.8;
-    }
+    padding: 10px 10px;
+  }
+  .preview {
+    width: 100%;
+    justify-content: space-between;
+    min-height: 500px;
+    border: 1px dashed $bg-primary-darker;
+    border-radius: 10px;
+    display: flex;
+  }
+}
+
+.download {
+  .downloadBtn {
+    padding-inline: 30px;
+  }
 }

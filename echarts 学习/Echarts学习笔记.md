@@ -1774,7 +1774,7 @@ btnadd.addEventListener('click', () => {
   销毁实例，实例销毁后无法再被使用
 
   ```js
-  myChart.clear(); 
+  myChart.dispose(); 
   myChart.setOption(option);   // 会报错
   ```
 

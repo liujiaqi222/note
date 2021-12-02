@@ -1,11 +1,33 @@
+@charset "UTF-8";
 * {
   margin: 0;
   padding: 0;
   -webkit-box-sizing: border-box;
           box-sizing: border-box;
+  font-family: "宋体", "楷体";
+}
+
+button,
+label {
+  font-size: 14px;
+  cursor: pointer;
+  border-radius: 10px;
+  padding: 18px 24px;
+  border: none;
+  color: #fff;
+  background-color: #7b3ef4;
+  -webkit-box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+          box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  text-decoration: none;
+}
+
+button:hover,
+label:hover {
+  background-color: #5417cf;
 }
 
 body {
+  background-color: #fcfbfe;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -16,27 +38,144 @@ body {
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
-  gap: 10px;
+  gap: 50px;
   padding: 50px;
 }
 
 body h1 {
-  margin-bottom: 50px;
-  font-size: 50px;
+  font-size: 3rem;
+  color: #706a7c;
 }
 
-.button {
+.upload input {
+  display: none;
+}
+
+.config-box {
+  width: 60%;
+  display: -ms-grid;
+  display: grid;
+  min-width: 300px;
+  gap: 20px;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -ms-grid-columns: (minmax(220px, 1fr))[auto-fit];
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
+.config-box .config {
+  height: 40px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  font-size: 1.25rem;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  gap: 12px;
+  line-height: 40px;
+}
+
+.config-box .config input[type="range"] {
   border: none;
-  background-color: #333;
-  color: white;
-  padding: 10px;
-  border-radius: 5px;
+}
+
+.config-box .config input[type="checkbox"] {
+  position: relative;
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  width: 70px;
+  height: 25px;
+  background-color: #e5e3e8;
+  border-radius: 20px;
   cursor: pointer;
+  -webkit-transition: ease 0.3s;
+  transition: ease 0.3s;
+  -webkit-box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+          box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.config-box .config input[type="checkbox"]:checked {
+  background-color: #fff;
+}
+
+.config-box .config input[type="checkbox"]::before {
+  content: "";
+  top: 0;
+  left: 0;
+  border-radius: 50%;
+  position: absolute;
+  height: 25px;
+  width: 25px;
+  background-color: #7b3ef4;
+  -webkit-transition: 0.3s ease left;
+  transition: 0.3s ease left;
+  -webkit-box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+          box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.config-box .config input[type="checkbox"]:checked::before {
+  left: 48px;
+  background-color: #5417cf;
+}
+
+.config-box .config input[type="color" i] {
+  border: none;
+}
+
+.config-box .is-shadow {
+  opacity: 0;
   -webkit-transition: 0.3s ease;
   transition: 0.3s ease;
 }
 
-.button:hover {
-  opacity: 0.8;
+.config-box .is-shadow input {
+  pointer-events: none;
+  cursor: pointer;
+}
+
+.preview_wrap {
+  min-height: 500px;
+  width: 80%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+
+.preview_wrap button {
+  -ms-flex-item-align: end;
+      align-self: flex-end;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  padding: 10px 10px;
+}
+
+.preview_wrap .preview {
+  width: 100%;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  min-height: 500px;
+  border: 1px dashed #5417cf;
+  border-radius: 10px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.download .downloadBtn {
+  padding-inline: 30px;
 }
 /*# sourceMappingURL=style.css.map */
