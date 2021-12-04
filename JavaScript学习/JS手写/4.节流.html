@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Document</title>
+  <style>
+    body{
+      height: 2000px;
+      background: linear-gradient(#125,#eae);
+    }
+  </style>
+</head>
+<body>
+  <script src="./4.节流.js"></script>
+  <script>
+    // 绑定滚动事件
+    window.addEventListener('scroll',throttle(function(e){
+      console.log(Date.now());
+      console.log(e);
+    },500));
+  </script>
+</body>
+</html>
