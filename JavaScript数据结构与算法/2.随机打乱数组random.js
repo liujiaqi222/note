@@ -9,14 +9,15 @@ function Testrandom(arr) {
 
 console.time('用时');
 let t = 0;
-for (let i = 0; i <= 10000000; i++){
-  let result = Testrandom(arr)[0];
+for (let i = 0; i <= 10000; i++){
+  let arrTest = [...arr];
+  let result = Testrandom(arrTest)[0];
   if (result === 1) {
     t++;
   }
 }
 
-console.log(t / 10000000);
+console.log(t / 10000);
 console.timeEnd('用时');
 // 差不多是0.25，也就是答案是正确的
 
