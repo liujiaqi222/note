@@ -24,4 +24,6 @@ let d = true; //d 之后只能是布尔值了
 
 sum(12,12)
 
+
+let jiaqi = 222;
 export { };

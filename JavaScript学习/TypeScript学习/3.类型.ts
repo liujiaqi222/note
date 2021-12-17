@@ -19,7 +19,6 @@ d = (n1:number, n2:number) =>{
 // string[]表示字符串数组
 let e: string[];
 e = ['a', 'b'];
-
 let f: number[];
 
 let g: Array<number>;
@@ -34,4 +33,25 @@ enum Gender{
   Male,Female
 }
 
+let i: { name: string, gender: Gender }
+i = {
+  name: 'jiaqi',
+  gender:Gender.Female,
+}
+
+console.log(i.gender === Gender.Female);
+
+// &表示同时
+// j要有name和age两个属性
+let j: { name: string } & { age: number };
+j = {name:'jiaqi',age:12}
+
+// k的值是1~5中的一个
+let k: 1 | 2 | 3 | 4 | 5;
+// 与此同时p的取值也和k一样，因此可以给类型起个别名
+
+type myType = 1 | 2 | 3 | 4 | 5;
+
+let p: myType;
+p = 1;
 export { };

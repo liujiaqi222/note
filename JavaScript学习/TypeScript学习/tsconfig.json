@@ -1,0 +1,7 @@
+{
+  "files": ["4.编译选项.ts"],
+  "compilerOptions": {
+    "target": "ES2017",
+    "module": "es6"
+  }
+}
