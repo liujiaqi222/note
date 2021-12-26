@@ -18,3 +18,5 @@
 const arr = [1, 2, [3, 4, [1, 3, [3]]], 8];
 
 // console.log(arr.myFlat(2));
+
+console.log(Object.prototype.toString.call(NaN));

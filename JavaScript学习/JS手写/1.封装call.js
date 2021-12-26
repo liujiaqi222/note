@@ -4,7 +4,7 @@
 // 1.原生的call函数，如果处于非严格模式下，则指定为 null 或 undefined 时会自动替换为指向全局对象，原始值会被包装。
 // 2. globalThis 是 ES10 的语法，如果在node环境下，则指向global，如果在浏览器环境下则指向windows
 function call(fn, obj, ...args) {
-  if (obj == undefined || typeof obj !== 'object') {
+  if ( typeof obj !== 'object') {
     obj = globalThis;
   }
   // 将fn做为obj的属性

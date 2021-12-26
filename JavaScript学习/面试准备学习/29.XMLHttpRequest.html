@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <form name="person">
+    <input name="name" value="John">
+    <input name="surname" value="Smith">
+  </form>
+  
+  <script>
+    // 从表单预填充 FormData
+    let formData = new FormData(document.forms.person);
+  
+    // 附加一个字段
+    formData.append("middle", "Lee");
+  
+    // 将其发送出去
+    let xhr = new XMLHttpRequest();
+    xhr.open("POST", "/article/xmlhttprequest/post/user");
+    xhr.send(formData);
+  
+    xhr.onload = () => alert(xhr.response);
+  </script>
+</body>
+
+</html>
