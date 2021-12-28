@@ -26,3 +26,6 @@ console.log(fn(1,2)(3)(4)); //10
 console.log(fn(1,2,3)(4)); //10
 console.log(fn(1,2,3,4)); //10
 
+export default fn;
+
+export const test = 'helo'

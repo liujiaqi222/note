@@ -21,10 +21,10 @@
 
     function throttle(fn,time){
       let start = 0;
-      return function(e){
-        if(Date.now()-start>= time){
+      return function(){
+        if(Date.now()-start>=time){
+          fn.apply(this,arguments);
           start = Date.now();
-          fn.call(this,e);
         }
       }
     }

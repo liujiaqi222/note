@@ -14,14 +14,13 @@
     input.addEventListener('input', debounce(function () {
       console.log(this.value);
     },500));
-
-    function debounce(fn, time) {
-      let timer = null;
-      return function (e) {
-        timer && clearTimeout(timer);
-        timer = setTimeout(() => {
-          fn.call(this, e);
-          timer = null;
+    function debounce(fn,time){
+      let timeout = null;
+      return function (){
+        timeout&&clearTimeout(timeout);
+        setTimeout(() => {
+          fn.call(this,...arguments)
+          timeout = null;
         }, time);
       }
     }

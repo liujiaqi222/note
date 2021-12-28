@@ -1,32 +1,45 @@
 <template>
   <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div>
-    <router-view/>
+    <ul>
+      <li v-for="item in arr" :key='item'>{{item}}</li>
+      {{obj.hello}}
+    </ul>
+    <router-view></router-view>
+    <router-link to='about'>222</router-link>
   </div>
 </template>
+<script>
+export default{
+  data(){
+    return {
+      msg:100,
+      arr:[1,2,3,4],
+      obj:{
+        hello:'嘉琪',
+      }
+
+    }
+  },
+  mounted() {
+    this.arr.length=3;
+    delete this.obj.hello;
+  },
+  beforeRouteEnter (to, from, next) {
+    console.log(222);
+    console.log(to,from,this);
+    next();
+  },
+  beforeRouteLeave (to, from, next) {
+    console.log(222);
+    console.log(to,from,this);
+    next();
+  }
+ 
+}
+</script>
 
 <style lang="scss">
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
 
-#nav {
-  padding: 30px;
 
-  a {
-    font-weight: bold;
-    color: #2c3e50;
 
-    &.router-link-exact-active {
-      color: #42b983;
-    }
-  }
-}
 </style>
