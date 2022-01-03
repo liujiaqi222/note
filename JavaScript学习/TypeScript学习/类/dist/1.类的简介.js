@@ -1,4 +1,3 @@
-"use strict";
 // 使用class关键词定义一个类
 // 直接定义的属性是实例属性，只有实例才能使用
 // 使用static关键词定义的属性，只有类才能使用
@@ -27,3 +26,4 @@ per.name = 'tom';
 console.log(new Person()); //{ name: '嘉琪', age: 23, hobby: 'coding' }
 Person.eat();
 new Person().sayHello();
+export default {};

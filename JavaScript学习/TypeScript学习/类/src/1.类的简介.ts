@@ -28,3 +28,5 @@ console.log(new Person()); //{ name: '嘉琪', age: 23, hobby: 'coding' }
 
 Person.eat();
 new Person().sayHello();
+
+export default{}
