@@ -52,10 +52,7 @@ import ReactDOM from 'react-dom';
 
 // 创建类组件
 
-class Hello extends React.Component{
-  render() {
-    return <h1>hello</h1>
-  }
-}
+// 导入组件
+import Hello from './Hello';
 
 ReactDOM.render(<Hello/>, document.getElementById('root'))
