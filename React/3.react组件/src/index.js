@@ -1,19 +1,37 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-// React事件处理
-
-class App extends React.Component{
-  // 事件处理程序
-  handleClick() {
-    console.log('单击事件触发了');
+class App extends React.Component {
+  state = {
+    comments: [
+      { id: 1, name: 'jack', content: '沙发' },
+      { id: 2, name: 'rose', content: '厉害' },
+      { id: 3, name: 'tom', content: '板凳' },
+    ]
   }
   render() {
-    return <button onclick={this.handleClick}>点我点我</button>
+    return (
+      <div className='app'>
+        <div>
+          <input type="text" className='user' placeholder='请输入评论人' />
+          <br />
+          <textarea className='content'></textarea>
+          <br />
+          <button>发布评论</button>
+        </div>
+        <div className='no-comment'></div>
+        <ul>
+          {this.state.comments.map(({id,name,content}) => (
+            <li key={id}>
+              <h3>评论人：{ name}</h3>
+              <p>评论内容：{ content}</p>
+            </li>
+          ))}
+        </ul>
+      </div>
+    )
   }
 }
 
-
-
-ReactDOM.render(<App/>,document.getElementById('root'));
+ReactDOM.render(<App />, document.getElementById('root'));
 
