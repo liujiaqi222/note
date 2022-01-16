@@ -1,3 +1,5 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 class Animal {
     constructor(name, age) {
         this.name = name;
@@ -17,4 +19,4 @@ class People extends Animal {
 }
 const jiaqi = new People('嘉琪', 22);
 jiaqi.sayHello();
-export default {};
+exports.default = {};

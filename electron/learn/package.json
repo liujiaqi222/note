@@ -1,0 +1,36 @@
+{
+  "name": "my-electron-app",
+  "version": "1.0.0",
+  "main": "main.js",
+  "license": "MIT",
+  "scripts": {
+    "start": "electron-forge start",
+    "package": "electron-forge package",
+    "make": "electron-forge make",
+    "lint": "eslint '**/*.js'",
+    "postlint": "npm-template-check",
+    "lintfix": "npm run lint -- --fix",
+    "preversion": "npm test",
+    "postversion": "npm publish",
+    "prepublishOnly": "git push origin --follow-tags",
+    "snap": "tap",
+    "test": "tap",
+    "posttest": "npm run lint"
+  },
+  "devDependencies": {
+    "@electron-forge/cli": "^6.0.0-beta.61",
+    "electron": "^16.0.6"
+  },
+  "dependencies": {},
+  "author": "GitHub Inc.",
+  "files": [
+    "bin",
+    "lib"
+  ],
+  "engines": {
+    "node": "^12.13.0 || ^14.15.0 || >=16"
+  },
+  "templateOSS": {
+    "version": "2.4.3"
+  }
+}

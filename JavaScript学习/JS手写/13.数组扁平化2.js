@@ -2,9 +2,9 @@
 
 const arr = [1, 2, 3, [4, 1, 3, [3]], 8];
 
-function flat(arr, dep = 1) {
-  return arr.reduce((acc, val) => {
-    return acc.concat(Array.isArray(val) && dep > 0 ? flat(val, --dep) : [val]);
+function flat(arr,dep=1) {
+  return arr.reduce((acc, cur) => {
+    return acc.concat(Array.isArray(cur)&&dep>0 ? flat(cur,dep-1):[cur]) 
   },[])
 }
 
