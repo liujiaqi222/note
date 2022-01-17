@@ -21,6 +21,7 @@ class People extends Animal {
         // super代表当前类的父类
         super.eat(); //调用父类的eat方法
     }
+    // 子类必须对其进行实现
     sayHello() {
         console.log('hello');
     }

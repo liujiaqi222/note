@@ -97,3 +97,4 @@ function getArray<T>(items: T[]): T[]{
 const numArray = getArray<number>([1, 2, 3, 4]);
 const strArray = getArray<string>(['jaiqi', 'string']);
 
+export default { };
