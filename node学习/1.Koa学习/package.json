@@ -1,6 +1,0 @@
-{
-  "dependencies": {
-    "koa": "^2.13.3",
-    "nodemon": "^2.0.13"
-  }
-}
