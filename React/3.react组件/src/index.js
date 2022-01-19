@@ -1,37 +1,17 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import './index.css'
 
-class App extends React.Component {
-  state = {
-    comments: [
-      { id: 1, name: 'jack', content: '沙发' },
-      { id: 2, name: 'rose', content: '厉害' },
-      { id: 3, name: 'tom', content: '板凳' },
-    ]
-  }
-  render() {
-    return (
-      <div className='app'>
-        <div>
-          <input type="text" className='user' placeholder='请输入评论人' />
-          <br />
-          <textarea className='content'></textarea>
-          <br />
-          <button>发布评论</button>
-        </div>
-        <div className='no-comment'></div>
-        <ul>
-          {this.state.comments.map(({id,name,content}) => (
-            <li key={id}>
-              <h3>评论人：{ name}</h3>
-              <p>评论内容：{ content}</p>
-            </li>
-          ))}
-        </ul>
-      </div>
-    )
-  }
+const App = props => {
+  console.log(props);
+  return (
+    <div>
+      <h1>组件的子节点标签</h1>
+      {props.children}
+    </div>
+  )
 }
 
-ReactDOM.render(<App />, document.getElementById('root'));
 
+// 给组件传递参数和子节点
+ReactDOM.render(<App name='嘉琪'><h2>hahahaha</h2></App>, document.getElementById('root'));

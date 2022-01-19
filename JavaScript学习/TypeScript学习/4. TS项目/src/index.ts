@@ -1,17 +1,9 @@
 import  './style/index.scss';
-import ScorePanel from './modules/ScorePanel';
-import Food from './modules/Food';
-import Snake from './modules/Snake';
 
-const food = new Food();
-console.log(food.X);
-food.change();
+import GameControl from './modules/GameControl';
 
-const score = new ScorePanel();
-score.addScore();
-score.addScore();
-score.addScore();
+const gc = new GameControl();
 
-const snake = new Snake();
-console.log();
+
+
 
