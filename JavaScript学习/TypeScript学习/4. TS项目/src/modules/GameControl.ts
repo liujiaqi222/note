@@ -9,6 +9,8 @@ class GameControl {
   scorePanel: ScorePanel;
   // 存储按键方向
   direction: string = '';
+  // 记录游戏是否结束（是否蛇死了）
+  isLive = true;
   constructor() {
     this.snake = new Snake();
     this.food = new Food();
@@ -20,7 +22,7 @@ class GameControl {
     // 键盘按下的事件
     document.addEventListener('keydown', this.keyDownHandler);
     this.run();
-    
+
   }
   // 创建键盘按下后的回调
   // 使用箭头函数，之后的this.direction中的this就是指向上一级
@@ -59,10 +61,37 @@ class GameControl {
         X += 10;
         break;
     }
-    // 修改蛇的X和Y值
-    this.snake.X = X;
-    this.snake.Y = Y;
+    // 检测蛇是否吃到了食物（食物的位置和蛇的位置是否一致）
+    this.checkEat(X, Y);
+    try {
+      // 修改蛇的X和Y值
+      this.snake.X = X;
+      this.snake.Y = Y;
+    }
+    catch (e) {
+      // 出现了异常，游戏结束
+      alert(e);
+      // 将isLive设置为false
+      this.isLive = false;
+    }
 
+    //蛇🐍活着的情况下 开启定时调用
+    this.isLive && setTimeout(
+      this.run.bind(this)
+      , 300 - (this.scorePanel.level - 1) * 30)
+  }
+  // 检测蛇是否迟到了食物
+  checkEat(X: number, Y: number) {
+    if (X === this.food.X && Y === this.food.Y) {
+      console.log(1);
+      // 食物位置进行重置
+      this.food.change();
+      // 分数增加
+      this.scorePanel.addScore();
+      // 蛇身增加一节
+      this.snake.snakeGrow();
+      console.log(2);
+    }
   }
 }
 

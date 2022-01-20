@@ -1,17 +1,28 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css'
+import './index.css';
 
-const App = props => {
-  console.log(props);
-  return (
-    <div>
-      <h1>组件的子节点标签</h1>
-      {props.children}
-    </div>
-  )
+class App extends React.Component {
+  constructor(props) {
+    super(props);
+    console.warn('生命周期钩子函数：constructor');
+  }
+  componentDidMount() {
+    console.warn('生命周期钩子函数：componentDidMount');
+    console.log(document.getElementById('btn'));
+  }
+  render() {
+    console.warn('生命周期钩子函数：render');
+    return (
+      <div>
+        <h1>统计打豆豆被打的次数：</h1>
+        <button id="btn">打豆豆</button>
+      </div>
+    )
+  }
+  
 }
 
 
-// 给组件传递参数和子节点
-ReactDOM.render(<App name='嘉琪'><h2>hahahaha</h2></App>, document.getElementById('root'));
+
+ReactDOM.render(<App />, document.getElementById('root'));
