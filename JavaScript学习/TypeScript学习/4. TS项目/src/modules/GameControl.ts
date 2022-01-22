@@ -14,15 +14,25 @@ class GameControl {
   constructor() {
     this.snake = new Snake();
     this.food = new Food();
-    this.scorePanel = new ScorePanel();
+    this.scorePanel = new ScorePanel(6,5);
     this.init();
   }
   // 游戏初始化 调用后游戏开始
   init() {
     // 键盘按下的事件
     document.addEventListener('keydown', this.keyDownHandler);
+    // 监听方向键按钮的点击事件
+    this.btnClick();
     this.run();
 
+  }
+  btnClick() {
+    const controler = document.querySelector('.controler');
+    controler!.addEventListener('click', e => {
+      if ((e.target as Element).tagName) {
+        this.direction = (e.target as Element).getAttribute('data-d') as string
+      }
+    })
   }
   // 创建键盘按下后的回调
   // 使用箭头函数，之后的this.direction中的this就是指向上一级
@@ -73,24 +83,23 @@ class GameControl {
       alert(e);
       // 将isLive设置为false
       this.isLive = false;
+      location.reload()
     }
 
     //蛇🐍活着的情况下 开启定时调用
     this.isLive && setTimeout(
       this.run.bind(this)
-      , 300 - (this.scorePanel.level - 1) * 30)
+      , 200 - (this.scorePanel.level - 1) * 30)
   }
   // 检测蛇是否迟到了食物
   checkEat(X: number, Y: number) {
     if (X === this.food.X && Y === this.food.Y) {
-      console.log(1);
       // 食物位置进行重置
       this.food.change();
       // 分数增加
       this.scorePanel.addScore();
       // 蛇身增加一节
       this.snake.snakeGrow();
-      console.log(2);
     }
   }
 }

@@ -27,7 +27,7 @@ set X(value: number) {
   }
   // 蛇存在第二节的情况下，不能掉头
   if (this.bodies[1] && (this.bodies[1] as HTMLElement).offsetLeft === value) {
-  //  如果发生了掉头，让蛇向反方向继续移动
+    //  如果发生了掉头，让蛇向反方向继续移动
     if (value > this.X) {
       // 则说明蛇在向右走，发生掉头
       value = this.X - 10;
@@ -35,10 +35,12 @@ set X(value: number) {
       value = this.X + 10;
     }
   }
-  this.head.style.left = value + 'px';
   // 移动身体
   this.moveBody();
-  
+  this.head.style.left = value + 'px';
+  if (this.checkHeadBody(this.X, this.Y)) {
+    throw new Error('蛇咬到了自己');
+  }
 }
 set Y(value: number) {
   if (this.Y === value) return;
@@ -50,20 +52,23 @@ set Y(value: number) {
   // 蛇存在第二节的情况下，不能掉头
   if (this.bodies[1] && (this.bodies[1] as HTMLElement).offsetTop === value) {
     //  如果发生了掉头，让蛇向反方向继续移动
-      if (value > this.Y) {
-        // 则说明蛇在向下走，发生掉头
-        value = this.Y - 10;
-      } else {
-        value = this.Y + 10;
-      }
+    if (value > this.Y) {
+      // 则说明蛇在向下走，发生掉头
+      value = this.Y - 10;
+    } else {
+      value = this.Y + 10;
     }
-  this.head.style.top = value + 'px';
+  }
   // 移动身体
   this.moveBody();
+  this.head.style.top = value + 'px';
+  if (this.checkHeadBody(this.X, this.Y)) {
+    throw new Error('蛇咬到了自己');
+  }
+
 }
   // 蛇身体增长
   snakeGrow() {
-    console.log('grow');
     this.snake.insertAdjacentHTML('beforeend', '<div></div>');
   }
   // 蛇身移动
@@ -81,6 +86,15 @@ set Y(value: number) {
       (this.bodies[i] as HTMLElement).style.top = Y + 'px';
     }
   }
+// 检查头和身体是否相撞
+// 第5节身体开始就可能和头相撞
+checkHeadBody(X: number, Y: number) {
+  for (let i = 4; i < this.bodies.length; i++){
+    if ((this.bodies[i] as HTMLElement).offsetLeft === X && ((this.bodies[i] as HTMLElement).offsetTop === Y) ){
+      return true;
+    }
+  }
+}
 
 }
 

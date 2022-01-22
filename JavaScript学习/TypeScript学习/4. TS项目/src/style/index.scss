@@ -5,12 +5,18 @@
 }
 
 $bg-color: #b7d4a8;
+
 body {
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-direction: column;
   height: 100vh;
-  font:bold 20px 'Courier'
+  font:bold 20px 'Courier';
+  
+  @media (max-width:1000px){
+    justify-content: flex-start;
+  }
 }
 
 main {
@@ -24,6 +30,12 @@ main {
   padding-top: 10px;
   align-items: center;
   justify-content: space-around;
+ 
+  @media (max-width:1000px) {
+    justify-self: flex-start;
+    margin-top: 5vh;
+    
+  }
   .stage {
     width: 304px;
     height: 304px;
@@ -62,5 +74,38 @@ main {
     padding: 20px;
     display: flex;
     justify-content: space-between;
+  }
+}
+
+$btn-width:4rem;
+.controler{
+  display: none;
+}
+@media (max-width:1000px) {
+  .controler{
+    margin-top: 20px;
+    display: block;
+    width: $btn-width;
+    position: relative;
+    i{
+      font-size: $btn-width;
+      
+    }
+    
+    i:nth-child(2){
+      left: $btn-width;
+      position: absolute;
+      top: $btn-width;
+    }
+    i:nth-child(3){
+      right: $btn-width;
+      position: absolute;
+      top: $btn-width;
+    }
+    i:nth-child(4){
+      top: $btn-width*2;
+      left: 0;
+      position: absolute;
+    }
   }
 }
