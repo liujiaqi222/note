@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import PropTypes from 'prop-types';
+
 import cat from './image/cat.png'
 
 // 创建Mouse组件
@@ -14,21 +14,15 @@ class Mouse extends React.Component {
     window.addEventListener('mousemove', this.handleMouseMove)
   }
   handleMouseMove = e => {
+    console.log(e);
     this.setState({
       x: e.clientX,
       y: e.clientY,
     })
   }
   render() {
-    return this.props.children(this.state);
+    return this.props.render(this.state);
   }
-componentWillUnmount() {
-  window.removeEventListener('mousemove',this.handleMouseMove)
-}
-}
-
-Mouse.propTypes = {
-  children:PropTypes.func.isRequired
 }
 
 class App extends React.Component {
@@ -36,8 +30,8 @@ class App extends React.Component {
     return (
       <div>
         <h1>render props模式</h1>
-<Mouse>{ mouseState => <p>鼠标当前的位置：{mouseState.x} {mouseState.y}</p>}</Mouse>
-        <Mouse>{mouseState => <img src={cat} style={{ width: '20%', position: 'absolute', top: mouseState.y, left: mouseState.x }} />}</Mouse>
+        <Mouse render={mouseState => <p>鼠标当前的位置：{mouseState.x} {mouseState.y}</p>} />
+        <Mouse render={mouseState => <img src={cat} style={{ width: '20%', position: 'absolute', top: mouseState.y, left: mouseState.x }} />} />
       </div >
     )
   }
