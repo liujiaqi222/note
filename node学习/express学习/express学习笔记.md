@@ -62,7 +62,7 @@ d. 如果想要给设置状态码，可以使用`res.sendStatus(500)`。
 
 <img src="https://gitee.com/zyxbj/image-warehouse/raw/master/pics/202111161449693.png" alt="image-20211116144917649" style="zoom:50%;" />
 
-或者也可以使用 `res.status.json(message:'error')`，就会发送json格式的数据。
+或者也可以使用 `res.status(500).json(message:'error')`，就会发送json格式的数据。
 
 ![image-20211116144644514](https://gitee.com/zyxbj/image-warehouse/raw/master/pics/202111161446563.png)
 
