@@ -1,4 +1,10 @@
-# 快速上手
+---
+title: Express学习笔记
+date: 2022-01-31 17:55:37
+tags: [Vue, Vuex]
+---
+
+## 快速上手
 
 a. 安装express，当前使用的是4.17版本。
 
@@ -111,7 +117,7 @@ app.listen(3000, () => {
 
 
 
-接着在代码中增加一句，`app.render(view文件夹下的html名称)`，就会再客户端看到了hello了。
+接着在代码中增加一句，`app.render(view文件夹下的html名称)`，就会在客户端看到了hello了。
 
 ```js
 app.get('/', (req, res) => {
@@ -413,4 +419,163 @@ module.exports = router;
 
 ![image-20211117000459777](https://gitee.com/zyxbj/image-warehouse/raw/master/pics/202111170004832.png)
 
-这是因为我们没有调用next函数，执行下一步。因为`router.param()`本质上就是一种中间件，中间件就是**请求发送到服务器后，但服务器还没有将响应返回客户端**
+这是因为我们没有调用next函数，执行下一步。因为`router.param()`本质上就是一种中间件，中间件就是**请求发送到服务器后，但服务器还没有将响应返回客户端。**
+
+经历了这个中间件，然后才会调用实际对应的路由（如果在这个中间件中调用了next()）。
+
+**如果此时在该中间件的req或者res上挂载属性，之后的路由可以访问到**
+
+```js
+
+router.get('/:id', (req, res) => {
+   //此处可以获取到刚才在req上添加的user属性.
+  console.log(req.user)
+  res.send(`user's id is ${req.params.id}`);
+})
+
+const users = [{ name: 'jiaqi' }, { name: 'sally' }];
+
+router.param('id', (req, res, next, id) => {
+  //接下来其他路由可以访问到此时添加的user属性
+  req.user = users[id]
+  next();
+})
+```
+
+## 中间件
+
+如果有一个函数，每个路径都需要使用，可以在最顶部用`app.use()`定义一个中间件。中间件是从上到下运行的。
+
+永远不要忘记了中间件函数需要调用`next()`。
+
+```js
+const express = require('express');
+
+const app = express();
+
+app.set('view engine', 'ejs');
+app.use(logger); //中间件
+
+
+app.get('/', (req, res) => {
+  res.render('index',{text:'world'});
+})
+
+const userRouter = require('./routes/users')
+app.use('/users', userRouter);
+
+function logger(req, res, next) {
+  console.log(req.originalUrl);
+  next()
+}
+
+
+app.listen(3000, () => {
+  console.log('running at http://localhost:3000');
+});
+```
+
+除了用`app.use()`使用中间件，还可以直接在某个路由前使用中间件。
+
+```js
+app.get('/',logger, (req, res) => {
+  res.render('index',{text:'world'});
+})
+```
+
+如果愿意的话，也可以在同一个路径下使用多个中间件函数。
+
+```js
+app.get('/',logger, logger, (req, res) => {
+  res.render('index',{text:'world'});
+})
+```
+
+
+
+### 渲染静态文件
+
+express 自带一些实用的中间件，比如渲染静态文件。
+
+比如在根目录下的`public`文件夹下，我们放了一些静态的HTML文件，HTML的内容我们不会去进行修改。
+
+![image-20220131132902752](https://gitee.com/zyxbj/image-warehouse/raw/master/pics/image-20220131132902752.png)
+
+```js
+app.use(express.static('public'));
+```
+
+
+
+此时，即使我们什么路由也不写，它就可以直接渲染 public 文件夹下的 `index.html`。
+
+```js
+const express = require('express');
+
+const app = express();
+
+app.set('view engine', 'ejs');
+
+app.use(express.static('public'));
+
+app.listen(3000, () => {
+  console.log('running at http://localhost:3000');
+});
+```
+
+![image-20220131133027618](https://gitee.com/zyxbj/image-warehouse/raw/master/pics/image-20220131133027618.png)
+
+如果在 public 文件夹下创建一个新的文件夹 test，然后在 test 文件夹下创建一个 index.html，接着如果我们访问：`http://localhost:3000/test/`也可以打开该html文件。
+
+总之，url会与文件实际存放路径一一对应。
+
+
+
+### 解析表单
+
+如果要获取到别人提交的表单信息，我们可以使用这个中间件：
+
+```js
+app.use(express.urlencoded({extended:true}));
+```
+
+之后，我们就可以通过 `req.body`获取到用户提交的信息。
+
+
+
+假设表单为：
+
+```js
+<form action="/users" method="post">
+    <input type="text" name="userName" id="name" value="<%=locals.name %>">
+  <button type="submit">提交</button>
+</form>
+```
+
+获取到表单信息：
+
+```js
+router.get('/new', (req, res) => {
+  res.render('users/new',{name:'jiaqi'}) //第二个参数给模板引擎传递参数
+})
+
+router.post('/', (req, res) => {
+  console.log(req.body); //获取到用户的提交的表单信息
+  res.send('create user');
+})
+```
+
+### 解析JSON
+
+这个和上面的解析表单作用一样，区别在于上面是解析表单，而这个是解析用户的JSON格式的请求。
+
+```js
+app.use(express.json())
+```
+
+
+
+
+
+
+
