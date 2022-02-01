@@ -652,3 +652,147 @@ module.exports = errorHandlerMiddleWare;
 
 # store api
 
+## 项目准备
+
+### 基本代码
+
+首先安装好express和dotenv，然后写好基本的代码。
+
+```js
+require('dotenv').config();
+const express = require('express');
+const notFoundMiddleware = require('./middleware/not-found');
+const errorHandler = require('./middleware/error-handler');
+
+const app = express();
+
+app.use(express.json());
+
+
+app.get('/', (req, res) => {
+  res.send('<h1>store api <a href ="/api/v1/products">products route</a></h1>')
+})
+
+//错误处理中间件
+app.use(notFoundMiddleware);
+app.use(errorHandler);
+
+const port = process.env.PORT || 3000;
+const start = async () => {
+  try {
+    // connect db
+    app.listen(port, console.log('running at http://localhost:3000'));
+  } catch (err) {
+    console.log(err);
+  }
+}
+
+start();
+```
+
+其中`not-found`和`error-handler`的代码如下：
+
+```js
+//middleware/not-found
+const notFound = (req, res) => res.status(404).send('Route does not exist')
+module.exports = notFound;
+```
+
+```js
+//middleware/error-handler
+const errorHandlerMiddleware = async (err, req, res, next) => {
+  console.log(err)
+  return res.status(500).json({ msg: 'Something went wrong, please try again' })
+}
+
+module.exports = errorHandlerMiddleware
+```
+
+
+
+### 连接数据库
+
+和之前一样，创建了一个连接数据库的函数，然后在开启服务器之前连接数据库。
+
+```js
+//db/connect.js
+const mongoose = require('mongoose');
+
+const connectDB = (uri) => {
+  return mongoose.connect(uri);
+}
+
+module.exports = connectDB;
+```
+
+与此同时，把数据库的链接放到`.env`中，然后再到主程序中调用连接数据库的函数。
+
+```js
+//app.js
+const connectDB = require('./db/connect');
+const port = process.env.PORT || 3000;
+const start = async () => {
+  try {
+    // connect db
+    await connectDB(process.env.MONGO_URI);
+    app.listen(port, console.log('running at http://localhost:3000'));
+  } catch (err) {
+    console.log(err);
+  }
+}
+
+start();
+```
+
+### 设置router
+
+```js
+//routes/products
+const express = require("express");
+
+const router = express.Router();
+
+router.route('/').get((req, res) => {
+  res.send('hello world')
+})
+
+module.exports = router;
+```
+
+```js
+//app.js
+const router = require('./routes/products.js');
+app.use('/api/v1/products', router);
+```
+
+接着把routes中的逻辑代码放在controller中。
+
+```js
+//controller/products.js
+const getAllProductsStatics = async (req, res, next) => {
+  res.status(200).json({ msg: 'products testing route' })
+}
+const getAllProducts = async (req, res, next) => {
+  res.status(200).json({ msg: 'getAllProducts' })
+}
+
+module.exports = {
+  getAllProductsStatics,
+  getAllProducts
+}
+```
+
+```js
+//routes/products.js
+const express = require("express");
+const router = express.Router();
+const { getAllProductsStatics, getAllProducts } = require('../controllers/products.js');
+
+router.route('/').get(getAllProducts);
+router.route('/statics').get(getAllProductsStatics);
+
+module.exports = router;
+```
+
+
+
