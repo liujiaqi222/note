@@ -18,7 +18,7 @@ const errorHandlerMiddleWare = require('./middleware/error-handler.js');
 app.use(errorHandlerMiddleWare);
 
 
-const port = 80;
+const port = process.env.PORT || 80;
 
 // 会在运行时自动读取根目录里.env文件的配置
 require('dotenv').config();
