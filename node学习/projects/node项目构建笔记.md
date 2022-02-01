@@ -325,6 +325,10 @@ const TaskSchema = new mongoose.Schema({
 })
 ```
 
+
+
+### 创建数据
+
 验证之后，我们需要`try catch`捕获验证失败的错误。
 
 ```js
@@ -794,5 +798,109 @@ router.route('/statics').get(getAllProductsStatics);
 module.exports = router;
 ```
 
+### 数据库错误处理
 
+之前，我们在路由中请求数据库的数据是使用`try catch`或者自行创建了一个`async wrapper`，但是我们可以直接使用别人写好的包`express-async-errors`。
+
+```bash
+yarn add express-async-errors
+```
+
+我们只需要使用它之前require它一下，其他什么的不用管了。
+
+```js
+const express = require('express');
+require('express-async-errors');
+const User = require('./models/user');
+const app = express();
+ 
+app.get('/users', async (req, res) => {
+  const users = await User.findAll();
+  res.send(users);
+});
+```
+
+之后如果mongoose抛出错误，这个npm包会自动帮我们捕获，进入到错误处理中间件。
+
+## 设置models
+
+```js
+const mongoose = require('mongoose');
+
+const productsSchema = new mongoose.Schema({
+  name: {
+    type: String,
+    required: [true, '必须提供产品名字']
+  },
+  price: {
+    type: Number,
+    required: [true, '必须提供产品价格']
+  },
+  featured: {
+    type: Boolean,
+    default: false,
+  },
+  rating: {
+    type: Number,
+    default:4.5,
+  },
+  createAt: {
+    type: Date,
+    default:Date.now()
+  },
+  // 公司限定为如下四个值
+  company: {
+    type: String,
+    enum: {
+      values: ['ikea', 'liddy', 'caressa', 'marcos'],
+      message:'{VALUE}不支持'
+    },
+  }
+})
+
+module.exports = mongoose.model('Product', productsSchema);
+```
+
+## 填充数据
+
+在`products.json`中准备了一些数据，因此我们将它们写入数据库中。
+
+![image-20220202000634814](https://gitee.com/zyxbj/image-warehouse/raw/master/pics/image-20220202000634814.png)
+
+因为json中的数据是一个数组，因此我们甚至不用遍历数组，直接`Model.create()`，mongoose就会帮助我们写入单个document。
+
+```js
+//populate.js
+require('dotenv').config();
+
+const connectDB = require('./db/connect');
+const Product = require('./models/product')
+
+// 厉害了 JSON数据直接require就能获取
+const jsonProducts = require('./products.json')
+
+
+// 把数据填充到database中
+const start = async () => {
+  try {
+    // 连接数据库
+    await connectDB(process.env.MONGO_URI);
+     // 删除之前所有的数据
+    await Product.deleteMany();
+    // 把json中的所有数据写入数据库
+    await Product.create(jsonProducts);
+    process.exit(0)；//退出node程序
+  } catch (err) {
+    console.log(err);
+     process.exit(1)
+  }
+
+}
+
+start();
+```
+
+
+
+![image-20220202001653212](https://gitee.com/zyxbj/image-warehouse/raw/master/pics/image-20220202001653212.png)
 
