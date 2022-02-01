@@ -6,7 +6,16 @@ const app = express();
 
 app.use(express.json());
 app.use('/api/v1/tasks', tasks);
-app.use(express.static('public'))
+app.use(express.static('public'));
+
+
+// 处理404的中间件
+const notFound = require('./middleware/not-found.js');
+app.use(notFound);
+
+// 错误处理
+const errorHandlerMiddleWare = require('./middleware/error-handler.js');
+app.use(errorHandlerMiddleWare);
 
 
 const port = 80;

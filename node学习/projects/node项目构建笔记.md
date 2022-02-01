@@ -451,3 +451,202 @@ const updateTask = async (req, res) => {
 }
 ```
 
+## 代码优化
+
+### 自定义404页面
+
+```js
+//app.js
+const express = require('express');
+const tasks = require('./routes/tasks.js');
+const connectDB = require('./db/connect.js');
+
+const app = express();
+
+app.use(express.json());
+app.use('/api/v1/tasks', tasks);
+app.use(express.static('public'))
+
+// 处理404的中间件
+const notFound = require('./middleware/not-found.js');
+app.use(notFound);
+
+
+const port = 80;
+
+// 会在运行时自动读取根目录里.env文件的配置
+require('dotenv').config();
+
+// 如果数据库连接成功，然后才会开启服务器
+connectDB(process.env.Mongo_URI)
+  .then(() => {
+    app.listen(port, console.log(`running on http://localhost:${port}`));
+  })
+  .catch(err => {
+    console.log(err);
+  })
+
+```
+
+```js
+//middleware/not-found.js
+
+const notFound = (req, res, next) => {
+  res.status(404).send('资源不存在');
+}
+
+module.exports = notFound;
+```
+
+### 包装try和catch
+
+在`controler/task.js`中写了超级多的try和catch，因此我们可以使用一个函数来包装try和catch。
+
+![image-20220201131251648](https://gitee.com/zyxbj/image-warehouse/raw/master/pics/image-20220201131251648.png)
+
+这个函数，接收原来try的逻辑作为函数参数，而它同时又会返回一个函数，这个函数可以获取到express传入的`req,res,next`。最后，它将catch到的error交给next中间件来处理（这个中间件我们还没有设置）。
+
+```js
+//middleware/async.js
+const asyncWrapper = fn => {
+  return async (req, res,next) => {
+    try {
+      await fn(req, res, next);
+    } catch (err) {
+      next(err);
+   }
+  }
+}
+
+module.exports = asyncWrapper;
+```
+
+之前的try catch代码就可以改写为
+
+```js
+//controler/task.js
+
+//原来
+// get all tasks
+const getAllTasks = async (req, res) => {
+  try {
+    // find all documents
+    const results = await Task.find({});
+    res.json(results);
+  } catch (err) {
+    res.status(500).json({ message: err });
+  }
+}
+
+//优化后
+// get all tasks
+const getAllTasks = asyncWrapper(async (req, res) => {
+  // find all documents
+  const results = await Task.find({});
+  res.json(results);
+});
+```
+
+### 错误处理器
+
+[官网：express的默认错误处理器](http://expressjs.com/en/guide/error-handling.html#error-handling)
+
+**If you pass an error to `next()` and you do not handle it in a custom error handler, it will be handled by the built-in error handler; the error will be written to the client with the stack trace.** 
+
+Define error-handling middleware functions in the same way as other middleware functions, except error-handling functions have four arguments instead of three: `(err, req, res, next)`. For example:
+
+```js
+app.use(function (err, req, res, next) {
+  console.error(err.stack)
+  res.status(500).send('Something broke!')
+})
+```
+
+```js
+//middleware/error-handler.js
+const errorHandlerMiddleWare = (err, req, res, next) => {
+  return res.status(500).json({ err});
+}
+module.exports = errorHandlerMiddleWare;
+```
+
+```js
+//app.js
+//略
+// 错误处理
+const errorHandlerMiddleWare = require('./middleware/error-handler.js');
+app.use(errorHandlerMiddleWare);
+```
+
+除了状态码为500的错误，我们还可以处理状态码为404的错误。我们主动定义一个错误，然后传递给`next`中间件。
+
+```js
+const getTask = asyncWrapper(async (req, res,next) => {
+  const taskId = req.params.id;
+  const task = await Task.findById(taskId);
+  if (!task) {
+    const err = new Error('task not found');
+    err.status = 404;
+    return next(err);
+  }
+  res.status(200).json(task);
+})
+```
+
+这里定义错误写了2行代码，因此我们可以自定义一个error类，让其继承自原生的类并且多一个statusCode。
+
+```js
+//errors/custom-errors
+class CustomError extends Error{
+  constructor(message,statusCode) {
+    super(message);
+    this.statusCode = statusCode;
+  }
+}
+
+module.exports = CustomError;
+```
+
+接着，404错误就可以写为：
+
+```js
+const CustomError = require('../errors/custom-error.js');
+const getTask = asyncWrapper(async (req, res,next) => {
+  const taskId = req.params.id;
+  const task = await Task.findById(taskId);
+  if (!task) {
+    // const err = new Error('task not found');
+    // err.status = 404;
+    // return next(err);
+    return next(new CustomError(`task not found with id: ${taskId}`, 404));
+  }
+  res.status(200).json(task);
+})
+```
+
+然后把wrapper的catch的错误也用自定义的类来声明错误：
+
+```js
+const CustomError = require('../errors/custom-error.js');
+const asyncWrapper = fn => {
+  return async (req, res,next) => {
+    try {
+      await fn(req, res, next);
+    } catch (err) {
+      next(new CustomError(err,500));
+   }
+  }
+}
+module.exports = asyncWrapper;
+```
+
+错误处理中间件就变为了：
+
+```js
+//middleware/error-handler.js
+const errorHandlerMiddleWare = (err, req, res, next) => {
+  return res.status(err.statusCode).json({ msg:err.message});
+}
+module.exports = errorHandlerMiddleWare;
+```
+
