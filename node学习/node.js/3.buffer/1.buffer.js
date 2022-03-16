@@ -2,7 +2,7 @@
 // Nodejs提供了操作计算机底层的api，而计算机底层只能识别0和1
 // 所以就提供了一个专门用于存储字节数据的类
 
-
+import { Buffer } from "buffer";
 
 // 1. 创建一个buffer对象
 //Buffer.alloc(size[, fill[, encoding]])
