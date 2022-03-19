@@ -1,0 +1,26 @@
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+
+.App{
+  background-color: #c2d0db;
+  padding: 15px;
+}
+
+.Node{
+  padding: 10px;
+  background-color: #98cc32;
+}
+
+.Subnode{
+  padding: 10px;
+  background-color: #dadc36;
+}
+
+.Child{
+  padding: 5px;
+  background-color: #85ceea;
+}
