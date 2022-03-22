@@ -30,14 +30,11 @@ function handleFiles(files){
 async function uploadFiles(file){
     const fd = new FormData();
     fd.append('file',file);
-    console.log({...fd})    
     const res = await fetch('http://localhost:3000/upload',{
       method:'post',
       body:fd
     });
-
     const data = await res.json();
-
-  
+    console.log(data.urls[0]);
 }
 
