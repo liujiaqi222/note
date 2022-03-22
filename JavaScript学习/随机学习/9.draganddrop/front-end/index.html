@@ -12,8 +12,7 @@
     <div id="drop-area">
       <form class="my-form">
         <p>
-          Upload multiple files with the file dialog or by dragging and dropping
-          images onto the dashed region
+          可以点击下方的上传按钮或者直接将图片拖拽进入虚线框内实现上传
         </p>
         <input
           type="file"
@@ -22,8 +21,11 @@
           accept="image/*"
           onchange="handleFiles(this.files)"
         />
-        <label class="button" for="fileElem">Select some files</label>
+        <label class="button" for="fileElem">选择一些文件</label>
       </form>
+      <progress id="progress-bar" max=100 value=0></progress>
+      <div id="gallery"></div>
+
     </div>
     <script src="./script.js"></script>
   </body>

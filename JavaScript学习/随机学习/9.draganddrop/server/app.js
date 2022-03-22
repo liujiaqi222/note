@@ -40,10 +40,11 @@ app.use((req, res, next) => {
 });
 
 app.post("/upload", upload.array("file", 20), (req, res) => {
+  console.log(req);
   let urls = [];
-  req.files.forEach(({ path: imgPath }) => {
-    imgPath = imgPath.replaceAll("\\", "/");
-    urls.push(baseUrl + imgPath);
+  req.files.forEach(({ path }) => {
+    path = imgPath.replaceAll("\\", "/");
+    urls.push(baseUrl + path);
   });
   res.json({
     status: 200,
