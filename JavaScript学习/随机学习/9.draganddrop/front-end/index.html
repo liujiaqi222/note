@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="./style.css">
+  </head>
+  <body>
+    <!-- drag, dragend, dragenter, dragexit, dragleave, dragover, dragstart, and drop -->
+    <div id="drop-area">
+      <form class="my-form">
+        <p>
+          Upload multiple files with the file dialog or by dragging and dropping
+          images onto the dashed region
+        </p>
+        <input
+          type="file"
+          id="fileElem"
+          multiple
+          accept="image/*"
+          onchange="handleFiles(this.files)"
+        />
+        <label class="button" for="fileElem">Select some files</label>
+      </form>
+    </div>
+    <script src="./script.js"></script>
+  </body>
+</html>
