@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <!-- download 特性（attribute）强制浏览器下载而不是导航 -->
+    <!-- donwload='hello.txt' 指明了下载文件的类型和名称 -->
+    <a download="hello.txt" href="#" id="link">Download</a>
+    <script>
+      // type 自然地变成了 Content-Type
+      let blob = new Blob(["hello world"], { type: "text/plain" });
+      link.href = URL.createObjectURL(blob);
+    </script>
+  </body>
+</html>

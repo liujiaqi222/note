@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+<img src="./img.jpeg" />
+<a id="link" href="#"></a>
+<script>
+    let img = document.querySelector("img");
+    // 生成相同尺寸的canvas
+    let canvas = document.createElement("canvas");
+    canvas.width = img.clientWidth;
+    canvas.height = img.clientHeight;
+    let context = canvas.getContext("2d");
+    // 像canvas中复制图像
+    context.drawImage(img, 0, 0);
+    // toBlob(callback, type, quality)
+    canvas.toBlob(
+    function (blob) {
+        link.download = "example.jpeg"; //限制的下载的格式和名称
+        link.href = URL.createObjectURL(blob);
+        link.click();
+        URL.revokeObjectURL(blob);
+    },
+    "image/jpeg",
+    0.4
+    );
+    </script>
+  </body>
+</html>
