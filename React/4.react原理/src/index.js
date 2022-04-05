@@ -1,73 +1,41 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import PropTypes from 'prop-types';
-import cat from './image/cat.png'
+import React, { Component } from "react";
+import ReactDOM from "react-dom";
 
-// 高阶组件
-function withMouse(WrappedComponent){
-  // 该组件提供复用的状态逻辑
-  class Mouse extends React.Component {
-    // 鼠标状态
-    state = {
-      x: 0,
-      y: 0,
-    };
-    componentDidMount() {
-      window.addEventListener("mousemove", this.handleMouseMove);
-    }
-    componentWillUnmount(){
-      window.removeEventListener('mousemove',this.handleMouseMove);
-    }
-    handleMouseMove = e=>{
-      this.setState({
-        x:e.clientX,
-        y:e.clientY
-      })
-    }
-    render(){
-      return <WrappedComponent {...this.state} {...this.props}/>;
-    }
-  }
-  // 设置dispayName
-  Mouse.displayName = `withMouse${getDisplayName(WrappedComponent)}`;
-  return Mouse;
-}
-
-const Position = props => {
-  console.log(props)
-  return (
-    <p>
-    
-      鼠标当前位置：(x:{props.x},y:{props.y})
-    </p>
-  );
-}
-
-function getDisplayName(WrappedComponent){
- return WrappedComponent.displayName || WrappedComponent.name ||'Component';
-}
-
-
-
-class App extends React.Component{
-  render(){
+class App extends React.Component {
+  state = {
+    number: 0,
+  };
+  handleClick = () => {
+    this.setState(() => {
+      return {
+        number: Math.floor(Math.random() * 3),
+      };
+    });
+  };
+  // 如果两次生成的随机数相同，则此时不需要重新被渲染
+  // shouldComponentUpdate(nextP, nextS) {
+  //   return nextS.number === this.state.number;
+  // }
+  render() {
     return (
       <div>
-        <MousePosition a='1' />
-        <CatP/>
+        <NumberBox number={this.state.number}></NumberBox>
+        <button onClick={this.handleClick}>+1</button>
       </div>
     );
-  } 
+  }
 }
 
-const CatC = props =>{
-  return (
-    <img src = {cat} style={{ width:'5%',position:'absolute',top:props.y,left:props.x}} />
-  )
+class NumberBox extends Component {
+  state = {};
+  render() {
+    console.log("render");
+    return <h1 id="title">计数器：{this.props.number}</h1>;
+  }
+  shouldComponentUpdate(nextP, nextS) {
+    console.log(nextP, this.props);
+    return nextP.number !== this.props.number;
+  }
 }
-
-const CatP = withMouse(CatC);
-
-const MousePosition = withMouse(Position);
 
 ReactDOM.render(<App />, document.getElementById("root"));

@@ -1,40 +1,43 @@
-<script setup lang="ts">
-defineProps<{
-  msg: string;
-}>();
-</script>
-
 <template>
-  <div class="greetings">
-    <h1 class="green">{{ msg }}</h1>
-    <h3>
-      You’ve successfully created a project with
-      <a target="_blank" href="https://vitejs.dev/">Vite</a> +
-      <a target="_blank" href="https://vuejs.org/">Vue 3</a>. What's next?
-    </h3>
-  </div>
+  <div>你好啊 {{ msg }}</div>
+  <button @click="handle1Click">+1</button>
+  <button @click="handle2Click">-1</button>
 </template>
 
+<script setup lang="ts">
+import { defineProps, defineEmits, ref, defineExpose, reactive } from "vue";
+// 使用defineEmits创建名称，接受一个数组
+let myEmits = defineEmits(["myAdd", "myDel"]);
+defineProps({
+  msg: {
+    type: String,
+    default: "---",
+  },
+});
+
+let a = ref(0);
+
+let handle1Click = (): void => {
+  a.value++;
+  myEmits("myAdd", a.value);
+};
+let handle2Click = (): void => {
+  a.value--;
+  myEmits("myDel", a.value);
+};
+
+let info = reactive({
+  name: "jaiqi",
+  age: 23,
+});
+
+defineExpose({info})
+
+let color='red';
+</script>
+
 <style scoped>
-h1 {
-  font-weight: 500;
-  font-size: 2.6rem;
-  top: -10px;
-}
-
-h3 {
-  font-size: 1.2rem;
-}
-
-.greetings h1,
-.greetings h3 {
-  text-align: center;
-}
-
-@media (min-width: 1024px) {
-  .greetings h1,
-  .greetings h3 {
-    text-align: left;
-  }
+div{
+  color:v-bind('color');
 }
 </style>
