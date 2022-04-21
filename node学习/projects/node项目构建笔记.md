@@ -35,7 +35,7 @@ app.listen(port, console.log(`running on http://localhost:${port}`));
 ```js
 //routes/task.js
 const express = require('express');
-const router = express.router;
+const router = express.Router();
 
 router.route('/').get((req,res) => {
   res.send('all items');
@@ -60,6 +60,12 @@ app.listen(port, console.log(`running on http://localhost:${port}`));
 
 
 为了获取JSON请求的请求体(通过`req.body`)，我们可以使用内置的中间件。
+
+自 `Express 4.16.0` 版本开始，`Express` 内置了 3 个常用的中间件，极大的提高了 `Express` 项目的开发效率和体验
+
+1. `express.static` 快速托管静态资源的内置中间件，例如： HTML 文件、图片、`CSS` 样式等（无兼容性）
+2. `express.json` 解析 `JSON` 格式的请求体数据（**有兼容性**，仅在 `4.16.0+` 版本中可用）
+3. `express.urlencoded` 解析 `URL-encoded` 格式的请求体数据（**有兼容性**，仅在 `4.16.0+` 版本中可用）
 
 ```js
 //app.js
@@ -154,6 +160,8 @@ module.exports = router;
 将使用 [mongoDB 云数据库](https://cloud.mongodb.com/)，它完全免费，只需要注册好账号即可。
 
 ![image-20220131181521685](https://gitee.com/zyxbj/image-warehouse/raw/master/pics/image-20220131181521685.png)
+
+![image-20220421204824537](https://gitee.com/zyxbj/image-warehouse/raw/master/pics/image-20220421204824537.png)
 
 点击database的 connect 按钮，将获取到连接的网址。
 
