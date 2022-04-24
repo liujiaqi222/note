@@ -427,7 +427,7 @@ const deleteTask = async (req, res) => {
     }
     res.status(200).json({msg:'task已经被成功删除'});
   } catch (err) {
-
+    res.status(500).json({ message: err });
   }
 }
 ```
@@ -458,7 +458,7 @@ const updateTask = async (req, res) => {
     }
     res.status(200).json(task);
   } catch (err) {
-    res.json(err);
+    res.status(500).json(err);
   }
 }
 ```
@@ -542,7 +542,7 @@ module.exports = asyncWrapper;
 // get all tasks
 const getAllTasks = async (req, res) => {
   try {
-    // find all documents
+    // find all 
     const results = await Task.find({});
     res.json(results);
   } catch (err) {
