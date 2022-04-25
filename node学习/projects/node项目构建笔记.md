@@ -569,7 +569,6 @@ Define error-handling middleware functions in the same way as other middleware f
 
 ```js
 app.use(function (err, req, res, next) {
-  console.error(err.stack)
   res.status(500).send('Something broke!')
 })
 ```

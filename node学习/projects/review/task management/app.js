@@ -3,6 +3,8 @@ const app = express();
 const tasks = require("./routes/task.js");
 const connectDB = require("./db/connection.js");
 const notFound = require('./middleware/not-found.js')
+const errorHandler = require('./middleware/error-handler');
+
 
 // 解析json格式的表单，通过req.body直接就能获取到数据
 app.use(express.json());
@@ -10,6 +12,8 @@ app.use("/api/v1/tasks", tasks);
 
 // 404中间件
 app.use(notFound);
+// 错误中间件
+app.use(errorHandler);
 
 app.get("/hello", (req, res) => {
   res.send("hello world");
