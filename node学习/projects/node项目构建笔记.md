@@ -845,7 +845,7 @@ const productsSchema = new mongoose.Schema({
   },
   featured: {
     type: Boolean,
-    default: false,
+    default: true,
   },
   rating: {
     type: Number,
@@ -894,7 +894,7 @@ const start = async () => {
     await connectDB(process.env.MONGO_URI);
      // 删除之前所有的数据
     await Product.deleteMany();
-    // 把json中的所有数据写入数据库
+    // 把json中的所有数据写入数据库，这里传入的数组，数组里面有很多对象
     await Product.create(jsonProducts);
     process.exit(0)；//退出node程序
   } catch (err) {
@@ -910,4 +910,46 @@ start();
 
 
 ![image-20220202001653212](https://gitee.com/zyxbj/image-warehouse/raw/master/pics/image-20220202001653212.png)
+
+## 数据查询
+
+首先了解一下数据库的数据查询api：
+
+- [`Model.find()`](https://mongoosejs.com/docs/api.html#model_Model.find)
+- [`Model.findById()`](https://mongoosejs.com/docs/api.html#model_Model.findById)
+- [`Model.findByIdAndDelete()`](https://mongoosejs.com/docs/api.html#model_Model.findByIdAndDelete)
+- [`Model.findByIdAndRemove()`](https://mongoosejs.com/docs/api.html#model_Model.findByIdAndRemove)
+- [`Model.findByIdAndUpdate()`](https://mongoosejs.com/docs/api.html#model_Model.findByIdAndUpdate)
+- [`Model.findOne()`](https://mongoosejs.com/docs/api.html#model_Model.findOne)
+- [`Model.findOneAndDelete()`](https://mongoosejs.com/docs/api.html#model_Model.findOneAndDelete)
+- [`Model.findOneAndRemove()`](https://mongoosejs.com/docs/api.html#model_Model.findOneAndRemove)
+- [`Model.findOneAndReplace()`](https://mongoosejs.com/docs/api.html#model_Model.findOneAndReplace)
+- [`Model.findOneAndUpdate()`](https://mongoosejs.com/docs/api.html#model_Model.findOneAndUpdate)
+
+```js
+await Product.find({}) // 传入空对象返回所有的数据
+await Product.find({ featured: true }) // 查找所有的feature为true的数据
+```
+
+然后在网址中的query参数，在express中可以通过`req.query`获取到。
+
+![image-20220426202010100](https://gitee.com/zyxbj/image-warehouse/raw/master/pics/image-20220426202010100.png)
+
+```js
+const Product = require('../models/product');
+
+
+const getAllProductsStatic = async (req, res) => {
+  const products = await Product.find({ featured: true })
+  res.status(200).json({ products, nbHits: products.length })
+}
+const getAllProducts = async (req, res) => {
+  const products = await Product.find(req.query)
+  res.status(200).json({ products})
+}
+
+module.exports = {
+  getAllProducts, getAllProductsStatic
+}
+```
 

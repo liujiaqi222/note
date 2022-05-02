@@ -9,13 +9,26 @@ const productSchema = new mongoose.Schema({
     type: Number,
     required: [true, 'price name must be provided']
   },
-  feature: {
+  featured: {
     type: Boolean,
-    default: false,
+    default: true,
   },
   rating: {
     type: Number,
     default: 4.5,
   },
-  
+  createdAt: {
+    type: Date,
+    default: Date.now()
+  },
+  company: {
+    type: String,
+    // enum: ['ikea', 'liddy', 'caressa', 'marcos']
+    enum: {
+      values: ['ikea', 'liddy', 'caressa', 'marcos'],
+      message: '{VALUE} is not supported'
+    }
+  }
 })
+
+module.exports = mongoose.model('Product', productSchema);
