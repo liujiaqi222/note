@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>原生JS实现拖拽缩放元素(工厂模式)</title>
+    <style type="text/css">
+      * {
+        padding: 0;
+        margin: 0;
+      }
+      #warpper {
+        position: relative;
+        width: 800px;
+        height: 800px;
+      }
+      #app-warpper {
+        position: absolute;
+        cursor: move;
+        left: 0px;
+        top: 0px;
+        background: yellow;
+        width: 100px;
+        height: 100px;
+        resize: both;
+      }
+      i {
+        display: inline-block;
+        width: 10px;
+        height: 10px;
+        position: absolute;
+        z-index: 10;
+        cursor: ne-resize;
+        background-color: rgb(255, 0, 0);
+        top: -2px;
+        right: -2px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="warpper">
+      <div id="app-warpper"><i id="drag"></i></div>
+    </div>
+  </body>
+  <script>
+    const divOverlay = document.getElementById("app-warpper");
+    const wrap = document.getElementById("warpper");
+    const dargDom = document.getElementById("drag");
+    let isDown = false;
+    let isDrag = false;
+    let offsetX;
+    let offsetY;
+    let maxArea = {
+      x: [0, 660],
+      y: [0, 660],
+    };
+    divOverlay.addEventListener(
+      "mousedown",
+      function (e) {
+        isDown = true;
+        isDrag = false;
+        offsetX = event.offsetX;
+        offsetY = event.offsetY;
+        // console.log(divOverlay.offsetLeft, e.clientX, e.offsetX);
+      },
+      true
+    );
+    dargDom.addEventListener(
+      "mousedown",
+      function (event) {
+        isDrag = true;
+        isDown = false;
+        offsetX = event.clientX;
+        offsetY = event.clientY;
+      },
+      true
+    );
+
+    document.addEventListener(
+      "mouseup",
+      function () {
+        isDown = false;
+        isDrag = false;
+        offsetX = 0;
+        offsetY = 0;
+      },
+      true
+    );
+
+    document.addEventListener(
+      "mousemove",
+      function (event) {
+        event.preventDefault();
+        let deltaX = event.clientX - offsetX;
+        let deltaY = event.clientY - offsetY;
+        if (isDown) {
+          if (deltaX < 0) {
+            deltaX = 0;
+          }
+          if (deltaX > maxArea["x"][1]) {
+            deltaX = maxArea["x"][1];
+          }
+          if (deltaY < 0) {
+            deltaY = 0;
+          }
+          if (deltaY > maxArea["y"][1]) {
+            deltaY = maxArea["y"][1];
+          }
+          divOverlay.style.left = deltaX + "px";
+          divOverlay.style.top = deltaY + "px";
+        }
+
+        if (isDrag) {
+          const height = divOverlay.offsetHeight - deltaY;
+          const width = divOverlay.offsetWidth + deltaX;
+          const top = divOverlay.offsetTop + deltaY;
+          console.log(deltaY, height, divOverlay.offsetHeight);
+          divOverlay.style.width = width + "px";
+          divOverlay.style.top = top + "px";
+          divOverlay.style.height = height + "px";
+          offsetX = event.clientX;
+          offsetY = event.clientY;
+        }
+      },
+      true
+    );
+  </script>
+</html>
