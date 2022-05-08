@@ -1105,3 +1105,318 @@ module.exports = {
 
 
 
+# JWT
+
+## 基本配置
+
+前面都已经写了2遍，因此不再重复，以下为代码：
+
+```js
+// app.js
+require('dotenv').config();
+require('express-async-errors');
+
+const express = require('express');
+const app = express();
+
+// middleware
+app.use(express.static('./public'));
+app.use(express.json());
+
+const mainRouter = require('./routes/main')
+app.use('/api/v1', mainRouter);
+const notFoundMiddleware = require('./middleware/not-found');
+const errorHandlerMiddleware = require('./middleware/error-handler');
+
+app.use(notFoundMiddleware);
+app.use(errorHandlerMiddleware);
+
+const port = process.env.PORT || 3000;
+
+const start = async () => {
+  try {
+    app.listen(port, () =>
+      console.log(`http://localhost:${port}...`)
+    );
+  } catch (error) {
+    console.log(error);
+  }
+};
+```
+
+```js
+//router/main.js
+const router = require('express').Router();
+const {login,dashboard} = require('../controllers/main');
+
+router.route('/dashboard').get(dashboard);
+router.route('/login').post(login);
+console.log(router);
+
+module.exports = router;
+```
+
+```js
+//controller/main.js
+const login = async (req, res) => {
+  res.send('login')
+}
+
+const dashboard = async (req, res) => {
+  const luckyNumber = Math.floor(Math.random() * 100);
+  res.status(200).json({
+    msg: 'hello',
+    secret: `here is your authorized data,your lucky number is ${luckyNumber}`
+  })
+}
+
+module.exports = {
+  login, dashboard
+}
+```
+
+## JWT的应用
+
+官网：https://jwt.io/
+
+
+
+![image-20220508161934262](https://gitee.com/zyxbj/image-warehouse/raw/master/pics/image-20220508161934262.png)
+
+我们使用的包是`jsonwebtoken`，用来生成和解码jwt。
+
+```js
+const CustomAPIError = require('../errors/custom-error');
+const jwt = require('jsonwebtoken');
+
+const login = async (req, res) => {
+  const { username, password } = req.body;
+  console.log(process.env.JWT_SECRET);
+  if (!username || !password) {
+    console.log(new CustomAPIError('please provide email and password', 400) instanceof CustomAPIError);
+    throw new CustomAPIError('please provide email and password', 400);
+  }
+  const id = Date.now();
+  // 第一个参数是payload，第二个参数是secret，最后一个参数是options
+  const token = jwt.sign({ id, username }, process.env.JWT_SECRET, {
+    expiresIn: '30d'
+  });
+  res.status(200).json({ msg: 'user created', token })
+}
+```
+
+
+
+这里就没有连接数据库，只要用户提供了用户名和密码，就生成了token。
+
+```js
+// 第一个参数是payload，第二个参数是secret，最后一个参数是options
+const token = jwt.sign({ id, username }, process.env.JWT_SECRET, {
+    expiresIn: '30d'
+});
+```
+
+接着前端就得到了返回的token，然后我们把这个token存在localStorage中
+
+```js
+const { data } = await axios.post('/api/v1/login', { username, password });
+localStorage.setItem('token', data.token);
+
+```
+
+之后，请求dashboard的时候，就把token放在headers中。
+
+```js
+const token = localStorage.getItem('token')
+try {
+  const { data } = await axios.get('/api/v1/dashboard', {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  })
+  
+} catch (error) {
+  localStorage.removeItem('token')
+}
+```
+
+当前端请求dashboard的时候，我们就验证它的token是否正确。
+
+```js
+const dashboard = async (req, res) => {
+  const authHeader = req.headers.authorization;
+  if (!authHeader || !authHeader.startsWith('Bearer')) {
+    throw new CustomAPIError('No token provided', 401);
+  }
+  const token = authHeader.split(' ')[1];
+
+  try {
+    // 验证token
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    console.log(decoded); //decoded就是之前的payload
+  } catch (err) {
+    throw new CustomAPIError('Not authorized to access this route', 401);
+  }
+  const luckyNumber = Math.floor(Math.random() * 100);
+  res.status(200).json({
+    msg: 'hello',
+    secret: `here is your authorized data,your lucky number is ${luckyNumber}`
+  })
+}
+
+```
+
+关键代码就是这一行：
+
+```js
+const decoded = jwt.verify(token, process.env.JWT_SECRET);
+```
+
+全部代码：
+
+```js
+const CustomAPIError = require('../errors/custom-error');
+const jwt = require('jsonwebtoken');
+
+const login = async (req, res) => {
+  const { username, password } = req.body;
+  console.log(process.env.JWT_SECRET);
+  if (!username || !password) {
+    console.log(new CustomAPIError('please provide email and password', 400) instanceof CustomAPIError);
+    throw new CustomAPIError('please provide email and password', 400);
+  }
+  const id = Date.now();
+  // 第一个参数是payload，第二个参数是secret，最后一个参数是options
+  const token = jwt.sign({ id, username }, process.env.JWT_SECRET, {
+    expiresIn: '30d'
+  });
+  res.status(200).json({ msg: 'user created', token })
+}
+
+const dashboard = async (req, res) => {
+  const authHeader = req.headers.authorization;
+  if (!authHeader || !authHeader.startsWith('Bearer')) {
+    throw new CustomAPIError('No token provided', 401);
+  }
+  const token = authHeader.split(' ')[1];
+
+  try {
+    // 验证token
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    console.log(decoded); //decoded就是之前的payload
+  } catch (err) {
+    throw new CustomAPIError('Not authorized to access this route', 401);
+
+  }
+
+  const luckyNumber = Math.floor(Math.random() * 100);
+  res.status(200).json({
+    msg: 'hello',
+    secret: `here is your authorized data,your lucky number is ${luckyNumber}`
+  })
+}
+
+module.exports = {
+  login, dashboard
+}
+```
+
+## 代码优化
+
+因为可能不止一个route需要验证后才能访问，因为我们可以设计一个中间件来避免重复写token验证的逻辑。
+
+```js
+// middleware/auth.js
+const { BadRequestError, UnauthenticatedError } = require('../errors/index.js');
+const jwt = require('jsonwebtoken');
+
+const authenticationMiddleware = async (req, res, next) => {
+  const authHeader = req.headers.authorization;
+  if (!authHeader || !authHeader.startsWith('Bearer')) {
+    throw new UnauthenticatedError('No token provided');
+  }
+  const token = authHeader.split(' ')[1];
+  try {
+    // 验证token
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const { id, username } = decoded;
+    req.user = { id, username };
+    next(); // 一定不要忘记了这个next，不然进入不了下一个route
+
+  } catch (err) {
+    throw new BadRequestError('Not authorized to access this route');
+  }
+}
+
+module.exports = authenticationMiddleware
+```
+
+注意这里，必须记得写`next()`，另外这里把decoded出来的值赋予给了`req`，因此之后dashboard这个路由可以获取到解码后的信息。
+
+然后我们在进入到`dashboard`这个路由之前进行token验证：
+
+```js
+const router = require('express').Router();
+const {login,dashboard} = require('../controllers/main');
+
+const authenticationMiddleware = require('../middleware/auth')
+
+// 在能访问dashboard之前需要验证token
+router.route('/dashboard').get(authenticationMiddleware,dashboard);
+router.route('/login').post(login);
+
+module.exports = router;
+```
+
+最关键的代码就是这一行：
+
+```js
+router.route('/dashboard').get(authenticationMiddleware,dashboard);
+```
+
+---
+
+接着，我们还另外写了一些error类。
+
+```js
+//errors/index.js
+const { StatusCodes } = require('http-status-codes');
+
+class CustomAPIError extends Error {
+  constructor(message, statusCode) {
+    super(message)
+    this.statusCode = statusCode
+  }
+}
+
+
+class BadRequestError extends CustomAPIError {
+  constructor(message) {
+    super(message)
+    this.statusCode = StatusCodes.BAD_REQUEST;
+  }
+}
+
+class UnauthenticatedError extends CustomAPIError {
+  constructor(message) {
+    super(message)
+    this.statusCode = StatusCodes.UNAUTHORIZED;
+  }
+}
+
+
+module.exports = {
+  CustomAPIError,
+  BadRequestError,
+  UnauthenticatedError
+}
+```
+
+然后这里还用到了一个包`http-status-codes`，目的就是不用手写status-code。
+
+![image-20220508182634774](https://gitee.com/zyxbj/image-warehouse/raw/master/pics/image-20220508182634774.png)
+
+
+
+
+

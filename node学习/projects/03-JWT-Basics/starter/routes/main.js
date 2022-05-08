@@ -1,8 +1,10 @@
 const router = require('express').Router();
 const {login,dashboard} = require('../controllers/main');
 
-router.route('/dashboard').get(dashboard);
+const authenticationMiddleware = require('../middleware/auth')
+
+// 在能访问dashboard之前需要验证token
+router.route('/dashboard').get(authenticationMiddleware,dashboard);
 router.route('/login').post(login);
-console.log(router);
 
 module.exports = router;
