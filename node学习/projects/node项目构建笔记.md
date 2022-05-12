@@ -1246,7 +1246,7 @@ try {
 const dashboard = async (req, res) => {
   const authHeader = req.headers.authorization;
   if (!authHeader || !authHeader.startsWith('Bearer')) {
-    throw new CustomAPIError('No token provided', 401);
+    throw new CustomAPIError('No token provided', 400);
   }
   const token = authHeader.split(' ')[1];
 
@@ -1282,7 +1282,6 @@ const login = async (req, res) => {
   const { username, password } = req.body;
   console.log(process.env.JWT_SECRET);
   if (!username || !password) {
-    console.log(new CustomAPIError('please provide email and password', 400) instanceof CustomAPIError);
     throw new CustomAPIError('please provide email and password', 400);
   }
   const id = Date.now();
@@ -1417,6 +1416,8 @@ module.exports = {
 ![image-20220508182634774](https://gitee.com/zyxbj/image-warehouse/raw/master/pics/image-20220508182634774.png)
 
 
+
+# 04.Job Api
 
 
 
