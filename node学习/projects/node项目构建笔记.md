@@ -1421,3 +1421,263 @@ module.exports = {
 
 
 
+## 基本配置
+
+```js
+// app.js
+require('dotenv').config();
+require('express-async-errors');
+const express = require('express');
+const app = express();
+
+// routers
+const authRouter = require('./routes/auth');
+const jobsRouter = require('./routes/jobs');
+// connectdb
+const connectDB = require('./db/connect')
+
+
+// error handler
+const notFoundMiddleware = require('./middleware/not-found');
+const errorHandlerMiddleware = require('./middleware/error-handler');
+
+app.use(express.json());
+// extra packages
+
+// routes
+app.use('/api/v1/auth', authRouter);
+app.use('/api/v1/jobs', jobsRouter);
+
+app.use(notFoundMiddleware);
+app.use(errorHandlerMiddleware);
+
+const port = process.env.PORT || 3000;
+
+const start = async () => {
+  try {
+  await connectDB(process.env.MONGO_URI);
+    app.listen(port, () =>
+      console.log(`running at http://localhost:${port}...`)
+    );
+  } catch (error) {
+    console.log(error);
+  }
+};
+start();//app.js
+require('dotenv').config();
+require('express-async-errors');
+const express = require('express');
+const app = express();
+
+// routers
+const authRouter = require('./routes/auth');
+const jobsRouter = require('./routes/jobs');
+
+
+// error handler
+const notFoundMiddleware = require('./middleware/not-found');
+const errorHandlerMiddleware = require('./middleware/error-handler');
+
+app.use(express.json());
+// extra packages
+
+// routes
+app.use('/api/v1/auth', authRouter);
+app.use('/api/v1/jobs', jobsRouter);
+
+app.use(notFoundMiddleware);
+app.use(errorHandlerMiddleware);
+
+const port = process.env.PORT || 3000;
+
+const start = async () => {
+  try {
+    app.listen(port, () =>
+      console.log(`running at http://localhost:${port}...`)
+    );
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+start();
+```
+
+```js
+//routes/auth.js
+const router = require('express').Router();
+const { register, login } = require('../controllers/auth');
+
+router.post('/register', register);
+
+router.post('/login', login);
+module.exports = router;
+```
+
+```js
+//routes/jobs.js
+const router = require('express').Router();
+const { getAllJobs,
+  getJob,
+  createJob,
+  updateJob,
+  deleteJob } = require('../controllers/jobs');
+
+router.route('/').post(createJob).get(getAllJobs);
+router.route('/:id').get(getJob).delete(deleteJob).patch(updateJob);
+module.exports = router;
+```
+
+```js
+// controller/auth.js
+const register = async (req, res) => {
+  res.send('register user');
+}
+
+const login = async (req, res) => {
+  res.send('register login');
+}
+
+module.exports={
+  register, login
+}
+```
+
+```js
+// controller/jobs.js
+const getAllJobs = async (req, res) => {
+  res.send('register user');
+}
+const getJob = async (req, res) => {
+  res.send('getJob');
+}
+const createJob = async (req, res) => {
+  res.send('createJob');
+}
+const updateJob = async (req, res) => {
+  res.send('updateJob');
+}
+const deleteJob = async (req, res) => {
+  res.send('delete job');
+}
+
+module.exports = {
+  getAllJobs,
+  getJob,
+  createJob,
+  updateJob,
+  deleteJob
+}
+```
+
+## 设置Model
+
+```js
+//model/user.js
+const mongoose = require('mongoose');
+
+const UserSchema = new mongoose.Schema({
+  name: {
+    type: String,
+    required: [true, 'please provide a name'],
+    minlength: 3,
+    maxlength: 50,
+  },
+  email: {
+    type: String,
+    required: [true, 'please provide a email'],
+    match: [/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/, 'Please provide valid email'],
+    unique: true,
+  },
+  password: {
+    type: String,
+    required: [true, 'please provide a password'],
+    minlength: 8,
+  }
+})
+
+module.exports = mongoose.model('User',UserSchema);
+```
+
+用户的密码我们需要hash加密后存储在数据库，但是要记住hashing is a one-way street，it can't be reversed.
+
+我们使用的npm包是 `bcryptjs`:
+
+```js
+//controllers/auth.js
+const User = require('../models/User');
+const { StatusCodes } = require('http-status-codes');
+const bcrypt = require('bcryptjs');
+
+
+const register = async (req, res) => {
+  const { name, email, password } = req.body;
+  const salt = await bcrypt.genSalt(10);
+  const hashedPassword = await bcrypt.hash(password, salt);
+  const user = await User.create({ name, email, password: hashedPassword })
+  res.status(StatusCodes.CREATED).json({
+    user
+  })
+}
+
+const login = async (req, res) => {
+  res.send('register login');
+}
+
+module.exports = {
+  register, login
+}
+```
+
+关键代码就2行：
+
+```js
+const salt = await bcrypt.genSalt(10);
+const hashedPassword = await bcrypt.hash(password, salt);
+```
+
+然后这个加密的操作可以用`moogoose`的中间件来实现：
+
+```js
+const mongoose = require('mongoose');
+const bcrypt = require('bcryptjs');
+
+const UserSchema = new mongoose.Schema({
+  //省略
+})
+
+UserSchema.pre('save', async function (next) {
+  const salt = await bcrypt.genSalt(10);
+  this.password = await bcrypt.hash(this.password, salt);
+  next();
+})
+
+module.exports = mongoose.model('User', UserSchema);
+
+```
+
+然后controller中的代码又减少了：
+
+```js
+//controller/auth.js
+const User = require('../models/User');
+const { StatusCodes } = require('http-status-codes');
+
+const register = async (req, res) => {
+  const user = await User.create(req.body)
+  res.status(StatusCodes.CREATED).json({
+    user
+  })
+}
+
+const login = async (req, res) => {
+  res.send('register login');
+}
+
+module.exports = {
+  register, login
+}
+```
+
+
+
