@@ -1601,6 +1601,8 @@ module.exports = mongoose.model('User',UserSchema);
 
 用户的密码我们需要hash加密后存储在数据库，但是要记住hashing is a one-way street，it can't be reversed.
 
+### 密码加密
+
 我们使用的npm包是 `bcryptjs`:
 
 ```js
@@ -1680,4 +1682,202 @@ module.exports = {
 ```
 
 
+
+### 生成token
+
+```js
+//controllers/auth.js
+const User = require('../models/User');
+const { StatusCodes } = require('http-status-codes');
+const jwt = require('jsonwebtoken');
+
+const register = async (req, res) => {
+  const user = await User.create(req.body)
+  const token = jwt.sign({userId:user._id,name:user.name},'jwtsercret',{
+    expiresIn:'30d'
+  })
+  res.status(StatusCodes.CREATED).json({
+    token,user:{name:user.name}
+  })
+}
+```
+
+
+
+不过我们可以使用mongoose的实例方法。注意定义实例方法的时候，不要使用箭头函数。
+
+> Instances of `Models` are [documents](https://mongoosejs.com/docs/documents.html). Documents have many of their own [built-in instance methods](https://mongoosejs.com/docs/api/document.html). We may also define our own custom document instance methods.
+
+```js
+// define a schema
+const animalSchema = new Schema({ name: String, type: String });
+
+// assign a function to the "methods" object of our animalSchema
+animalSchema.methods.findSimilarTypes = function(cb) {
+  return mongoose.model('Animal').find({ type: this.type }, cb);
+};
+```
+
+Now all of our `animal` instances have a `findSimilarTypes` method available to them.
+
+```js
+const Animal = mongoose.model('Animal', animalSchema);
+const dog = new Animal({ type: 'dog' });
+
+dog.findSimilarTypes((err, dogs) => {
+  console.log(dogs); // woof
+});
+```
+
+因此我们在定义schema的文件中增加如下代码
+
+```js
+//models/User.js
+//注意不要使用箭头函数，在这里的this指向刚刚创建好的document
+UserSchema.methods.createJWT = function () {
+  return jwt.sign({ userId: this._id, name: this.name }, 'jwtsercret', {
+    expiresIn: '30d'
+  })
+}
+```
+
+接着在controller中调用即可。
+
+```js
+//controllers/auth.js
+const User = require('../models/User');
+const { StatusCodes } = require('http-status-codes');
+
+const register = async (req, res) => {
+  const user = await User.create(req.body)
+  res.status(StatusCodes.CREATED).json({
+    token: user.createJWT(), user: { name: user.name }
+  })
+}
+
+```
+
+### token secret
+
+可以在[这个网站](https://www.allkeysgenerator.com/)生成token的secret，然后将它放在`.env`。
+
+![image-20220515110425379](https://gitee.com/zyxbj/image-warehouse/raw/master/pics/image-20220515110425379.png)
+
+## 实现登陆功能
+
+最重要的一步就是要检查用户的密码是否正确，同样可以给mongoose的实例添加方法来进行验证
+
+```js
+//model/User.js
+UserSchema.methods.comparePassword = async function (canditatePassword) {
+  const isMatch = await bcrypt.compare(canditatePassword, this.password)
+  return isMatch;
+}
+```
+
+接着，在controller中，当我们查询到user后就可以进行密码对比了
+
+```js
+//controllers/auth.js
+const login = async (req, res) => {
+  const { email, password } = req.body;
+  if (!email || !password) {
+    throw new BadRequestError('Please provide email and password!')
+  }
+  // 根据邮箱查找用户
+  const user = await User.findOne({ email });
+  if (!user) {
+    throw new UnauthenticatedError('Invalid email');
+  }
+  // 调用user的comparePassword方法对比密码
+  const isPasswordCorrect = await user.comparePassword(String(password))
+  if (!isPasswordCorrect) {
+    throw new UnauthenticatedError('Invalid Credentials')
+  }
+
+  res.status(StatusCodes.OK).json({
+    token: user.createJWT(), user: { name: user.name }
+  })
+}
+```
+
+## token验证
+
+```js
+// middleware/authentication.js
+const jwt = require('jsonwebtoken')
+const { UnauthenticatedError } = require('../errors/index')
+
+
+
+const auth = async (req, res, next) => {
+  // check header
+  const authHeader = req.headers.authorization;
+  if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    throw new UnauthenticatedError('Authentication invalid');
+  }
+  const token = authHeader.split(' ')[1];
+  try {
+    const payload = jwt.verify(token, process.env.JWT_SECRET)
+    // attach the user to the job route
+    req.user = {
+      userId: payload.userId,
+      name:payload.name,
+    }
+    next()
+  } catch (err) {
+    throw new UnauthenticatedError('Authentication invalid');
+
+  }
+
+}
+
+module.exports = auth;
+```
+
+由于所有的job routes都需要token验证，因此我们把这个中间件放在app.js中。
+
+```js
+const authenticateUser = require('./middleware/authentication')
+app.use('/api/v1/jobs', authenticateUser,jobsRouter);
+```
+
+## 设置Job model
+
+这里有个第2个选项：`timeStamp:true`，可以创建的document增加createAt和updateAt两个属性。
+
+> The timestamps option tells mongoose to assign createdAt and updatedAt fields to your schema. 
+
+```js
+const mongoose = require('mongoose');
+
+const JobSchema = new mongoose.Schema({
+  company: {
+    type: String,
+    require: [true, 'Please provide company name'],
+    maxlength: 20,
+  },
+  position: {
+    type: String,
+    require: [true, 'Please provide position name'],
+    maxlength: 100,
+  },
+  status: {
+    type: String,
+    enum: ['interview', 'decline', 'pending'],
+    default: 'pending'
+  },
+  createdBy: {
+    type: mongoose.Types.ObjectId,
+    ref: 'User',
+    required: [true, 'Please provide user id']
+
+  }
+}, {
+  // The timestamps option tells mongoose to assign createdAt and updatedAt fields to your schema. 
+  timestamps: true
+})
+
+module.exports = mongoose.model('Job', JobSchema)
+```
 
