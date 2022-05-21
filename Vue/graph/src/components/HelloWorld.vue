@@ -8,8 +8,8 @@
       </p>
       <h4>TODO</h4>
       <p>
-        <input type="checkbox" />
-        移除新增节点需要入栈和出栈，实现撤销和重做的功能
+        <input type="checkbox" checked />
+        移除新增节点需要入栈和出栈，实现撤销的功能
       </p>
       <p>
         <input type="checkbox" checked />
@@ -19,7 +19,7 @@
       <p><input type="checkbox" /> 实现第2层combo</p>
       <p><input type="checkbox" /> 思考如何更好地布局</p>
       <p><input type="checkbox" /> 增加其他的工具栏</p>
-      <p><input type="checkbox" /> 增加响应式</p>
+      <p><input type="checkbox" /> 增加响应式，每步操作后自动居中</p>
       <p><input type="checkbox" /> 优化样式</p>
     </div>
   </div>
@@ -31,7 +31,6 @@
 import G6 from "@antv/g6";
 import { clone } from "@antv/util";
 import { data, comboData } from "../data/data";
-
 const nodeColor = ["#fff", "#f4faff", "#ffded6"];
 const nodeHoverStrokeColor = ["#007dff", '"#007dff"'];
 const nodeStrokeColor = ["#c1c1c1", "#d0d1d5", "#ddb8b1"];
@@ -145,7 +144,11 @@ export default {
         modes: {
           default: [
             "zoom-canvas",
-            "drag-combo",
+            {
+              type: "drag-combo",
+              enableStack: false,
+              onlyChangeComboSize: true,
+            },
             "drag-canvas",
             {
               type: "drag-node",
@@ -184,10 +187,11 @@ export default {
       this.graph.node(this.configNode);
       this.graph.data(data);
       this.graph.render();
+
       this.bindEvents();
       this.graph.getRedoStack().maxStep = 100;
       this.graph.getUndoStack().maxStep = 100;
-
+      console.log(this.graph)
       toolbar.undo = this.undo;
     },
 
@@ -197,20 +201,20 @@ export default {
       if (!undoStack || undoStack.length === 1) {
         return;
       }
-
+      console.log(undoStack);
       const currentData = undoStack.pop();
-      console.log(currentData);
       if (currentData) {
         const { action } = currentData;
         graph.pushStack(action, clone(currentData.data), "redo");
         let data = currentData.data.before;
-
         if (action === "add") {
           data = currentData.data.after;
         }
-
+        if (action === "addCombo") {
+          data = currentData.data;
+        }
+        console.log(action);
         if (!data) return;
-
         switch (action) {
           case "visible": {
             Object.keys(data).forEach((key) => {
@@ -270,11 +274,29 @@ export default {
               });
             });
             break;
+          case "addCombo":
+            {
+              const { nodeIds, comboId, before } = data;
+              nodeIds.forEach((id) => graph.removeItem(id, false));
+              // edgeIds.forEach((id) => graph.removeItem(id, false));
+              graph.uncombo(comboId);
+              Object.keys(before).forEach((key) => {
+                const array = before[key];
+                if (!array) return;
+                array.forEach((model) => {
+                  const itemType = model.itemType;
+                  delete model.itemType;
+                  graph.addItem(itemType, model, false);
+                });
+              });
+            }
+            break;
           default:
+            console.log("fuck");
         }
       }
     },
-
+ 
     bindEvents() {
       // 鼠标进入节点
       this.graph.on("node:mouseenter", (e) => {
@@ -299,13 +321,16 @@ export default {
         this.configNodeClick(nodeItem);
         let idList = ["node1", "node2", "node3", "node4"];
         if (!idList.includes(nodeId)) return;
+
         this.createCombo(nodeId, nodeItem);
-        this.graph.removeItem(nodeItem);
+        // console.log(nodeItem.get('model').itemType)
+        this.graph.removeItem(nodeItem, false);
       });
+
       // 监听栈的变化
-      // this.graph.on("stackchange", (e) => {
-      //   const { redoStack, undoStack } = e;
-      // });
+      this.graph.on("stackchange", (e) => {
+        console.log(e);
+      });
     },
     // 创建combo
     createCombo(nodeId, nodeItem) {
@@ -314,15 +339,32 @@ export default {
       let newNodeId = [];
       // 创建节点
       for (let i = 0; i < comboData[n].combonodes.length; i++) {
-        this.graph.addItem("node", comboData[n].combonodes[i]);
+        this.graph.addItem("node", comboData[n].combonodes[i], false);
         newNodeId.push(comboData[n].combonodes[i].id);
       }
       this.graph.createCombo(comboId, newNodeId);
       this.beforeNodeEdges(nodeItem, comboData[n].comboedges, comboId);
       // 创建边
       for (let i = 0; i < comboData[n].comboedges.length; i++) {
-        this.graph.addItem("edge", comboData[n].comboedges[i]);
+        this.graph.addItem("edge", comboData[n].comboedges[i], false);
       }
+      const edgeArray = nodeItem.getEdges().map((edge) => {
+        delete edge.get("model").sourceNode;
+        delete edge.get("model").targetNode;
+        return { ...edge.get("model"), itemType: "edge" };
+      });
+      this.graph.pushStack(
+        "addCombo",
+        {
+          nodeIds: newNodeId,
+          comboId,
+          before: {
+            nodes: [{ ...nodeItem.get("model"), itemType: "node" }],
+            edges: edgeArray,
+          },
+        },
+        "undo"
+      );
       this.graph.layout();
     },
 
@@ -332,8 +374,6 @@ export default {
       inEdges.forEach((edge) => {
         const sourceId = edge.getSource().get("model").id;
         comboedges.push({ source: sourceId, target: comboId });
-
-        // console.log(edge.getSource());
       });
       const outEdges = nodeItem.getOutEdges();
       outEdges.forEach((edge) => {
@@ -370,12 +410,11 @@ export default {
   },
   mounted() {
     this.init();
-    console.log();
   },
 };
 </script>
 
-<style lang="scss">
+<style>
 #graph-container {
   display: flex;
   gap: 10px;
