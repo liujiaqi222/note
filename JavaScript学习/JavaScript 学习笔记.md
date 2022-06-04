@@ -156,7 +156,7 @@ HTML `<canvas>` 元素用于在网页上绘制图形。`<canvas>`元素只是图
 
 在我们开始画图之前，我们需要了解一下画布栅格（canvas grid）以及坐标空间。通常来说网格中的一个单元相当于canvas元素中的一像素。栅格的起点为左上角（坐标为（0,0））。所有元素的位置都相对于原点定位。所以图中蓝色方形左上角的坐标为距离左边（X轴）x像素，距离上边（Y轴）y像素（坐标为（x,y））
 
-![img](https://gitee.com/zyxbj/image-warehouse/raw/master/pics/202111070022363.png)
+![img](https://raw.githubusercontent.com/liujiaqi222/images/master/pics/202111070022363.png)
 
 
 
@@ -186,7 +186,7 @@ canvas提供了三种方法绘制矩形：
 </script>
 ```
 
-![image-20211107003236080](https://gitee.com/zyxbj/image-warehouse/raw/master/pics/202111070032112.png)
+![image-20211107003236080](https://raw.githubusercontent.com/liujiaqi222/images/master/pics/202111070032112.png)
 
 `fillRect()`函数绘制了一个边长为100px的黑色正方形。`clearRect()`函数从正方形的中心开始擦除了一个60乘以60px的正方形，接着 `strokeRect()`在清除区域内生成一个50乘以50的正方形边框。
 
@@ -240,7 +240,7 @@ draw();
 </script>
 ```
 
-![image-20211107004313922](https://gitee.com/zyxbj/image-warehouse/raw/master/pics/202111070043957.png)
+![image-20211107004313922](https://raw.githubusercontent.com/liujiaqi222/images/master/pics/202111070043957.png)
 
 #### 移动笔触
 
@@ -271,11 +271,11 @@ draw();
 </script>
 ```
 
-![加上了moveto](https://gitee.com/zyxbj/image-warehouse/raw/master/pics/202111070104914.png)
+![加上了moveto](https://raw.githubusercontent.com/liujiaqi222/images/master/pics/202111070104914.png)
 
 如果删掉了上面所有的`moveTo`，则会显示有很多连续的线，因此需要移动笔刷。
 
-![image-20211107010542971](https://gitee.com/zyxbj/image-warehouse/raw/master/pics/202111070105004.png)
+![image-20211107010542971](https://raw.githubusercontent.com/liujiaqi222/images/master/pics/202111070105004.png)
 
 
 
@@ -315,7 +315,7 @@ lineTo(x,y) 绘制一条从当前位置到指定x以及y位置的直线。
 </script>
 ```
 
-![image-20211107154424458](https://gitee.com/zyxbj/image-warehouse/raw/master/pics/202111071544551.png)
+![image-20211107154424458](https://raw.githubusercontent.com/liujiaqi222/images/master/pics/202111071544551.png)
 
 #### 圆弧
 
@@ -364,7 +364,7 @@ x,y坐标是可变的。半径（radius）和开始角度（startAngle）都是�
 
 `clockwise`语句作用于第一、三行是顺时针的圆弧，`anticlockwise`作用于二、四行为逆时针圆弧。`if`语句让一、二行描边圆弧，下面两行填充路径。
 
-![image-20211107160032208](https://gitee.com/zyxbj/image-warehouse/raw/master/pics/202111071600251.png)
+![image-20211107160032208](https://raw.githubusercontent.com/liujiaqi222/images/master/pics/202111071600251.png)
 
 
 
@@ -403,7 +403,7 @@ new Path2D(d);    // 从SVG建立Path对象
 </script>
 ```
 
-![image-20211107162952342](https://gitee.com/zyxbj/image-warehouse/raw/master/pics/202111071629382.png)
+![image-20211107162952342](https://raw.githubusercontent.com/liujiaqi222/images/master/pics/202111071629382.png)
 
 
 
@@ -448,7 +448,7 @@ ctx.fillStyle = "rgba(255,165,0,1)";
 </script>
 ```
 
-![image-20211107164445676](https://gitee.com/zyxbj/image-warehouse/raw/master/pics/202111071644749.png)
+![image-20211107164445676](https://raw.githubusercontent.com/liujiaqi222/images/master/pics/202111071644749.png)
 
 #### strokeStyle示例
 
@@ -475,7 +475,7 @@ ctx.fillStyle = "rgba(255,165,0,1)";
 </script>
 ```
 
-![image-20211107165333941](https://gitee.com/zyxbj/image-warehouse/raw/master/pics/202111071653005.png)
+![image-20211107165333941](https://raw.githubusercontent.com/liujiaqi222/images/master/pics/202111071653005.png)
 
 ### 透明度
 
@@ -525,7 +525,7 @@ ctx.fillStyle = "rgba(255,0,0,0.5)";
 
 
 
-![image-20211107170949016](https://gitee.com/zyxbj/image-warehouse/raw/master/pics/202111071709083.png)
+![image-20211107170949016](https://raw.githubusercontent.com/liujiaqi222/images/master/pics/202111071709083.png)
 
 ### 线型 Line styles（未看完）
 
@@ -568,7 +568,7 @@ canvas 提供了两种方法来渲染文本:
 </script>
 ```
 
-![image-20211107172621343](https://gitee.com/zyxbj/image-warehouse/raw/master/pics/202111071726560.png)
+![image-20211107172621343](https://raw.githubusercontent.com/liujiaqi222/images/master/pics/202111071726560.png)
 
 ### 文本样式
 
@@ -599,7 +599,7 @@ canvas 提供了两种方法来渲染文本:
 </script>
 ```
 
-![image-20211107173313382](https://gitee.com/zyxbj/image-warehouse/raw/master/pics/202111071733442.png)
+![image-20211107173313382](https://raw.githubusercontent.com/liujiaqi222/images/master/pics/202111071733442.png)
 
 
 
@@ -651,7 +651,7 @@ canvas更有意思的一项特性就是图像操作能力。可以用于动态�
 </script>
 ```
 
-![image-20211107181013334](https://gitee.com/zyxbj/image-warehouse/raw/master/pics/202111071810396.png)
+![image-20211107181013334](https://raw.githubusercontent.com/liujiaqi222/images/master/pics/202111071810396.png)
 
 
 
@@ -682,7 +682,7 @@ canvas更有意思的一项特性就是图像操作能力。可以用于动态�
 </script>
 ```
 
-![image-20211109161504633](https://gitee.com/zyxbj/image-warehouse/raw/master/pics/202111091615184.png)
+![image-20211109161504633](https://raw.githubusercontent.com/liujiaqi222/images/master/pics/202111091615184.png)
 
 #### 图片裁切
 
@@ -692,7 +692,7 @@ canvas更有意思的一项特性就是图像操作能力。可以用于动态�
 
 第一个参数和其它的是相同的，都是一个图像或者另一个 canvas 的引用。其它8个参数可以参考下面的图片来理解，前4个是定义**图像源**的切片位置和大小，后4个则是定义切片的目标显示位置和大小。
 
-![img](https://gitee.com/zyxbj/image-warehouse/raw/master/pics/202111091620747.jpeg)
+![img](https://raw.githubusercontent.com/liujiaqi222/images/master/pics/202111091620747.jpeg)
 
 
 
@@ -716,7 +716,7 @@ canvas更有意思的一项特性就是图像操作能力。可以用于动态�
 </script>
 ```
 
-![image-20211109163632996](https://gitee.com/zyxbj/image-warehouse/raw/master/pics/202111091636066.png)
+![image-20211109163632996](https://raw.githubusercontent.com/liujiaqi222/images/master/pics/202111091636066.png)
 
 
 
@@ -807,7 +807,7 @@ ctx.fillRect(60,60,30,30);
 
 在做变形之前先保存状态是一个良好的习惯。大多数情况下，调用 restore 方法比手动恢复原先的状态要简单得多。又，如果你是在一个循环中做位移但没有保存和恢复 canvas 的状态，很可能到最后会发现怎么有些东西不见了，那是因为它很可能已经超出 canvas的画布 范围以外了。
 
-![img](https://gitee.com/zyxbj/image-warehouse/raw/master/pics/202111091802408.png)
+![img](https://raw.githubusercontent.com/liujiaqi222/images/master/pics/202111091802408.png)
 
 #### translate的例子
 
@@ -842,7 +842,7 @@ let buffer = new ArrayBuffer(16); // 创建一个长度为 16 的 buffer
  console.log(buffer);
 ```
 
-![image-20211109230142509](https://gitee.com/zyxbj/image-warehouse/raw/master/pics/202111092301640.png)
+![image-20211109230142509](https://raw.githubusercontent.com/liujiaqi222/images/master/pics/202111092301640.png)
 
 它会分配一个 16 字节的连续内存空间，并用 0 进行预填充。
 
@@ -880,7 +880,7 @@ const view = new Uint32Array(buffer);
 console.log(view); // 一个类数组对象 其值为[0,0,0,0]
 ```
 
-![image-20211109231046463](https://gitee.com/zyxbj/image-warehouse/raw/master/pics/202111092310535.png)
+![image-20211109231046463](https://raw.githubusercontent.com/liujiaqi222/images/master/pics/202111092310535.png)
 
 ```js
 // 写入一个值
@@ -986,7 +986,7 @@ new TypedArray();
 
 257 的二进制格式是 `100000001`（9 位），最右边的 8 位会被存储，因此数组中会有 `1`：
 
-![image-20211110091257833](https://gitee.com/zyxbj/image-warehouse/raw/master/pics/202111100912880.png)
+![image-20211110091257833](https://raw.githubusercontent.com/liujiaqi222/images/master/pics/202111100912880.png)
 
 
 
@@ -1157,7 +1157,7 @@ link.href = URL.createObjectURL(blob);
 
 
 
-![实际效果](https://gitee.com/zyxbj/image-warehouse/raw/master/pics/202111101129414.gif)
+![实际效果](https://raw.githubusercontent.com/liujiaqi222/images/master/pics/202111101129414.gif)
 
 
 
@@ -1179,7 +1179,7 @@ link.click();
 
 
 
-![实际演示](https://gitee.com/zyxbj/image-warehouse/raw/master/pics/202111101144252.gif)
+![实际演示](https://raw.githubusercontent.com/liujiaqi222/images/master/pics/202111101144252.gif)
 
 
 
@@ -1247,7 +1247,7 @@ blob:http://127.0.0.1:5500/1f6ea749-8b03-4b5a-9bf1-af08fde81aae
 
 `mouseenter`:当鼠标移除元素本身（不包含元素的子元素）会触发事件，也就是不会冒泡，对应的移除事件是mouseleave
 
-![img](https://gitee.com/zyxbj/image-warehouse/raw/master/pics/202110260947495.png)
+![img](https://raw.githubusercontent.com/liujiaqi222/images/master/pics/202110260947495.png)
 
 **`mouseover`和`mouseenter`的异同体现在两个方面：**
 

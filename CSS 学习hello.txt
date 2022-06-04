@@ -1,6 +1,6 @@
 # CSS实现导航栏
 
-![](https://raw.githubusercontent.com/liujiaqi222/images/master/pics/202109291533141.gif){:height 787, :width 784}
+![](https://gitee.com/zyxbj/image-warehouse/raw/master/pics/202109291533141.gif){:height 787, :width 784}
 
 除了变主题色需要js来实现，导航栏效果全部由CSS来实现。
 
@@ -23,7 +23,7 @@
 
 # CSS + JS 实现主题色变化
 
-![2](https://raw.githubusercontent.com/liujiaqi222/images/master/pics/202110092353765.gif)
+![2](https://gitee.com/zyxbj/image-warehouse/raw/master/pics/202110092353765.gif)
 
 核心思想：
 
@@ -92,4 +92,3 @@
 
 视频地址：https://youtu.be/-myi8EU8HIo
 
-https://raw.githubusercontent.com/liujiaqi222/images/master/pics/202109291533141.gif

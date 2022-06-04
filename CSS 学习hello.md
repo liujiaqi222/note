@@ -92,4 +92,3 @@
 
 视频地址：https://youtu.be/-myi8EU8HIo
 
-https://raw.githubusercontent.com/liujiaqi222/images/master/pics/202109291533141.gif

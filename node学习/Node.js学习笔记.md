@@ -28,7 +28,7 @@ c. 那么，JavaScript代码由谁来执行呢？
 
 由JavaScript引擎。
 
-![image-20211020002926025](https://gitee.com/zyxbj/image-warehouse/raw/master/pics/202110200029139.png)
+![image-20211020002926025](https://raw.githubusercontent.com/liujiaqi222/images/master/pics/202110200029139.png)
 
 ### JavaScript引擎
 
@@ -50,7 +50,7 @@ b. 比较常见的JavaScript引擎有哪些呢？
 - WebCore：负责HTML解析、布局、渲染等等相关的工作；
 - JavaScriptCore：解析、执行JavaScript代码；  
 
-![image-20211020003853345](https://gitee.com/zyxbj/image-warehouse/raw/master/pics/202110200038409.png)
+![image-20211020003853345](https://raw.githubusercontent.com/liujiaqi222/images/master/pics/202110200038409.png)
 
 ### V8引擎
 
@@ -60,7 +60,7 @@ V8是用C++编写的Google开源高性能JavaScript和WebAssembly引擎，它用
 
 - V8可以独立运行，也可以嵌入到任何C++应用程序中。  
 
-![image-20211020004418807](https://gitee.com/zyxbj/image-warehouse/raw/master/pics/202110200044912.png)
+![image-20211020004418807](https://raw.githubusercontent.com/liujiaqi222/images/master/pics/202110200044912.png)
 
 ### V8引擎
 
@@ -96,7 +96,7 @@ Node.js是一个基于V8 JavaScript引擎的JavaScript运行时环境。
 
 Node和浏览器架构的区别
 
-![image-20211020011325528](https://gitee.com/zyxbj/image-warehouse/raw/master/pics/202110200113676.png)
+![image-20211020011325528](https://raw.githubusercontent.com/liujiaqi222/images/master/pics/202110200113676.png)
 
 
 
@@ -108,7 +108,7 @@ libuv（Unicorn Velociraptor—独角伶盗龙）是使用C语言编写的库；
 
 libuv提供了事件循环、文件系统读写、网络IO、线程池等等内容； 
 
-![image-20211020214049889](https://gitee.com/zyxbj/image-warehouse/raw/master/pics/202110202140018.png)
+![image-20211020214049889](https://raw.githubusercontent.com/liujiaqi222/images/master/pics/202110202140018.png)
 
 ### Node的REPL
 
@@ -116,7 +116,7 @@ REPL是Read-Eval-Print Loop的简称，翻译为“读取-求值-输出”循环
 
 在命令行中输入node，即可进入repl环境。
 
-![image-20211022230301476](https://gitee.com/zyxbj/image-warehouse/raw/master/pics/202110222303573.png)
+![image-20211022230301476](https://raw.githubusercontent.com/liujiaqi222/images/master/pics/202110222303573.png)
 
 
 
@@ -146,13 +146,13 @@ node index.js env=development jiaqicoder
 
   
 
-![image-20211022230846442](https://gitee.com/zyxbj/image-warehouse/raw/master/pics/202110222308518.png)
+![image-20211022230846442](https://raw.githubusercontent.com/liujiaqi222/images/master/pics/202110222308518.png)
 
 ![image-20211022231040959](C:\Users\liujiaqi\AppData\Roaming\Typora\typora-user-images\image-20211022231040959.png)
 
 如果想要拿到传递的参数，可以直接通过`process.argv`来获取。
 
-![image-20211022231902688](https://gitee.com/zyxbj/image-warehouse/raw/master/pics/202110222319736.png)
+![image-20211022231902688](https://raw.githubusercontent.com/liujiaqi222/images/master/pics/202110222319736.png)
 
 > 为什么叫做argv？
 
@@ -176,7 +176,7 @@ node index.js env=development jiaqicoder
 
 
 
-![image-20211022233150540](https://gitee.com/zyxbj/image-warehouse/raw/master/pics/202110222335432.png)
+![image-20211022233150540](https://raw.githubusercontent.com/liujiaqi222/images/master/pics/202110222335432.png)
 
 ### 常见的全局对象
 
@@ -184,7 +184,7 @@ Node中给我们提供了一些全局对象，方便我们进行一些操作：
 
 https://nodejs.org/dist/latest-v17.x/docs/api/globals.html
 
-![image-20211023000034652](https://gitee.com/zyxbj/image-warehouse/raw/master/pics/202110230000795.png)
+![image-20211023000034652](https://raw.githubusercontent.com/liujiaqi222/images/master/pics/202110230000795.png)
 
 - process对象：process提供了Node进程中相关的信息：
 
@@ -212,7 +212,7 @@ global是一个全局对象，事实上前面的process、console、setTimeout�
 
 在node的repl中输入`global.`，再按两次`tab`键即可显示global对象中所有的属性。
 
-![image-20211023145054263](https://gitee.com/zyxbj/image-warehouse/raw/master/pics/202110231451599.png)
+![image-20211023145054263](https://raw.githubusercontent.com/liujiaqi222/images/master/pics/202110231451599.png)
 
 # 模块化
 
@@ -315,7 +315,7 @@ console.log(bar);
 
 
 
-![image-20211023163925850](https://gitee.com/zyxbj/image-warehouse/raw/master/pics/202110231639934.png)
+![image-20211023163925850](https://raw.githubusercontent.com/liujiaqi222/images/master/pics/202110231639934.png)
 
 ```js
 //bar.js

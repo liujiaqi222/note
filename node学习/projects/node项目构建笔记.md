@@ -103,7 +103,7 @@ module.exports = router;
 
 最后，文件夹目录如下：
 
-![image-20220131171158147](https://gitee.com/zyxbj/image-warehouse/raw/master/pics/image-20220131171158147.png)
+![image-20220131171158147](https://raw.githubusercontent.com/liujiaqi222/images/master/pics/image-20220131171158147.png)
 
 接着，同样的设置好其他的api。
 
@@ -159,9 +159,9 @@ module.exports = router;
 
 将使用 [mongoDB 云数据库](https://cloud.mongodb.com/)，它完全免费，只需要注册好账号即可。
 
-![image-20220131181521685](https://gitee.com/zyxbj/image-warehouse/raw/master/pics/image-20220131181521685.png)
+![image-20220131181521685](https://raw.githubusercontent.com/liujiaqi222/images/master/pics/image-20220131181521685.png)
 
-![image-20220421204824537](https://gitee.com/zyxbj/image-warehouse/raw/master/pics/image-20220421204824537.png)
+![image-20220421204824537](https://raw.githubusercontent.com/liujiaqi222/images/master/pics/image-20220421204824537.png)
 
 点击database的 connect 按钮，将获取到连接的网址。
 
@@ -222,7 +222,7 @@ yarn add dotenv
 
 我们将环境变量写在名字为 `.env` 文件中，**同时记得一定要在`.gitignore`中添加`.env`**。
 
-![image-20220131193945575](https://gitee.com/zyxbj/image-warehouse/raw/master/pics/image-20220131193945575.png)
+![image-20220131193945575](https://raw.githubusercontent.com/liujiaqi222/images/master/pics/image-20220131193945575.png)
 
 `.env`中的键和值我们使用 `=` 来连接
 
@@ -268,7 +268,7 @@ module.exports = Task;
 
 `*行`中第一个参数为model的名字，`mongoose`自动创建该名字对应的复数小写形式的集合。即，Task是集合`tasks`的model。
 
-![image-20220131202714921](https://gitee.com/zyxbj/image-warehouse/raw/master/pics/image-20220131202714921.png)
+![image-20220131202714921](https://raw.githubusercontent.com/liujiaqi222/images/master/pics/image-20220131202714921.png)
 
 document是model的实例，创建document很简单：
 
@@ -279,7 +279,7 @@ const task = await Task.create({name:'study',completed:false});
 
 返回创建好的集合：
 
-![image-20220131202838441](https://gitee.com/zyxbj/image-warehouse/raw/master/pics/image-20220131202838441.png)
+![image-20220131202838441](https://raw.githubusercontent.com/liujiaqi222/images/master/pics/image-20220131202838441.png)
 
 ### 验证数据
 
@@ -355,7 +355,7 @@ const createTask = async (req, res) => {
 
 在[官方文档](https://mongoosejs.com/docs/queries.html)中可以找到各类的操作文档的api：
 
-![image-20220131210901039](https://gitee.com/zyxbj/image-warehouse/raw/master/pics/image-20220131210901039.png)
+![image-20220131210901039](https://raw.githubusercontent.com/liujiaqi222/images/master/pics/image-20220131210901039.png)
 
 mongoose的query有两种执行方式：一是通过回调函数，mongoose会异步地query并且把执行的结果传给回调函数；二是通过`.then`函数，因此可以使用promise。
 
@@ -514,7 +514,7 @@ module.exports = notFound;
 
 在`controler/task.js`中写了超级多的try和catch，因此我们可以使用一个函数来包装try和catch。
 
-![image-20220201131251648](https://gitee.com/zyxbj/image-warehouse/raw/master/pics/image-20220201131251648.png)
+![image-20220201131251648](https://raw.githubusercontent.com/liujiaqi222/images/master/pics/image-20220201131251648.png)
 
 这个函数，接收原来try的逻辑作为函数参数，而它同时又会返回一个函数，这个函数可以获取到express传入的`req,res,next`。最后，它将catch到的error交给next中间件来处理（这个中间件我们还没有设置）。
 
@@ -872,7 +872,7 @@ module.exports = mongoose.model('Product', productsSchema);
 
 在`products.json`中准备了一些数据，因此我们将它们写入数据库中。
 
-![image-20220202000634814](https://gitee.com/zyxbj/image-warehouse/raw/master/pics/image-20220202000634814.png)
+![image-20220202000634814](https://raw.githubusercontent.com/liujiaqi222/images/master/pics/image-20220202000634814.png)
 
 因为json中的数据是一个数组，因此我们甚至不用遍历数组，直接`Model.create()`，mongoose就会帮助我们写入单个document。
 
@@ -909,7 +909,7 @@ start();
 
 
 
-![image-20220202001653212](https://gitee.com/zyxbj/image-warehouse/raw/master/pics/image-20220202001653212.png)
+![image-20220202001653212](https://raw.githubusercontent.com/liujiaqi222/images/master/pics/image-20220202001653212.png)
 
 ## 数据查询
 
@@ -933,7 +933,7 @@ await Product.find({ featured: true }) // 查找所有的feature为true的数据
 
 然后在网址中的query参数，在express中可以通过`req.query`获取到。
 
-![image-20220426202010100](https://gitee.com/zyxbj/image-warehouse/raw/master/pics/image-20220426202010100.png)
+![image-20220426202010100](https://raw.githubusercontent.com/liujiaqi222/images/master/pics/image-20220426202010100.png)
 
 ```js
 ./controlers/products.js
@@ -1001,7 +1001,7 @@ const products = await Product.find(queryObject).sort('name -price')
 const products = await Product.find(queryObject).select('name price')
 ```
 
-![image-20220508123444683](https://gitee.com/zyxbj/image-warehouse/raw/master/pics/image-20220508123444683.png)
+![image-20220508123444683](https://raw.githubusercontent.com/liujiaqi222/images/master/pics/image-20220508123444683.png)
 
 如果想要限制返回结果的数量，可以使用`limit`。如果想要实现分页功能，可以配合`skip`一起实现。
 
@@ -1181,7 +1181,7 @@ module.exports = {
 
 
 
-![image-20220508161934262](https://gitee.com/zyxbj/image-warehouse/raw/master/pics/image-20220508161934262.png)
+![image-20220508161934262](https://raw.githubusercontent.com/liujiaqi222/images/master/pics/image-20220508161934262.png)
 
 我们使用的包是`jsonwebtoken`，用来生成和解码jwt。
 
@@ -1413,7 +1413,7 @@ module.exports = {
 
 然后这里还用到了一个包`http-status-codes`，目的就是不用手写status-code。
 
-![image-20220508182634774](https://gitee.com/zyxbj/image-warehouse/raw/master/pics/image-20220508182634774.png)
+![image-20220508182634774](https://raw.githubusercontent.com/liujiaqi222/images/master/pics/image-20220508182634774.png)
 
 
 
@@ -1761,7 +1761,7 @@ const register = async (req, res) => {
 
 可以在[这个网站](https://www.allkeysgenerator.com/)生成token的secret，然后将它放在`.env`。
 
-![image-20220515110425379](https://gitee.com/zyxbj/image-warehouse/raw/master/pics/image-20220515110425379.png)
+![image-20220515110425379](https://raw.githubusercontent.com/liujiaqi222/images/master/pics/image-20220515110425379.png)
 
 ## 实现登陆功能
 

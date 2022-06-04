@@ -49,7 +49,7 @@
 - series：系列列表。每个系列通过type决定自己的图表类型
 - [title]([Documentation - Apache ECharts](https://echarts.apache.org/zh/option.html#title))：标题组件，包含主标题和副标题。
 
-![image-20210924105806030](https://gitee.com/zyxbj/image-warehouse/raw/master/pics/202109241614890.png)
+![image-20210924105806030](https://raw.githubusercontent.com/liujiaqi222/images/master/pics/202109241614890.png)
 
 # 通用配置
 
@@ -189,7 +189,7 @@ toolbox:{
 },
 ```
 
-![image-20210924143614282](https://gitee.com/zyxbj/image-warehouse/raw/master/pics/202109241615720.png)
+![image-20210924143614282](https://raw.githubusercontent.com/liujiaqi222/images/master/pics/202109241615720.png)
 
 
 
@@ -217,9 +217,9 @@ legend:{
 }
 ```
 
-![image-20210924151308211](https://gitee.com/zyxbj/image-warehouse/raw/master/pics/202109241615448.png)
+![image-20210924151308211](https://raw.githubusercontent.com/liujiaqi222/images/master/pics/202109241615448.png)
 
-![image-20210924151320748](https://gitee.com/zyxbj/image-warehouse/raw/master/pics/202109241615889.png)
+![image-20210924151320748](https://raw.githubusercontent.com/liujiaqi222/images/master/pics/202109241615889.png)
 
 
 
@@ -304,7 +304,7 @@ legend:{
     }]
     ```
 
-    ![image-20210924114001186](https://gitee.com/zyxbj/image-warehouse/raw/master/pics/202109241615217.png)
+    ![image-20210924114001186](https://raw.githubusercontent.com/liujiaqi222/images/master/pics/202109241615217.png)
 
   
 
@@ -334,7 +334,7 @@ legend:{
     }],
     ```
 
-    ![image-20210924114211478](https://gitee.com/zyxbj/image-warehouse/raw/master/pics/202109241615232.png)
+    ![image-20210924114211478](https://raw.githubusercontent.com/liujiaqi222/images/master/pics/202109241615232.png)
 
 - 显示：
 
@@ -369,7 +369,7 @@ legend:{
 
     
 
-    ![image-20210924114641529](https://gitee.com/zyxbj/image-warehouse/raw/master/pics/202109241615544.png)
+    ![image-20210924114641529](https://raw.githubusercontent.com/liujiaqi222/images/master/pics/202109241615544.png)
 
   - 柱宽度(barWidth)
 
@@ -418,7 +418,7 @@ legend:{
     }
     ```
 
-    ![image-20210924115428763](https://gitee.com/zyxbj/image-warehouse/raw/master/pics/202109241615320.png)
+    ![image-20210924115428763](https://raw.githubusercontent.com/liujiaqi222/images/master/pics/202109241615320.png)
 
 ## 折线图
 
@@ -544,7 +544,7 @@ myChart.setOption({
     },
     ```
   
-    ![image-20210924160114696](https://gitee.com/zyxbj/image-warehouse/raw/master/pics/202109241615129.png)
+    ![image-20210924160114696](https://raw.githubusercontent.com/liujiaqi222/images/master/pics/202109241615129.png)
   
   
 
@@ -563,7 +563,7 @@ myChart.setOption({
 
     
 
-    ![image-20210924161756384](https://gitee.com/zyxbj/image-warehouse/raw/master/pics/202109241617419.png)
+    ![image-20210924161756384](https://raw.githubusercontent.com/liujiaqi222/images/master/pics/202109241617419.png)
 
   - 线条样式 lineStyle
 
@@ -602,7 +602,7 @@ myChart.setOption({
     },
     ```
 
-    ![image-20210924162815962](https://gitee.com/zyxbj/image-warehouse/raw/master/pics/202109241628999.png)
+    ![image-20210924162815962](https://raw.githubusercontent.com/liujiaqi222/images/master/pics/202109241628999.png)
 
     全部代码：[A Pen by liujiaqi222 (codepen.io)](https://codepen.io/liujiaqi222/pen/gORdQeo)
   
@@ -610,7 +610,7 @@ myChart.setOption({
   
     默认和边缘是存在距离的，注意此时bundaryGap的是放在 xAxis中的。
   
-    ![image-20210924164058998](https://gitee.com/zyxbj/image-warehouse/raw/master/pics/202109241640031.png)
+    ![image-20210924164058998](https://raw.githubusercontent.com/liujiaqi222/images/master/pics/202109241640031.png)
   
     ```js
     xAxis: {
@@ -620,7 +620,7 @@ myChart.setOption({
     },
     ```
   
-    ![image-20210924164443113](https://gitee.com/zyxbj/image-warehouse/raw/master/pics/202109241644145.png)
+    ![image-20210924164443113](https://raw.githubusercontent.com/liujiaqi222/images/master/pics/202109241644145.png)
   
     
   
@@ -628,7 +628,7 @@ myChart.setOption({
   
     如果数值相差无几，且数值较大，此时发现y轴的坐标依旧从0开始。
   
-    ![image-20210924164917454](https://gitee.com/zyxbj/image-warehouse/raw/master/pics/202109241649496.png)
+    ![image-20210924164917454](https://raw.githubusercontent.com/liujiaqi222/images/master/pics/202109241649496.png)
   
     此时，就可以将scale属性的值设置为true，允许坐标轴缩放。
   
@@ -639,13 +639,13 @@ myChart.setOption({
     },
     ```
   
-    ![image-20210924165202333](https://gitee.com/zyxbj/image-warehouse/raw/master/pics/202109241652365.png)
+    ![image-20210924165202333](https://raw.githubusercontent.com/liujiaqi222/images/master/pics/202109241652365.png)
   
   - 堆叠图 （stack的属性值要设置为相同的）
   
     如果两条不同的线，他们的数值波动较大就会出现如下的重叠情况，此时容易让人眼花缭乱。
   
-    ![image-20210924170852203](https://gitee.com/zyxbj/image-warehouse/raw/master/pics/202109241708239.png)
+    ![image-20210924170852203](https://raw.githubusercontent.com/liujiaqi222/images/master/pics/202109241708239.png)
   
     因此可以将两条线的stack属性值设置为同一个值（任意设置），此时第一条仍然为第一条线，第二条线则为原来两条线的总和（叠加）。
   
@@ -666,7 +666,7 @@ myChart.setOption({
     }],
     ```
   
-    ![image-20210924171151354](https://gitee.com/zyxbj/image-warehouse/raw/master/pics/202109241711386.png)
+    ![image-20210924171151354](https://raw.githubusercontent.com/liujiaqi222/images/master/pics/202109241711386.png)
   
     
   
@@ -747,7 +747,7 @@ myChart.setOption({
   
     
   
-    ![image-20210928121227440](https://gitee.com/zyxbj/image-warehouse/raw/master/pics/202109281213005.png)
+    ![image-20210928121227440](https://raw.githubusercontent.com/liujiaqi222/images/master/pics/202109281213005.png)
   
 - 涟漪动画效果
 
@@ -788,7 +788,7 @@ grid:{
 },
 ```
 
-![image-20210928143034621](https://gitee.com/zyxbj/image-warehouse/raw/master/pics/202109281430660.png)
+![image-20210928143034621](https://raw.githubusercontent.com/liujiaqi222/images/master/pics/202109281430660.png)
 
 ### 配置2：坐标轴axis
 
@@ -816,11 +816,11 @@ dataZoom 是一个数组，意味着可以配置多个区域缩放器。
 
   slider：滑块
 
-  ![image-20210928145615405](https://gitee.com/zyxbj/image-warehouse/raw/master/pics/202109281456457.png)
+  ![image-20210928145615405](https://raw.githubusercontent.com/liujiaqi222/images/master/pics/202109281456457.png)
 
   inside：内置，依靠鼠标滚轮或者双指缩放
 
-  ![image-20210928145636483](https://gitee.com/zyxbj/image-warehouse/raw/master/pics/202109281456524.png)
+  ![image-20210928145636483](https://raw.githubusercontent.com/liujiaqi222/images/master/pics/202109281456524.png)
 
   ```js
   dataZoom:[{
@@ -924,7 +924,7 @@ dataZoom 是一个数组，意味着可以配置多个区域缩放器。
   }]
   ```
 
-  ![image-20210928153224578](https://gitee.com/zyxbj/image-warehouse/raw/master/pics/202109281532648.png)
+  ![image-20210928153224578](https://raw.githubusercontent.com/liujiaqi222/images/master/pics/202109281532648.png)
 
 - 圆环 
 
@@ -942,7 +942,7 @@ dataZoom 是一个数组，意味着可以配置多个区域缩放器。
 
   
 
-  <img src="https://gitee.com/zyxbj/image-warehouse/raw/master/pics/202109281537737.png" alt="image-20210928153703675"  />
+  <img src="https://raw.githubusercontent.com/liujiaqi222/images/master/pics/202109281537737.png" alt="image-20210928153703675"  />
 
 - 南丁格尔图：
 
@@ -958,7 +958,7 @@ dataZoom 是一个数组，意味着可以配置多个区域缩放器。
   });
   ```
 
-  ![image-20210928154303804](https://gitee.com/zyxbj/image-warehouse/raw/master/pics/202109281543847.png)
+  ![image-20210928154303804](https://raw.githubusercontent.com/liujiaqi222/images/master/pics/202109281543847.png)
 
 - 选中效果
 
@@ -970,7 +970,7 @@ dataZoom 是一个数组，意味着可以配置多个区域缩放器。
   selectedOffset:30
   ```
 
-  ![image-20210928154757511](https://gitee.com/zyxbj/image-warehouse/raw/master/pics/202109281547552.png)
+  ![image-20210928154757511](https://raw.githubusercontent.com/liujiaqi222/images/master/pics/202109281547552.png)
 
 ## 地图
 
@@ -1015,7 +1015,7 @@ dataZoom 是一个数组，意味着可以配置多个区域缩放器。
   })
   ```
   
-  ![image-20210928162654623](https://gitee.com/zyxbj/image-warehouse/raw/master/pics/202109281626661.png)
+  ![image-20210928162654623](https://raw.githubusercontent.com/liujiaqi222/images/master/pics/202109281626661.png)
 
 ### 常用配置
 
@@ -1135,11 +1135,11 @@ fetch('./JSON/map/china.json').then(res=>res.json()).then((data)=>{
        })
    ```
 
-   ![image-20210928175640244](https://gitee.com/zyxbj/image-warehouse/raw/master/pics/202109281756290.png)
+   ![image-20210928175640244](https://raw.githubusercontent.com/liujiaqi222/images/master/pics/202109281756290.png)
 
    另外，还有一个属性为 `calcuable`, 将其设置为 true，通过拖动手柄可以对其筛选。下图筛选的是0~118的数据
 
-   ![image-20210928175816418](https://gitee.com/zyxbj/image-warehouse/raw/master/pics/202109281758460.png)
+   ![image-20210928175816418](https://raw.githubusercontent.com/liujiaqi222/images/master/pics/202109281758460.png)
 
 #### 地图和散点图结合使用
 
@@ -1172,7 +1172,7 @@ fetch('./JSON/map/china.json').then(res=>res.json()).then((data)=>{
    ],
    ```
 
-   ![image-20210929170828567](https://gitee.com/zyxbj/image-warehouse/raw/master/pics/202109291708625.png)
+   ![image-20210929170828567](https://raw.githubusercontent.com/liujiaqi222/images/master/pics/202109291708625.png)
 
 ## 雷达图
 
@@ -1212,7 +1212,7 @@ fetch('./JSON/map/china.json').then(res=>res.json()).then((data)=>{
 
    
 
-   ![image-20210929172444874](https://gitee.com/zyxbj/image-warehouse/raw/master/pics/202109291724913.png)
+   ![image-20210929172444874](https://raw.githubusercontent.com/liujiaqi222/images/master/pics/202109291724913.png)
 
 ### 常用配置
 
@@ -1246,7 +1246,7 @@ fetch('./JSON/map/china.json').then(res=>res.json()).then((data)=>{
   })
   ```
 
-  ![image-20210929173611589](https://gitee.com/zyxbj/image-warehouse/raw/master/pics/202109291736631.png)
+  ![image-20210929173611589](https://raw.githubusercontent.com/liujiaqi222/images/master/pics/202109291736631.png)
 
 ## 仪表盘
 
@@ -1281,7 +1281,7 @@ fetch('./JSON/map/china.json').then(res=>res.json()).then((data)=>{
   })
   ```
 
-  ![image-20210929175100354](https://gitee.com/zyxbj/image-warehouse/raw/master/pics/202109291751403.png)
+  ![image-20210929175100354](https://raw.githubusercontent.com/liujiaqi222/images/master/pics/202109291751403.png)
 
 ### 常见效果
 
@@ -1304,7 +1304,7 @@ fetch('./JSON/map/china.json').then(res=>res.json()).then((data)=>{
   })
   ```
 
-  ![image-20210929175328268](https://gitee.com/zyxbj/image-warehouse/raw/master/pics/202109291753316.png)
+  ![image-20210929175328268](https://raw.githubusercontent.com/liujiaqi222/images/master/pics/202109291753316.png)
 
 
 ## 总结
@@ -1321,7 +1321,7 @@ fetch('./JSON/map/china.json').then(res=>res.json()).then((data)=>{
 
 ### 配置项总结
 
-![image-20210930093001344](https://gitee.com/zyxbj/image-warehouse/raw/master/pics/202109300930460.png)
+![image-20210930093001344](https://raw.githubusercontent.com/liujiaqi222/images/master/pics/202109300930460.png)
 
 # Echarts 进阶
 
@@ -1337,13 +1337,13 @@ Echarts 内置了两套主题：light dark。
 
   `const chart = echarts.init(dom,'light');`
 
-  ![dark主题](https://gitee.com/zyxbj/image-warehouse/raw/master/pics/202109301022634.png)
+  ![dark主题](https://raw.githubusercontent.com/liujiaqi222/images/master/pics/202109301022634.png)
 
 #### 自定义主题
 
 1. 在[主题编辑器](https://echarts.apache.org/zh/theme-builder.html)中编辑主题
 
-   ![image-20210930102607631](https://gitee.com/zyxbj/image-warehouse/raw/master/pics/202109301026746.png)
+   ![image-20210930102607631](https://raw.githubusercontent.com/liujiaqi222/images/master/pics/202109301026746.png)
 
 2. 下载主题，是一个js文件
 
@@ -1416,7 +1416,7 @@ Echarts 内置了两套主题：light dark。
   }
   ```
 
-  ![image-20210930105849775](https://gitee.com/zyxbj/image-warehouse/raw/master/pics/202109301058837.png)
+  ![image-20210930105849775](https://raw.githubusercontent.com/liujiaqi222/images/master/pics/202109301058837.png)
 
 - 径向渐变
 
@@ -1447,7 +1447,7 @@ Echarts 内置了两套主题：light dark。
   }
   ```
 
-  ![image-20210930110554025](https://gitee.com/zyxbj/image-warehouse/raw/master/pics/202109301105076.png)
+  ![image-20210930110554025](https://raw.githubusercontent.com/liujiaqi222/images/master/pics/202109301105076.png)
 
 ### 样式
 
@@ -1493,7 +1493,7 @@ myChart.setOption({
 })
 ```
 
-![image-20210930112829865](https://gitee.com/zyxbj/image-warehouse/raw/master/pics/202109301128919.png)
+![image-20210930112829865](https://raw.githubusercontent.com/liujiaqi222/images/master/pics/202109301128919.png)
 
 #### 高亮样式
 
@@ -1587,7 +1587,7 @@ ECharts已经内置好了加载数据的动画，我们只需要在合适的时�
   })
   ```
 
-  ![image-20210930120726408](https://gitee.com/zyxbj/image-warehouse/raw/master/pics/202109301207486.png)
+  ![image-20210930120726408](https://raw.githubusercontent.com/liujiaqi222/images/master/pics/202109301207486.png)
 
 ### 增量动画
 
@@ -1786,7 +1786,7 @@ btnadd.addEventListener('click', () => {
 
 如果数据像下面一样较多，则占用的页面空间也会较多，用户看起来也会比较吃力。因此，可以将数据动态刷新显示。
 
-![image-20211011073141537](https://gitee.com/zyxbj/image-warehouse/raw/master/pics/202110110731653.png)
+![image-20211011073141537](https://raw.githubusercontent.com/liujiaqi222/images/master/pics/202110110731653.png)
 
 
 
@@ -1824,4 +1824,4 @@ setInterval(() => {
 
 另外再实现当鼠标移入，图表暂停更新，鼠标移出，图表继续更新。
 
-![动态刷新](https://gitee.com/zyxbj/image-warehouse/raw/master/pics/202110112244734.gif)
+![动态刷新](https://raw.githubusercontent.com/liujiaqi222/images/master/pics/202110112244734.gif)
