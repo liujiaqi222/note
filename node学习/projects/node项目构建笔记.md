@@ -933,7 +933,7 @@ await Product.find({ featured: true }) // 查找所有的feature为true的数据
 
 然后在网址中的query参数，在express中可以通过`req.query`获取到。
 
-![image-20220426202010100](https://raw.githubusercontent.com/liujiaqi222/images/master/pics/image-20220426202010100.png)
+<img src="https://raw.githubusercontent.com/liujiaqi222/images/master/pics/image-20220426202010100.png" alt="image-20220426202010100" style="zoom:50%;" />
 
 ```js
 ./controlers/products.js
@@ -1001,7 +1001,7 @@ const products = await Product.find(queryObject).sort('name -price')
 const products = await Product.find(queryObject).select('name price')
 ```
 
-![image-20220508123444683](https://raw.githubusercontent.com/liujiaqi222/images/master/pics/image-20220508123444683.png)
+<img src="https://raw.githubusercontent.com/liujiaqi222/images/master/pics/image-20220508123444683.png" alt="image-20220508123444683" style="zoom:50%;" />
 
 如果想要限制返回结果的数量，可以使用`limit`。如果想要实现分页功能，可以配合`skip`一起实现。
 
